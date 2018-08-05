@@ -1,0 +1,9 @@
+.cache/
+.coverage
+.tox/
+htmlcov/
+staticfiles/
+venv/
+drfreact/development.py
+*.pyc
+*.pyc
