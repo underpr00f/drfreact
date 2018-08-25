@@ -13,10 +13,7 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-<<<<<<< HEAD
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'drfreact.settings')
-=======
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "drfreact.settings")
->>>>>>> ef351aa248ebf3e8bf75610af247d338f932f722
 
 application = get_wsgi_application()

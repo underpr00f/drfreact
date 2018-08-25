@@ -1,14 +1,17 @@
 {% load render_bundle from webpack_loader %}
+{% load static %}
 <!DOCTYPE html>
 <html>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" type="text/css" href="{% static 'rest_framework/css/bootstrap.min.css.map' %}">
     <title>DRFREACT</title>
   </head>
   <body>
     <div id="root">
     </div>
       {% render_bundle 'main' %}
+
   </body>
 </html>
