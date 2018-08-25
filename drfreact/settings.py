@@ -72,6 +72,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.media',
                 'django.template.context_processors.static',
+
             ],
         },
     },
@@ -122,9 +123,7 @@ AUTH_PASSWORD_VALIDATORS = [
 WEBPACK_LOADER = {
     'DEFAULT': {
             'BUNDLE_DIR_NAME': 'bundles/',
-            'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats.dev.json'),
-            #'STATS_FILE': os.path.join(os.path.dirname(BASE_DIR)+'/drfreact-front', 'webpack-stats.dev.json'),
-            #'STATS_FILE': os.path.join(os.path.dirname(BASE_DIR), 'webpack-stats.dev.json'),
+            'STATS_FILE': os.path.join(os.path.dirname(BASE_DIR), 'webpack-stats.dev.json'),
         }
 }
 

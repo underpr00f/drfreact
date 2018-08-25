@@ -506,7 +506,9 @@ class Button extends Component {
 }
 ```
 
-**This is not required for React** but many people find this feature convenient. You can read about the benefits of this approach [here](https://medium.com/seek-blog/block-element-modifying-your-javascript-components-d7f99fcab52b). However you should be aware that this makes your code less portable to other build tools and environments than Webpack.
+
+**This is not required for React** but many people find this feature convenient. You can read about the benefits of this approach [here](https://medium.com/seek-ui-engineering/block-element-modifying-your-javascript-components-d7f99fcab52b). However you should be aware that this makes your code less portable to other build tools and environments than Webpack.
+
 
 In development, expressing dependencies this way allows your styles to be reloaded on the fly as you edit them. In production, all CSS files will be concatenated into a single minified `.css` file in the build output.
 
@@ -1428,6 +1430,7 @@ Import it in [`src/setupTests.js`](#initializing-test-environment) to make its m
 import 'jest-enzyme';
 ```
 
+<<<<<<< HEAD
 #### Use `react-testing-library`
 
 As an alternative or companion to `enzyme`, you may consider using `react-testing-library`. [`react-testing-library`](https://github.com/kentcdodds/react-testing-library) is a library for testing React components in a way that resembles the way the components are used by end users. It is well suited for unit, integration, and end-to-end testing of React components and applications. It works more directly with DOM nodes, and therefore it's recommended to use with [`jest-dom`](https://github.com/gnapse/jest-dom) for improved assertions.
@@ -1470,6 +1473,8 @@ it('renders welcome message', () => {
 
 Learn more about the utilities provided by `react-testing-library` to facilitate testing asynchronous interactions as well as selecting form elements from [the `react-testing-library` documentation](https://github.com/kentcdodds/react-testing-library) and [examples](https://codesandbox.io/s/github/kentcdodds/react-testing-library-examples).
 
+=======
+>>>>>>> ef351aa248ebf3e8bf75610af247d338f932f722
 ### Using Third Party Assertion Libraries
 
 We recommend that you use `expect()` for assertions and `jest.fn()` for spies. If you are having issues with them please [file those against Jest](https://github.com/facebook/jest/issues/new), and we’ll fix them. We intend to keep making them better for React, supporting, for example, [pretty-printing React elements as JSX](https://github.com/facebook/jest/pull/1566).
