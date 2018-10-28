@@ -3,6 +3,8 @@
 .tox/
 htmlcov/
 staticfiles/
+frontend/node_modules/
+tmp/
 venv/
 drfreact/development.py
 drfreact/__pycache__/*.pyc
