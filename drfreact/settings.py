@@ -44,7 +44,20 @@ INSTALLED_APPS = [
     'webpack_loader',
     'drfreact',
     'drfreact_api',
+    'posts',
+
+    'rest_framework.authtoken',
+    'rest_auth',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'rest_auth.registration',
+    'allauth.socialaccount',
+    #'allauth.socialaccount.providers.facebook',
+    'rest_framework_swagger',
+    'user_profile',
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -56,7 +69,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
 ]
-
+#AUTH_USER_MODEL = 'user_profile.CustomUser'
 ROOT_URLCONF = 'drfreact.urls'
 
 TEMPLATES = [
@@ -79,7 +92,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'drfreact.wsgi.application'
-
+APPEND_SLASH = True
 
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
@@ -162,3 +175,75 @@ STATICFILES_FINDERS = (
 
 
 CORS_ORIGIN_WHITELIST = 'localhost:3000',
+
+#REST_SESSION_LOGIN = True
+#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+SITE_ID = 1
+
+ACCOUNT_ADAPTER = 'user_profile.adapter.MyAccountAdapter'
+# Following is added to enable registration with email instead of username
+AUTHENTICATION_BACKENDS = (
+ # Needed to login by username in Django admin, regardless of `allauth`
+ "django.contrib.auth.backends.ModelBackend",
+
+ # `allauth` specific authentication methods, such as login by e-mail
+ "allauth.account.auth_backends.AuthenticationBackend",
+)
+
+REST_AUTH_SERIALIZERS = {
+    'USER_DETAILS_SERIALIZER': 'user_profile.serializers.UserSerializer'
+}
+
+ACCOUNT_EMAIL_REQUIRED = False
+ACCOUNT_AUTHENTICATION_METHOD = 'username'
+ACCOUNT_EMAIL_VERIFICATION = 'optional'
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+        #'rest_framework.permissions.IsAuthenticated',
+    ),
+    "DATE_INPUT_FORMATS": ["%Y-%m-%d"],
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ),
+    'DEFAULT_THROTTLE_CLASSES': (
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.UserRateThrottle'
+    ),
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '100/day',
+        'user': '1000/day'
+    },
+}
+
+# SWAGGER_SETTINGS = {
+#     'LOGIN_URL': 'login',
+#     'LOGOUT_URL': 'logout',
+# }
+
+REST_SESSION_LOGIN = False
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 3
+ACCOUNT_USERNAME_REQUIRED = True
+LOGOUT_ON_PASSWORD_CHANGE = False
+EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+EMAIL_FILE_PATH = 'tmp/emails'
+DEFAULT_FROM_EMAIL = 'admin@admin.com'
+
+# SESSION_COOKIE_SECURE = False
+# CSRF_COOKIE_SECURE = False
+# SECURE_SSL_REDIRECT = False
+CSRF_COOKIE_NAME = "XSRF-TOKEN"
+CORS_ALLOW_CREDENTIALS = True
+
+CORS_ORIGIN_ALLOW_ALL = False
+CORS_ORIGIN_WHITELIST = 'localhost:3000',
+CORS_ORIGIN_REGEX_WHITELIST = (
+    r'^(https?://)?localhost',
+    r'^(https?://)?127.',
+)
+

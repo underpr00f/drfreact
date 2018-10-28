@@ -1,9 +1,18 @@
 from rest_framework import serializers
-from .models import Item
-class ItemSerializer(serializers.ModelSerializer):
+from .models import Item, Message
+from user_profile.serializers import UserSerializer
+
+class ItemSerializer(serializers.HyperlinkedModelSerializer):
+	# current_user = serializers.SerializerMethodField('_user')
+	# # Use this method for the custom field
+	# def _user(self, obj):
+	# 	# request = getattr(self.context, 'request', None)
+	# 	# if request:
+	# 	return self.context['request'].user
+
 	class Meta:
 		model = Item
-		fields = 'id','title', 'description', 'image', 'slug'
+		fields = 'id','title', 'description', 'image', 'slug', 
 		read_only_fields = ['id']
 	# def create(self, validated_data):
 	# 	# Create the Foo instance
@@ -20,7 +29,6 @@ class ItemSerializer(serializers.ModelSerializer):
 		# always set, the follow could raise a `DoesNotExist`, which
 		# would need to be handled.
 		# profile = instance.profile
-
 		instance.title = validated_data.get('title', instance.title)
 		instance.description = validated_data.get('description', instance.description)
 		instance.image = validated_data.get('image', instance.image)
@@ -38,3 +46,38 @@ class ItemSerializer(serializers.ModelSerializer):
 		# profile.save()
 
 		return instance
+
+class MessageSerializer(serializers.ModelSerializer):
+	#owner = UserSerializer(many=True, read_only=True)
+	status = serializers.ChoiceField(choices=Message.STATUS_CHOICES)
+	#status = serializers.CharField(source='get_status_display')
+	class Meta:
+		model = Message
+		fields = 'id', 'text', 'created_at', 'owner', 'phone', 'status',
+
+
+# class UserSerializer(UserDetailsSerializer):
+#     #print(self.context['request'])
+#     website = serializers.URLField(source="userprofile.website", allow_blank=True, required=False)
+#     about = serializers.CharField(source="userprofile.about", allow_blank=True, required=False)
+
+#     class Meta(UserDetailsSerializer.Meta):
+#         fields = UserDetailsSerializer.Meta.fields + ('website', 'about')
+
+#     def update(self, instance, validated_data):
+#         profile_data = validated_data.pop('userprofile', {})
+#         website = profile_data.get('website')
+#         about = profile_data.get('about')
+
+#         instance = super(UserSerializer, self).update(instance, validated_data)
+
+#         # get and update user profile
+#         profile = instance.userprofile
+
+#         if profile_data:
+#             if website:
+#                 profile.website = website
+#             if about:
+#                 profile.about = about
+#             profile.save()
+#         return instance
