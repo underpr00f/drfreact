@@ -19,6 +19,7 @@ import ReactifyComp from '../routingComps/ReactifyComp'
 import PostDetail from '../reactify/PostDetail';
 import PostCreate from '../reactify/PostCreate'
 import InputForm from '../routingComps/InputForm'
+import NoteDetail from './notes/NoteDetail'
 
 const MainContent = () => (
     <div>
@@ -38,7 +39,8 @@ const MainContent = () => (
             <Route path='/react/posts/create' component={RequireAuth(PostCreate)}/>
             <Route path='/react/posts/:slug' component={RequireAuth(PostDetail)}/>
             <Route path='/react/posts' component={RequireAuth(ReactifyComp)} />
-            <Route path='/messages' component={RequireAuth(InputForm)} />
+            <Route exact path='/messages' component={RequireAuth(InputForm)} />
+            <Route path='/messages/:id' component={RequireAuth(NoteDetail)}/>
             
             <Route component={NoMatch}/>
         </Switch>

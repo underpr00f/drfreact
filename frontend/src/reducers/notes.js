@@ -1,28 +1,65 @@
-const initialState = [];
-
+const initialState = [{noteitems: [],}]
 
 export default function notes(state=initialState, action) {
-    let noteList = state.slice();
+    //собрать все массивы с ключами noteitems и объединить в один массив
+    let noteList = state.map(a => a.noteitems).reduce((a, b) => [...a, ...b], []).slice();
 
     switch (action.type) {
 
         case 'FETCH_NOTES':
-            return [...state, ...action.notes];
+            //удаление дубликатов
+            noteList = noteList.filter((noteList, index, self) => self.findIndex(t => t.created_at === noteList.created_at && t.id === noteList.id) === index)
+            
+            return [                    
+
+                    {...state[state.length-1],
+                    noteitems: noteList},
+                    ...action.notes
+
+
+                ];
 
         case 'ADD_NOTE':
-            return [...state, action.note];
+            // Добавляем заметку
+            noteList.unshift(action.note);
+            // Удаляем нижнюю
+            if (noteList.length > 0) {
+                noteList.pop();
+            }
+
+            return [
+                        //берем последний стейт и добавляем к нему общий массив
+                        {...state[state.length-1],
+                            noteitems: noteList},
+
+                    ];
 
         case 'UPDATE_NOTE':
-            let noteToUpdate = noteList[action.index]
+
+            //Поиск в общем массиве элемента по id и index (2мерный массив)
+            let selectById = state[action.index].noteitems[action.id].id
+            let indexEdit = noteList.findIndex(p => p.id === selectById) 
+
+            let noteToUpdate = noteList[indexEdit]
             noteToUpdate.text = action.note.text;
             noteToUpdate.phone = action.note.phone;
             noteToUpdate.status = action.note.status;
-            noteList.splice(action.index, 1, noteToUpdate);
-            return noteList;
+            noteList.splice(indexEdit, 1, noteToUpdate);
+            return [
+                    {...state[state.length-1],
+                        noteitems: noteList},
+                    ];
 
         case 'DELETE_NOTE':
-            noteList.splice(action.index, 1);
-            return noteList;
+            //Поиск в общем массиве элемента по id и index (2мерный массив)
+            let deleteById = state[action.id].noteitems[action.index].id
+            let indexDel = noteList.findIndex(p => p.id === deleteById)            
+
+            noteList.splice(indexDel, 1);
+            return [
+                        {...state[state.length-1],
+                            noteitems: noteList}
+                    ];
 
         default:
             return state;

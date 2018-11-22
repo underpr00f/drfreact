@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets, permissions, pagination
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .models import Item, Message
@@ -28,50 +28,39 @@ class ItemViewSet(viewsets.ModelViewSet):
 			return super(ItemViewSet, self).create(request, *args, **kwargs)
 
 
-from rest_framework.decorators import detail_route
+# from rest_framework.decorators import detail_route
 
-# class UserDetailsView(RetrieveUpdateAPIView):
+class MessagePageNumberPagination(pagination.PageNumberPagination):
+    page_size = 5
+    page_size_query_param = 'size'
+    max_page_size = 20
 
-#     serializer_class = UserDetailsSerializer
-#     permission_classes = (IsAuthenticated,)
-
-#     def get_object(self):
-#         return self.request.user
-
-#     def get_queryset(self):
-#         return get_user_model().objects.none()
-
-# class MessageView(generics.ListCreateAPIView):
-#     queryset = Message.objects.all()
-#     serializer_class = MessageSerializer
-
-
-#     def post(self, request, *args, **kwargs):
-
-#         post_data = {
-#             'text': request.data.get('fullName'),
-#             'created_at': request.data.get('created_at'),
-#             'owner': request.data.get('owner'),
-
-#         }
-#         serializer = MessageSerializer(data=post_data)
-
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data, status.HTTP_201_CREATED)
-#         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)        
+    def get_paginated_response(self, data):
+        # author = False
+        # user = self.request.user
+        # if user.is_authenticated:
+        #     author = True
+        context = {
+            'next': self.get_next_link(),
+            'previous': self.get_previous_link(),
+            'count': self.page.paginator.count,
+            # 'author': author,
+            'noteitems': data,
+        }
+        return Response(context)     
 
 class MessageViewSet(viewsets.ModelViewSet):
 
 	queryset = Message.objects.all()
 	serializer_class = MessageSerializer
 	permission_classes = [permissions.IsAuthenticated] #убрать Attribute error с /api/messages/
+	pagination_class    = MessagePageNumberPagination
 
 	def get_queryset(self):
 		if self.request.user.is_staff or self.request.user.is_superuser:
-			return Message.objects.all()
+			return Message.objects.all().order_by('-id')
 		else:
-			return self.request.user.messages.all()
+			return self.request.user.messages.all().order_by('-id')
 		
 
 	def perform_create(self, serializer):

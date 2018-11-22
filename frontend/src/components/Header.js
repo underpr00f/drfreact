@@ -1,39 +1,72 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import { connect } from "react-redux";
+import {
+  Collapse,
+  Navbar,
+  NavbarToggler,
+  NavbarBrand,
+  Nav,
+  NavItem,
+  NavLink,
+    } from 'reactstrap';
+
+import { getUserProfile } from "../actions/authActions";
+import { renderUser } from "../utils/noteUtils";
 
 class Header extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            collapsed: true
+        };
+    }
+    toggleNavbar = () => {
+        this.setState({
+            collapsed: !this.state.collapsed
+        });
+    }
 
     static propTypes = {
-        authenticated: PropTypes.bool
+        authenticated: PropTypes.bool,
+        getUserProfile: PropTypes.func.isRequired,
+        user: PropTypes.object
     };
-    
+    componentWillMount() {
+        this.props.getUserProfile();
+    } 
+
     renderLinks() {
         if (this.props.authenticated) {
+            const { user } = this.props
             return (
-                [
-                    <li className="nav-item" key="profile">
-                        <Link className="nav-link" to="/profile">Profile</Link>
-                    </li>,
-                    <li className="nav-item" key="messages">
-                        <Link className="nav-link" onClick={this.forceUpdate} to={"/messages"}>Messages</Link>
-                    </li>,
-                    <li className="nav-item" key="logout">
-                        <Link className="nav-link" to="/logout">Logout</Link>
-                    </li>
-                ]
+                
+                    <Nav className="mr-auto" navbar>
+                        <NavItem key="messages">
+                            <NavLink className="nav-link" onClick={this.forceUpdate} href={"/messages"}>Messages</NavLink>
+                        </NavItem>
+                        <NavItem key="profile">
+                            <NavLink className="nav-link" href="/profile">{renderUser(user)}</NavLink>
+                        </NavItem>
+                        <NavItem key="logout">
+                            <NavLink className="nav-link" href="/logout">Logout</NavLink>
+                        </NavItem>
+                    </Nav>
+                
             );
 
         } else {
             return (
                 [
-                    <li className="nav-item" key="login">
-                        <Link className="nav-link" to="/login">Login</Link>
-                    </li>,
-                    <li className="nav-item" key="signup">
-                        <Link className="nav-link" to="/signup">Sign Up</Link>
-                    </li>
+                    <Nav className="ml-auto" navbar>
+                        <NavItem key="login">
+                            <NavLink className="nav-link" href="/login">Login</NavLink>
+                        </NavItem>,
+                        <NavItem key="signup">
+                            <NavLink className="nav-link" href="/signup">Sign Up</NavLink>
+                        </NavItem>
+                    </Nav>
                 ]
             );
         }
@@ -41,19 +74,32 @@ class Header extends Component {
 
     render() {
         return (
-            <nav className="navbar navbar-expand-lg navbar-light bg-light">
-                <Link to="/" className="navbar-brand">Auth Demo</Link>
-                <ul className="navbar-nav">
-                    {this.renderLinks()}
-                </ul>
-            </nav>
+            <Navbar color="info" dark expand="md">
+                <NavbarBrand href="/">Lead Platform</NavbarBrand>
+                <NavbarToggler onClick={this.toggleNavbar} />
+                  <Collapse isOpen={!this.state.collapsed} navbar>
+                    
+                        {this.renderLinks()}
+                  </Collapse>
+            </Navbar>
         )
     }
 }
 
 function mapStateToProps(state) {
     return {
-        authenticated: state.auth.authenticated
+        authenticated: state.auth.authenticated,
+        user: state.auth.user
     }
 }
-export default connect(mapStateToProps)(Header);
+
+const mapDispatchToProps = dispatch => {
+    return {
+        getUserProfile: () => {
+            return dispatch(getUserProfile());
+        }
+    }
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);

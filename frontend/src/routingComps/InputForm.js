@@ -1,48 +1,90 @@
 import React, { Component } from 'react'
 
-// import { Link } from 'react-router-dom'
-// import Notes from '../learn/notes';
 import * as notes from "../learn/notes";
 import {connect} from 'react-redux';
-import PropTypes from "prop-types";
-import { getUserProfile } from "../actions/authActions";
-import { renderUser } from "../utils/noteUtils";
-import { Container, Col, Form, FormFeedback, 
-  FormGroup, Label, Input,
-  Button, Dropdown, DropdownToggle, 
-  DropdownMenu, DropdownItem } from 'reactstrap';
+import { Link } from 'react-router-dom'
+import { Form, FormText, 
+  FormGroup, Label, Input, Button,
+  Dropdown, DropdownToggle, 
+  DropdownMenu, DropdownItem, Table } from 'reactstrap';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'
+// import { library } from '@fortawesome/fontawesome-svg-core'
+// import { faFacebookF } from '@fortawesome/free-brands-svg-icons'  
+// library.add(faFacebookF); 
 class InputForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
       text: "",
       phone: "",
-      updateNoteId: null,
-      dropdownOpen: false,
       status: 'Candidate',
+      updateNoteId: null,
+      updateNoteIndex: null,
+      dropdownOpen: false,
+
       errors: {},
-    }
+      notes: [
+          {
+            count: null,
+            next: null,
+            previous: null,
+            noteitems: []
+          },
+        ]
+      }
+     
   }
-  static propTypes = {
-      getUserProfile: PropTypes.func.isRequired,
-      user: PropTypes.object
-  };
-  componentWillMount() {
-    this.props.getUserProfile();
-  }
+
   componentDidMount () {
     this.props.fetchNotes()
   }
-
+  // componentWillReceiveProps(nextProps){
+  //   if(nextProps.notes[0] === this.props.notes[0]){
+  //     this.setState({
+  //       notes: 
+  //         []
+  //     })
+  //   }
+  // }
   resetForm = () => {
     this.setState({text: "", phone: '', errors: {}, updateNoteId: null, status: 'Candidate',});
   }
 
-  selectForEdit = (id) => {
-      let note = this.props.notes[id];
-      this.setState({text: note.text, phone: note.phone, status: note.status, updateNoteId: id});
+  selectForEdit = (index, id) => {
+      console.log("id", id, "index", index)
+      let note = this.props.notes[index].noteitems[id];
+      this.setState({text: note.text, phone: note.phone, status: note.status, updateNoteId: id, updateNoteIndex: index});
   }
+
+  selectForDelete = (index, id) => {
+    this.props.deleteNote(index, id)
+  }
+  componentWillReceiveProps(nextProps) {
+    //если длина массива меньше чем предыдущая длина (один элемент удален)
+    // то пересчитываем эндпоинт для фетча (вычитаем из последнего символа next
+    // число "1" чтобы получить текущий фетч), если в нексте на конце "1", то обрезаем
+    // до знака "?"
+    let nextForDelete = null;
+
+    if(this.props.notes[0].noteitems.length > nextProps.notes[0].noteitems.length) {
+      nextForDelete = this.props.notes[0].next
+      console.log('nextForDeleteBefore', nextForDelete)
+      if (nextForDelete) {
+        let lastChar = parseInt(nextForDelete.slice(-1), 10)
+        console.log(lastChar)
+        if ((lastChar-1) >= 2) {
+          nextForDelete = nextForDelete.slice(0, -1)+(lastChar-1);
+        } else {
+          nextForDelete = nextForDelete.split('?')[0]
+        }
+      }
+      console.log('nextForDelete', nextForDelete)
+      this.props.fetchNotes(nextForDelete);
+    }
+  }  
+    
   toggle = () => {
     this.setState(prevState => ({
       dropdownOpen: !prevState.dropdownOpen
@@ -62,7 +104,7 @@ class InputForm extends Component {
            if(!fields["text"].match(/^[a-zA-Z]+$/)){
               formIsValid = false;
               errors["text"] = "Name must be only letters";
-           } else if (fields["text"].length > 5) {
+           } else if (fields["text"].length > 7) {
               formIsValid = false;
               errors["text"] = "Your name is too long";
            }        
@@ -100,7 +142,6 @@ class InputForm extends Component {
     // this.form.validateFields(e.target);
     let key = e.target.name
     let value = e.target.value
-
     // if (key === 'title'){
     //     if (value.length > 120){
     //         alert("This title is too long")
@@ -116,17 +157,26 @@ class InputForm extends Component {
   changeValue = (e) => {
     this.setState({status: e.currentTarget.textContent})
   }
+  loadMorePosts = () => {
+      const {next} = this.props.notes[this.props.notes.length - 1] 
+      console.log(next)
+      if (next !== null || next !== undefined) {
+          this.props.fetchNotes(next)
+      }     
+  }
+
   submitNote = (e) => {
       e.preventDefault();
+
       if(this.handleValidation()){
         if (this.state.updateNoteId === null) {
             this.props.addNote(this.state.text, this.state.phone, this.state.status)
-              .then(this.resetForm)
+              .then(this.resetForm)            
               .catch(function (error) {
                  console.log("error", error);
                });
         } else {
-            this.props.updateNote(this.state.updateNoteId, this.state.text, this.state.phone, this.state.status)
+            this.props.updateNote(this.state.updateNoteIndex, this.state.updateNoteId, this.state.text, this.state.phone, this.state.status)
               .then(this.resetForm)              
               .catch(function (error) {
                  console.log("error", error);
@@ -151,19 +201,15 @@ class InputForm extends Component {
   // }
 
   render () {
-    const { notes, user } = this.props
+    const { notes } = this.props
     const { errors } = this.state;
-    if (errors.text) {
-      console.log(errors.text)
-    }
-    if (errors.phone) {
-      console.log(errors.phone)
-    }
-    
+    const { next } = this.state; 
+    // const { notes } = this.state
+    // console.log('constr', this.state)
+    // {notes[0] && notes[0].noteitems ? console.log('state', notes[0].noteitems) : console.log('props', undefined)}
     return (
       <div>
-        {renderUser(user)}
-        <Form onSubmit={this.submitNote} className="form col col-sm-4 mt-5 p-2">
+        <Form onSubmit={this.submitNote} className="form col col-sm-4 mt-2 p-2">
             
             <FormGroup>
               <Label>Name</Label>
@@ -173,9 +219,10 @@ class InputForm extends Component {
                 placeholder="Enter name..."
                 onChange={this.handleChange}
                 required />
+                {errors.text ? <FormText color="danger">{errors.text}</FormText>: ""}
             </FormGroup>
 
-            {errors.text ? <div>{errors.text}</div>: ""}
+            
 
             <FormGroup>
               <Label>Phone</Label>
@@ -187,8 +234,9 @@ class InputForm extends Component {
                 placeholder="Enter phone..."
                 onChange={this.handleChange}
                 />
+                {errors.phone ? <FormText color="danger">{errors.phone}</FormText>: ""}
             </FormGroup>
-            {errors.phone ? <div>{errors.phone}</div>: ""}
+            
 
             <Dropdown className="form-group" isOpen={this.state.dropdownOpen} toggle={this.toggle}>
               <DropdownToggle caret>
@@ -205,28 +253,51 @@ class InputForm extends Component {
             <input type="submit" value="Save Note" />
         </Form>
         <h3>Notes</h3>
-        <table>
-            <tbody>
-                {notes.map((note, id) => {
-                  return (
-                    <tr key={`note_${note.id}`}>
-                        <td>{note.text}</td>
-                        <td>{note.phone}</td>
-                        <td>{note.status}</td>
-                        <td><button onClick={() => this.selectForEdit(id)}>edit</button></td>
-                        <td><button onClick={() => this.props.deleteNote(id)}>delete</button></td>
-                    </tr>
-                    )
-                  }
-                )}
-            </tbody>
-        </table>
+        <Table striped>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Phone</th>
+              <th>Status</th>
+              <th>Manage</th>
+            </tr>
+          </thead>  
+               
+          {notes !== undefined ? notes.map((post, index)=>{
+            return ( 
+                <tbody key={index}>
+                    {post.noteitems !== undefined && post.noteitems.length > 0 ? post.noteitems.map((note, id) => {
+                      return (                                    
+                          <tr key={id}>
+                              <th scope="row">{id+1}</th>
+                              <td>
+                                <Link to={{pathname:`/messages/${note.id}`,
+                                      state: {fromDashboard: false}
+                                      }}>{note.text}</Link>
+                              </td>
+                              <td>{note.phone}</td>
+                              <td>{note.status}</td>
+                              <td>
+                                <Button className="mr-1" color="info" onClick={() => this.selectForEdit(index, id)}><FontAwesomeIcon icon={faEdit} color="white"/></Button>
+                                <Button onClick={() => this.selectForDelete(index, id)}><FontAwesomeIcon icon={faTrash} color="white"/></Button>
+                              </td>
+                          </tr>                                        
+                        )
+                      }
+                    ) : null}
+                </tbody>
+              )
+            }) : null}
+        </Table>
+        {next !== null ? <Button onClick={this.loadMorePosts}>Load more</Button> : ''}
       </div>
     )
   }
 }
-
-
+// <tr key={`note_${note.id}`}>
+// {notes[0] && notes[0].noteitems ?
+// : ''}
 // <input
 // className="form-group"
 // name="url"
@@ -244,29 +315,25 @@ class InputForm extends Component {
 // />
 // export default InputForm
 const mapStateToProps = state => {
-    console.log(state);
+
     return {
         notes: state.notes,
-        user: state.auth.user,
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        fetchNotes: () => {
-            dispatch(notes.fetchNotes());
+        fetchNotes: (next) => {
+            dispatch(notes.fetchNotes(next));
         },
         addNote: (text, phone, status) => {
             return dispatch(notes.addNote(text, phone, status));
         },
-        updateNote: (id, text, phone, status) => {
-            return dispatch(notes.updateNote(id, text, phone, status));
+        updateNote: (index, id, text, phone, status) => {
+            return dispatch(notes.updateNote(index, id, text, phone, status));
         },
-        deleteNote: (id) => {
-            dispatch(notes.deleteNote(id));
-        },
-        getUserProfile: () => {
-            return dispatch(getUserProfile());
+        deleteNote: (index, id) => {
+            dispatch(notes.deleteNote(index, id));
         },
     }
 }

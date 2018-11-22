@@ -31,7 +31,7 @@ class Posts extends Component {
   loadMorePosts(){
       const {next} = this.state 
       if (next !== null || next !== undefined) {
-           this.loadPosts(next)
+           this.props.loadPosts(next)
       }
      
   }
@@ -132,7 +132,7 @@ class Posts extends Component {
   render() {
       const {posts} = this.state
       const {postsListClass} = this.state
-      const {author} = this.state
+      // const {author} = this.state
       const {next} = this.state 
       // const {auth} = this.props.state.auth.authenticated
       const {authenticated} = this.state //adding redux-props
