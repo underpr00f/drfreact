@@ -25,8 +25,10 @@ class Message(models.Model):
 	owner = models.ForeignKey(User, related_name="messages", on_delete=models.CASCADE, 
 		null=True)
 	status = models.CharField(max_length=10, blank=True, null=True, choices=STATUS_CHOICES, default="Candidate")
-
-
+	is_corporate = models.BooleanField(blank=True, null=True, default=False)
+	email = models.EmailField(blank=True, null=True)
+	linkedin_profile = models.URLField(blank=True, null=True, max_length=250)
+	website = models.URLField(blank=True, null=True, max_length=250)
 	def __str__(self):
 		return self.text
 

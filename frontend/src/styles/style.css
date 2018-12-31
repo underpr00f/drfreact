@@ -1,1 +1,4 @@
 /*define styles here*/
+.table th, .table td {
+    vertical-align: inherit;
+}

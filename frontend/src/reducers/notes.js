@@ -23,9 +23,9 @@ export default function notes(state=initialState, action) {
             // Добавляем заметку
             noteList.unshift(action.note);
             // Удаляем нижнюю
-            if (noteList.length > 0) {
-                noteList.pop();
-            }
+            // if (noteList.length > 0) {
+            //     noteList.pop();
+            // }
 
             return [
                         //берем последний стейт и добавляем к нему общий массив
@@ -44,6 +44,10 @@ export default function notes(state=initialState, action) {
             noteToUpdate.text = action.note.text;
             noteToUpdate.phone = action.note.phone;
             noteToUpdate.status = action.note.status;
+            noteToUpdate.is_corporate = action.note.is_corporate;
+            noteToUpdate.email = action.note.email;
+            noteToUpdate.linkedin_profile = action.note.linkedin_profile;
+            noteToUpdate.website = action.note.website;
             noteList.splice(indexEdit, 1, noteToUpdate);
             return [
                     {...state[state.length-1],

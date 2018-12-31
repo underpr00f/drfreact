@@ -34,7 +34,7 @@ export const fetchNotes = (nextEndpoint) => {
     }
 }
 
-export const addNote = (text, phone, status) => {
+export const addNote = (text, phone, status, is_corporate, email, linkedin_profile, website) => {
     return (dispatch, getState) => {
         let headers = {"Content-Type": "application/json"};
         let {token} = getState().auth;
@@ -43,7 +43,7 @@ export const addNote = (text, phone, status) => {
             headers["Authorization"] = `Token ${token}`;
         }
 
-        let body = JSON.stringify({text, phone, status });
+        let body = JSON.stringify({text, phone, status, is_corporate, email, linkedin_profile, website });
         return fetch("/api/messages/", {headers, method: "POST", body})
             .then(res => {
                 if (res.status < 500) {
@@ -66,7 +66,7 @@ export const addNote = (text, phone, status) => {
     }
 }
 
-export const updateNote = (index, id, text, phone, status) => {
+export const updateNote = (index, id, text, phone, status, is_corporate, email, linkedin_profile, website) => {
     return (dispatch, getState) => {
 
         let headers = {"Content-Type": "application/json"};
@@ -76,7 +76,7 @@ export const updateNote = (index, id, text, phone, status) => {
             headers["Authorization"] = `Token ${token}`;
         }
 
-        let body = JSON.stringify({text, phone, status });
+        let body = JSON.stringify({text, phone, status, is_corporate, email, linkedin_profile, website });
         console.log("id", id, "index", index)
         let noteId = getState().notes[index].noteitems[id].id;
 

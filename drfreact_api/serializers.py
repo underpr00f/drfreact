@@ -48,14 +48,36 @@ class ItemSerializer(serializers.HyperlinkedModelSerializer):
 		return instance
 
 class MessageSerializer(serializers.ModelSerializer):
-	#owner = UserSerializer(many=True, read_only=True)
 	status = serializers.ChoiceField(choices=Message.STATUS_CHOICES)
-	#status = serializers.CharField(source='get_status_display')
+	is_corporate = serializers.BooleanField(default=False)
+	email = serializers.EmailField()
+	linkedin_profile = serializers.URLField()
+
 	class Meta:
 		model = Message
-		fields = 'id', 'text', 'created_at', 'owner', 'phone', 'status',
-
-
+		fields = 'id', 'text', 'created_at', 'owner', 'phone', 'status', 'is_corporate', 'email', 'linkedin_profile', 'website'
+		extra_kwargs = {'phone': {'required': True}, 
+						'text': {'required': True},
+						'is_corporate': {'required': True},
+						'status': {'required': True},
+						'email': {'required': True},
+						'linkedin_profile': {'required': True},
+						'website': {'required': False},
+						} 
+	# For validation
+	def create(self, validated_data):
+		message = Message.objects.create(**validated_data)
+		return message
+	def update(self, instance, validated_data):
+		instance.email = validated_data.get('email', instance.email)
+		instance.text = validated_data.get('text', instance.text)
+		instance.phone = validated_data.get('phone', instance.phone)
+		instance.linkedin_profile = validated_data.get('linkedin_profile', instance.linkedin_profile)
+		instance.status = validated_data.get('status', instance.status)
+		instance.is_corporate = validated_data.get('is_corporate', instance.is_corporate)
+		instance.website = validated_data.get('website', instance.website)
+		instance.save()
+		return instance
 # class UserSerializer(UserDetailsSerializer):
 #     #print(self.context['request'])
 #     website = serializers.URLField(source="userprofile.website", allow_blank=True, required=False)

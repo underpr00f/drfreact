@@ -58,7 +58,6 @@ class Header extends Component {
 
         } else {
             return (
-                [
                     <Nav className="ml-auto" navbar>
                         <NavItem key="login">
                             <NavLink className="nav-link" href="/login">Login</NavLink>
@@ -67,7 +66,6 @@ class Header extends Component {
                             <NavLink className="nav-link" href="/signup">Sign Up</NavLink>
                         </NavItem>
                     </Nav>
-                ]
             );
         }
     }

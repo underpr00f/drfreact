@@ -9,7 +9,7 @@ import { Form, FormText,
   DropdownMenu, DropdownItem, Table } from 'reactstrap';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faEdit, faTrash, faMale, faUsers, faSave, faPlusSquare } from '@fortawesome/free-solid-svg-icons'
 // import { library } from '@fortawesome/fontawesome-svg-core'
 // import { faFacebookF } from '@fortawesome/free-brands-svg-icons'  
 // library.add(faFacebookF); 
@@ -20,10 +20,13 @@ class InputForm extends Component {
       text: "",
       phone: "",
       status: 'Candidate',
+      email: "",
+      linkedin_profile: "",
+      website: "",
+      is_corporate: false, 
       updateNoteId: null,
       updateNoteIndex: null,
       dropdownOpen: false,
-
       errors: {},
       notes: [
           {
@@ -36,26 +39,29 @@ class InputForm extends Component {
       }
      
   }
+  // // FETCH DATA AFTER PROPS
+  // componentWillMount() {
+  //     this.props.fetchNotes(); // Fetch data and set state
+  // }
 
+  // componentWillReceiveProps(nextProps) {
+  //     const { notes } = nextProps;
+  //     if(!notes) {
+  //         this.props.fetchCategory(id); // Fetch data and set state
+  //     }
+  // }
+  // // END FETCH DATA AFTER PROPS
   componentDidMount () {
     this.props.fetchNotes()
   }
-  // componentWillReceiveProps(nextProps){
-  //   if(nextProps.notes[0] === this.props.notes[0]){
-  //     this.setState({
-  //       notes: 
-  //         []
-  //     })
-  //   }
-  // }
+
   resetForm = () => {
-    this.setState({text: "", phone: '', errors: {}, updateNoteId: null, status: 'Candidate',});
+    this.setState({text: "", phone: '', email:'', errors: {}, updateNoteId: null, status: 'Candidate', is_corporate: false, linkedin_profile: "", website: "", });
   }
 
   selectForEdit = (index, id) => {
-      console.log("id", id, "index", index)
       let note = this.props.notes[index].noteitems[id];
-      this.setState({text: note.text, phone: note.phone, status: note.status, updateNoteId: id, updateNoteIndex: index});
+      this.setState({text: note.text, phone: note.phone, status: note.status, is_corporate: note.is_corporate, email: note.email, linkedin_profile: note.linkedin_profile, website: note.website, updateNoteId: id, updateNoteIndex: index});
   }
 
   selectForDelete = (index, id) => {
@@ -123,16 +129,44 @@ class InputForm extends Component {
           }      
         }
       }
-
-      // if(typeof fields["email"] !== "undefined"){
-      //    let lastAtPos = fields["email"].lastIndexOf('@');
-      //    let lastDotPos = fields["email"].lastIndexOf('.');
-
-      //    if (!(lastAtPos < lastDotPos && lastAtPos > 0 && fields["email"].indexOf('@@') == -1 && lastDotPos > 2 && (fields["email"].length - lastDotPos) > 2)) {
-      //       formIsValid = false;
-      //       errors["email"] = "Email is not valid";
-      //     }
-      //  }
+      // Email
+      if(fields["email"].trim() === ""){
+        formIsValid = false;
+        errors["email"] = "Cannot be empty";
+      } else {
+        if(typeof fields["email"] !== "undefined"){
+          let lastAtPos = fields["email"].lastIndexOf('@');
+          let lastDotPos = fields["email"].lastIndexOf('.');
+          if (!(lastAtPos < lastDotPos && lastAtPos > 0 && fields["email"].indexOf('@@') === -1 && lastDotPos > 2 && (fields["email"].length - lastDotPos) > 2)) {
+            formIsValid = false;
+            errors["email"] = "Email is not valid";
+          }
+        }
+      }
+      // Linkedin profile
+      if(fields["linkedin_profile"].trim() === ""){
+        formIsValid = false;
+        errors["linkedin_profile"] = "Cannot be empty";
+      } else {
+        if(typeof fields["linkedin_profile"] !== "undefined"){
+          let re=/^((https?|ftp|smtp):\/\/)+(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9-_#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/;
+          if (!re.test(fields["linkedin_profile"])) {
+            formIsValid = false;
+            errors["linkedin_profile"] = "Not Linkedin URL";
+          }
+        }
+      }
+      // Website
+      if(fields["website"].trim() === ""){
+      } else {
+        if(typeof fields["website"] !== "undefined"){
+          let re=/^((https?|ftp|smtp):\/\/)+(www.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)?$/;
+          if (!re.test(fields["website"])) {
+            formIsValid = false;
+            errors["website"] = "URL is not valid";
+          }
+        }
+      }
       this.setState({errors: errors}); 
 
       return formIsValid;
@@ -159,60 +193,45 @@ class InputForm extends Component {
   }
   loadMorePosts = () => {
       const {next} = this.props.notes[this.props.notes.length - 1] 
-      console.log(next)
+      console.log('next', next)
       if (next !== null || next !== undefined) {
-          this.props.fetchNotes(next)
+          this.props.fetchNotes(next)              
       }     
   }
-
+  onCheckboxBtnClick = () => {
+    this.setState({
+      is_corporate: !this.state.is_corporate,
+    });
+  }
   submitNote = (e) => {
       e.preventDefault();
 
       if(this.handleValidation()){
         if (this.state.updateNoteId === null) {
-            this.props.addNote(this.state.text, this.state.phone, this.state.status)
+            this.props.addNote(this.state.text, this.state.phone, this.state.status, this.state.is_corporate, this.state.email, this.state.linkedin_profile, this.state.website)
               .then(this.resetForm)            
               .catch(function (error) {
                  console.log("error", error);
                });
         } else {
-            this.props.updateNote(this.state.updateNoteIndex, this.state.updateNoteId, this.state.text, this.state.phone, this.state.status)
+            this.props.updateNote(this.state.updateNoteIndex, this.state.updateNoteId, this.state.text, this.state.phone, this.state.status, this.state.is_corporate, this.state.email, this.state.linkedin_profile, this.state.website)
               .then(this.resetForm)              
               .catch(function (error) {
                  console.log("error", error);
-               });;
+               });
         }
       }
-
   }
-
-  // renderError() {
-  //   if (Object.keys(errors).length) {
-  //     return (
-  //       <div>
-  //         <div className="alert alert-danger">
-  //           <div>{ errors['text'] }</div> 
-  //           <div>{ errors['phone'] }</div>
-  //         </div>
-  //       </div>
-  //       );
-  //   }
-  //   return null;
-  // }
 
   render () {
     const { notes } = this.props
     const { errors } = this.state;
-    const { next } = this.state; 
-    // const { notes } = this.state
-    // console.log('constr', this.state)
-    // {notes[0] && notes[0].noteitems ? console.log('state', notes[0].noteitems) : console.log('props', undefined)}
+    const { next } = this.props.notes[this.props.notes.length - 1]; 
     return (
       <div>
-        <Form onSubmit={this.submitNote} className="form col col-sm-4 mt-2 p-2">
-            
+        <Form onSubmit={this.submitNote} className="form col col-sm-4 mt-2 p-2">            
             <FormGroup>
-              <Label>Name</Label>
+              <Label>Name <span className="text-danger">*</span></Label>
               <Input
                 name="text"
                 value={this.state.text || ''}
@@ -221,11 +240,8 @@ class InputForm extends Component {
                 required />
                 {errors.text ? <FormText color="danger">{errors.text}</FormText>: ""}
             </FormGroup>
-
-            
-
             <FormGroup>
-              <Label>Phone</Label>
+              <Label>Phone <span className="text-danger">*</span></Label>
               <Input
                 className="form-group"
                 name="phone"
@@ -236,27 +252,70 @@ class InputForm extends Component {
                 />
                 {errors.phone ? <FormText color="danger">{errors.phone}</FormText>: ""}
             </FormGroup>
-            
-
-            <Dropdown className="form-group" isOpen={this.state.dropdownOpen} toggle={this.toggle}>
-              <DropdownToggle caret>
-                {this.state.status}
-              </DropdownToggle>
-              <DropdownMenu>
-                <DropdownItem onClick={this.changeValue}>Candidate</DropdownItem>
-                <DropdownItem onClick={this.changeValue}>Processed</DropdownItem>
-                <DropdownItem onClick={this.changeValue}>Converted</DropdownItem>
-                <DropdownItem onClick={this.changeValue}>Rejected</DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
-            <button onClick={this.resetForm}>Reset</button>
-            <input type="submit" value="Save Note" />
+            <FormGroup>
+              <Label>Email <span className="text-danger">*</span></Label>
+              <Input
+                className="form-group"
+                name="email"
+                type='text'
+                value={this.state.email || ''}
+                placeholder="Enter email..."
+                onChange={this.handleChange}
+                />
+                {errors.email ? <FormText color="danger">{errors.email}</FormText>: ""}
+            </FormGroup> 
+            <FormGroup>
+              <Label>Linkedin <span className="text-danger">*</span></Label>
+              <Input
+                className="form-group"
+                name="linkedin_profile"
+                type='text'
+                value={this.state.linkedin_profile || ''}
+                placeholder="Enter Linkedin profile..."
+                onChange={this.handleChange}
+                />
+                {errors.linkedin_profile ? <FormText color="danger">{errors.linkedin_profile}</FormText>: ""}
+            </FormGroup> 
+            <FormGroup>
+              <Label>Website</Label>
+              <Input
+                className="form-group"
+                name="website"
+                type='text'
+                value={this.state.website || ''}
+                placeholder="Enter your website..."
+                onChange={this.handleChange}
+                />
+                {errors.website ? <FormText color="danger">{errors.website}</FormText>: ""}
+            </FormGroup> 
+            <FormGroup>
+                <Label>Individual <FontAwesomeIcon icon={faMale} color="black"/> / Corporate <FontAwesomeIcon icon={faUsers} color="black"/></Label>
+                <Button className="btn btn-block" onClick={this.onCheckboxBtnClick} active={this.state.is_corporate}>{this.state.is_corporate ? 'Corporate' : 'Individual'}</Button>
+            </FormGroup>
+            <FormGroup>
+            <Label>Status</Label>
+              <Dropdown className="form-group" isOpen={this.state.dropdownOpen} toggle={this.toggle}>              
+                <DropdownToggle caret>
+                  {this.state.status}
+                </DropdownToggle>
+                <DropdownMenu>
+                  <DropdownItem onClick={this.changeValue}>Candidate</DropdownItem>
+                  <DropdownItem onClick={this.changeValue}>Processed</DropdownItem>
+                  <DropdownItem onClick={this.changeValue}>Converted</DropdownItem>
+                  <DropdownItem onClick={this.changeValue}>Rejected</DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
+            </FormGroup>
+            <Button className="mr-1" onClick={this.resetForm}>Reset</Button>
+            <Button className="mr-1" type="submit"><FontAwesomeIcon icon={faSave} color="white"/></Button>
+            <Link to={"/messages/add"}><Button color="info"><FontAwesomeIcon icon={faPlusSquare} color="white"/></Button></Link>
         </Form>
         <h3>Notes</h3>
-        <Table striped>
+        <Table className="text-center" striped>
           <thead>
             <tr>
               <th>#</th>
+              <th><FontAwesomeIcon icon={faMale} color="black"/> / <FontAwesomeIcon icon={faUsers} color="black"/></th>
               <th>Name</th>
               <th>Phone</th>
               <th>Status</th>
@@ -271,6 +330,7 @@ class InputForm extends Component {
                       return (                                    
                           <tr key={id}>
                               <th scope="row">{id+1}</th>
+                              <td>{note.is_corporate ? <FontAwesomeIcon icon={faUsers} color="black"/> : <FontAwesomeIcon icon={faMale} color="black"/>}</td>
                               <td>
                                 <Link to={{pathname:`/messages/${note.id}`,
                                       state: {fromDashboard: false}
@@ -295,25 +355,7 @@ class InputForm extends Component {
     )
   }
 }
-// <tr key={`note_${note.id}`}>
-// {notes[0] && notes[0].noteitems ?
-// : ''}
-// <input
-// className="form-group"
-// name="url"
-// value={this.state.usersite || ''}
-// placeholder="Enter linkedin url..."
-// onChange={this.handleChange}
-// required />
-// <input
-// className="form-group"
-// name="phone"
-// type='email'
-// value={this.state.useremail || ''}
-// placeholder="Enter email..."
-// onChange={this.handleChange}
-// />
-// export default InputForm
+
 const mapStateToProps = state => {
 
     return {
@@ -326,11 +368,11 @@ const mapDispatchToProps = dispatch => {
         fetchNotes: (next) => {
             dispatch(notes.fetchNotes(next));
         },
-        addNote: (text, phone, status) => {
-            return dispatch(notes.addNote(text, phone, status));
+        addNote: (text, phone, status, is_corporate, email, linkedin_profile, website) => {
+            return dispatch(notes.addNote(text, phone, status, is_corporate, email, linkedin_profile, website));
         },
-        updateNote: (index, id, text, phone, status) => {
-            return dispatch(notes.updateNote(index, id, text, phone, status));
+        updateNote: (index, id, text, phone, status, is_corporate, email, linkedin_profile, website) => {
+            return dispatch(notes.updateNote(index, id, text, phone, status, is_corporate, email, linkedin_profile, website));
         },
         deleteNote: (index, id) => {
             dispatch(notes.deleteNote(index, id));

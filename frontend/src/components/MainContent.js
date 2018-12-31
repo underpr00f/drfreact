@@ -20,6 +20,7 @@ import PostDetail from '../reactify/PostDetail';
 import PostCreate from '../reactify/PostCreate'
 import InputForm from '../routingComps/InputForm'
 import NoteDetail from './notes/NoteDetail'
+import NewNote from './notes/NewNote'
 
 const MainContent = () => (
     <div>
@@ -40,6 +41,7 @@ const MainContent = () => (
             <Route path='/react/posts/:slug' component={RequireAuth(PostDetail)}/>
             <Route path='/react/posts' component={RequireAuth(ReactifyComp)} />
             <Route exact path='/messages' component={RequireAuth(InputForm)} />
+            <Route path='/messages/add' component={RequireAuth(NewNote)}/>
             <Route path='/messages/:id' component={RequireAuth(NoteDetail)}/>
             
             <Route component={NoMatch}/>
