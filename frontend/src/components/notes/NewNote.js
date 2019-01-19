@@ -6,8 +6,7 @@ import * as detail from "../../actions/noteDetailActions";
 import {connect} from 'react-redux';
 import { Form, FormText, 
   FormGroup, Label, Input, Button,
-  Dropdown, DropdownToggle, 
-  DropdownMenu, DropdownItem } from 'reactstrap';
+   } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUndoAlt, faSave, faMale, faUsers } from '@fortawesome/free-solid-svg-icons'
 
@@ -24,8 +23,7 @@ class NewNote extends Component {
           is_corporate: false,
           id: null,
           doneLoading: false,
-          errors: {},
-          dropdownOpen: false,          
+          errors: {},        
           redirectToNewPage: false          
         }
     }
@@ -47,11 +45,7 @@ class NewNote extends Component {
         })
       }
     }    
-    toggle = () => {
-      this.setState(prevState => ({
-        dropdownOpen: !prevState.dropdownOpen
-      }));
-    }
+
     resetForm = () => {
       this.setState({text: "", phone: '', email:'', errors: {}, status: 'Candidate', is_corporate: false, linkedin_profile: "", website: "",});
     }
@@ -239,20 +233,7 @@ class NewNote extends Component {
                     <Label>Individual <FontAwesomeIcon icon={faMale} color="black"/> / Corporate <FontAwesomeIcon icon={faUsers} color="black"/></Label>
                     <Button className="btn btn-block" onClick={this.onCheckboxBtnClick} active={this.state.is_corporate}>{this.state.is_corporate ? 'Corporate' : 'Individual'}</Button>
                 </FormGroup>
-                <FormGroup>
-                  <Label>Status</Label>
-                  <Dropdown className="form-group" isOpen={this.state.dropdownOpen} toggle={this.toggle}>
-                    <DropdownToggle caret>
-                      {this.state.status}
-                    </DropdownToggle>
-                    <DropdownMenu>
-                      <DropdownItem onClick={this.changeValue}>Candidate</DropdownItem>
-                      <DropdownItem onClick={this.changeValue}>Processed</DropdownItem>
-                      <DropdownItem onClick={this.changeValue}>Converted</DropdownItem>
-                      <DropdownItem onClick={this.changeValue}>Rejected</DropdownItem>
-                    </DropdownMenu>
-                  </Dropdown>
-                </FormGroup>
+
                 <Button color="info" onClick={this.resetForm}>Reset</Button>
                 <Button type="submit"><FontAwesomeIcon icon={faSave} color="white"/></Button>
             </Form>

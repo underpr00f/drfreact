@@ -2,10 +2,10 @@ from django.shortcuts import render
 from rest_framework import viewsets, permissions, pagination
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .models import Item, Message
-from .serializers import ItemSerializer, MessageSerializer
-
-
+from .models import Item, Message, Payments
+from .serializers import ItemSerializer, MessageSerializer, PaymentsSerializer
+from rest_framework import filters
+from rest_framework.decorators import detail_route, list_route
 
 class ItemViewSet(viewsets.ModelViewSet):
 	queryset = Item.objects.all()
@@ -44,7 +44,8 @@ class MessagePageNumberPagination(pagination.PageNumberPagination):
             'next': self.get_next_link(),
             'previous': self.get_previous_link(),
             'count': self.page.paginator.count,
-            # 'author': author,
+            #'total_items': Message.objects.count(),
+            #'author': author,
             'noteitems': data,
         }
         return Response(context)     
@@ -55,6 +56,9 @@ class MessageViewSet(viewsets.ModelViewSet):
 	serializer_class = MessageSerializer
 	permission_classes = [permissions.IsAuthenticated] #убрать Attribute error с /api/messages/
 	pagination_class    = MessagePageNumberPagination
+	filter_backends = (filters.SearchFilter, filters.OrderingFilter,)
+	search_fields = ('text',)
+	ordering_fields = ('text', 'status')
 
 	def get_queryset(self):
 		if self.request.user.is_staff or self.request.user.is_superuser:
@@ -65,62 +69,112 @@ class MessageViewSet(viewsets.ModelViewSet):
 
 	def perform_create(self, serializer):
 		serializer.save(owner=self.request.user)
-	# @detail_route(methods=['post','get'])
-	# def comment(self, request, **kwargs):
 
-	# 	# user = self.get_object()
+from django.contrib.auth import get_user_model 
+User = get_user_model()
+import math
 
-	# 	self.queryset = Message.objects.all()
-	# 	# self.serializer_class = CommentFlat
+class PaymentsViewSet(viewsets.ModelViewSet):	
+	serializer_class = PaymentsSerializer
+	permission_classes = [permissions.IsAuthenticated]
+	users = User.objects.all()
 
-	# 	if request.method == 'POST':
+	def get_queryset(self):
+		if self.request.user.is_staff or self.request.user.is_superuser:
+			return Message.objects.values('owner', 'status', 'is_payed')
+		else:
+			return Message.objects.filter(owner=self.request.user).values('owner', 'status', 'is_payed')
+	
+	def list(self, request):
 
-	# 		# request.data is from the POST object. We want to take these
-	# 		# values and supplement it with the user.id that's defined
-	# 		# in our URL parameter
-	# 		data = {
-	# 			'text': request.data['fullName'],
-	# 		}
+		queryset = self.get_queryset()
+		output = []
 
-	# 		serializer = MessageSerializer(data=data)
+		#initialize price by objects, {"investors": price-per-each}
+		prices = {
+			10: 50,
+			20: 100,
+			30: 250,
+			40: 500,
+			50: 1000,
+		};
 
-	# 		if serializer.is_valid():
-	# 			serializer.save()
-	# 			return Response(serializer.data, status=status.HTTP_201_CREATED)
-	# 		else:
-	# 			return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+		if self.request.user.is_staff or self.request.user.is_superuser:	
+			for user in self.users:
+				total = queryset.filter(owner=user).count()
+				if total:
+					output_data = {};	
+					price = 0;
+					price_payed = 0;
 
-	# 	# Return GET by default
-	# 	else:
+					#get count payed investors
+					count_payed = queryset.filter(owner=user, is_payed=True).count();
+					# get true_investors (without candidate status)
+					candidate_count = queryset.filter(owner=user, status='Candidate').count()					
+					true_investors = total - candidate_count
+					
+					# Calculating price
+					for key, value in prices.items():
+						# Calculating price for investors without Candidate status						
+						if true_investors >=10: 
+							if true_investors >= key:
+								price += 10*value
+							else:
+								if (math.ceil(true_investors/10) == key/10):
+									price += (true_investors+10-key)*value
+						# Get payed price 
+						if count_payed and true_investors >=10: 
+							if count_payed >= key:
+								price_payed += 10*value
+							else:
+								if (math.ceil(count_payed/10) == key/10):
+									price_payed += (count_payed+10-key)*value
+					# output price without payed prices
+					output_data['price'] = price-price_payed
+					# output other data
+					output_data['owner'] = user.username
+					output_data['total'] = total		
+					output_data['processed'] = queryset.filter(owner=user, status='Processed').count()
+					output_data['converted'] = queryset.filter(owner=user, status='Converted').count()
+					output_data['rejected'] = queryset.filter(owner=user, status='Rejected').count()					
+					
+					output.append(output_data)
+		else:
+			total = queryset.all().count()
+			if total:
+				output_data = {};
+				price = 0;
+				price_payed = 0;
 
-	# 		serializer = MessageSerializer(instance=self.queryset, many=True)
-
-	# 		return Response(serializer.data)
-
-
-# def get(self, request):
-# 	serializer = MessageSerializer(data=request.data)
-# 	return Response(serializer.data)
-
-# def post(self, request):
-
-# 	serializer = MessageSerializer(data=request.data)
-# 	if serializer.is_valid():
-# 		serializer.save()
-# 		return Response(serializer.data, status=status.HTTP_201_CREATED)
-# 	return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-# def message_add(request):
-#     """
-#     Saves a new user on the database
-#     """
-
-#     if request.method == 'POST':
-
-#         serializer = messageSerializer(data=request.DATA)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data, status=status.HTTP_201_CREATED)
-#         else:
-#             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+				#get count payed investors
+				count_payed = queryset.filter(is_payed=True).count();
+				# get true_investors (without candidate status)
+				candidate_count = queryset.filter(status='Candidate').count()					
+				true_investors = total - candidate_count
+				
+				# Calculating price
+				for key, value in prices.items():
+					# Calculating price for investors without Candidate status						
+					if true_investors >=10: 
+						if true_investors >= key:
+							price += 10*value
+						else:
+							if (math.ceil(true_investors/10) == key/10):
+								price += (true_investors+10-key)*value
+					# Get payed price 
+					if count_payed and true_investors >=10: 
+						if count_payed >= key:
+							price_payed += 10*value
+						else:
+							if (math.ceil(count_payed/10) == key/10):
+								price_payed += (count_payed+10-key)*value
+				
+				# output price without payed prices
+				output_data['price'] = price-price_payed			
+				output_data['owner'] = request.user.username
+				output_data['total'] = total		
+				output_data['processed'] = queryset.filter(status='Processed').count()
+				output_data['converted'] = queryset.filter(status='Converted').count()
+				output_data['rejected'] = queryset.filter(status='Rejected').count()
+				output.append(output_data)			
+		return Response(output)

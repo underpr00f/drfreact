@@ -22,9 +22,11 @@ export const fetchNotes = (nextEndpoint) => {
                     throw res;
                 }
             })
+
             // getState().notes[0].concat(res.data)}
             .then(res => {
                 if (res.status === 200) {
+                    console.log(res.data)
                     return dispatch({type: 'FETCH_NOTES', notes: notes.push(res.data)});
                 } else if (res.status === 401 || res.status === 403) {
                     dispatch({type: "AUTHENTICATION_ERROR", data: res.data});
@@ -33,8 +35,75 @@ export const fetchNotes = (nextEndpoint) => {
             })
     }
 }
+export const searchNotes = (searchtext) => {
+    return (dispatch, getState) => {
+        let headers = {"Content-Type": "application/json"};
+        let {token} = getState().auth;
+        let endpoint = '/api/messages/' 
+        if (searchtext !== undefined && searchtext !== null) {
+          endpoint = `/api/messages/?search=${searchtext}`
+        }
+        if (token) {
+            headers["Authorization"] = `Token ${token}`;
+        }
+        return fetch(endpoint, {headers, method: "GET", })
+            .then(res => {
+                if (res.status < 500) {
+                    return res.json().then(data => {
+                        // console.log(res)
+                        return {status: res.status, data};
+                    })
+                } else {
+                    console.log("Server Error!");
+                    throw res;
+                }
+            })
 
-export const addNote = (text, phone, status, is_corporate, email, linkedin_profile, website) => {
+            .then(res => {
+                if (res.status === 200) {
+                    return dispatch({type: 'SEARCH_NOTES', notes: res.data});
+                } else if (res.status === 401 || res.status === 403) {
+                    dispatch({type: "AUTHENTICATION_ERROR", data: res.data});
+                    throw res.data;
+                }
+            })
+    }
+}
+export const orderNotes = (order) => {
+    return (dispatch, getState) => {
+        let headers = {"Content-Type": "application/json"};
+        let {token} = getState().auth;
+        let endpoint = '/api/messages/' 
+        if (order !== undefined && order !== null) {
+          endpoint = `/api/messages/?ordering=${order}`
+        }
+        if (token) {
+            headers["Authorization"] = `Token ${token}`;
+        }
+        return fetch(endpoint, {headers, method: "GET", })
+            .then(res => {
+                if (res.status < 500) {
+                    return res.json().then(data => {
+                        // console.log(res)
+                        return {status: res.status, data};
+                    })
+                } else {
+                    console.log("Server Error!");
+                    throw res;
+                }
+            })
+
+            .then(res => {
+                if (res.status === 200) {
+                    return dispatch({type: 'ORDER_NOTES', notes: res.data});
+                } else if (res.status === 401 || res.status === 403) {
+                    dispatch({type: "AUTHENTICATION_ERROR", data: res.data});
+                    throw res.data;
+                }
+            })
+    }
+}
+export const addNote = (text, phone, status, is_corporate, is_payed, email, linkedin_profile, website) => {
     return (dispatch, getState) => {
         let headers = {"Content-Type": "application/json"};
         let {token} = getState().auth;
@@ -43,7 +112,7 @@ export const addNote = (text, phone, status, is_corporate, email, linkedin_profi
             headers["Authorization"] = `Token ${token}`;
         }
 
-        let body = JSON.stringify({text, phone, status, is_corporate, email, linkedin_profile, website });
+        let body = JSON.stringify({text, phone, status, is_corporate, is_payed, email, linkedin_profile, website });
         return fetch("/api/messages/", {headers, method: "POST", body})
             .then(res => {
                 if (res.status < 500) {
@@ -66,7 +135,7 @@ export const addNote = (text, phone, status, is_corporate, email, linkedin_profi
     }
 }
 
-export const updateNote = (index, id, text, phone, status, is_corporate, email, linkedin_profile, website) => {
+export const updateNote = (index, id, text, phone, status, is_corporate, is_payed, email, linkedin_profile, website) => {
     return (dispatch, getState) => {
 
         let headers = {"Content-Type": "application/json"};
@@ -76,7 +145,7 @@ export const updateNote = (index, id, text, phone, status, is_corporate, email, 
             headers["Authorization"] = `Token ${token}`;
         }
 
-        let body = JSON.stringify({text, phone, status, is_corporate, email, linkedin_profile, website });
+        let body = JSON.stringify({text, phone, status, is_corporate, is_payed, email, linkedin_profile, website });
         console.log("id", id, "index", index)
         let noteId = getState().notes[index].noteitems[id].id;
 

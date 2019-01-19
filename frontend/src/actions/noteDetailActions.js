@@ -37,7 +37,7 @@ export const fetchDetailNote = (id) => {
     }
 }
 
-export const updateDetailNote = (id, text, phone, status, is_corporate, email, linkedin_profile, website) => {
+export const updateDetailNote = (id, text, phone, status, is_corporate, is_payed, email, linkedin_profile, website) => {
     return (dispatch, getState) => {
 
         let headers = {"Content-Type": "application/json"};
@@ -47,7 +47,7 @@ export const updateDetailNote = (id, text, phone, status, is_corporate, email, l
             headers["Authorization"] = `Token ${token}`;
         }
 
-        let body = JSON.stringify({text, phone, status, is_corporate, email, linkedin_profile, website });
+        let body = JSON.stringify({text, phone, status, is_corporate, is_payed, email, linkedin_profile, website });
         let noteId = id;
 
         return fetch(`/api/messages/${noteId}/`, {headers, method: "PUT", body})

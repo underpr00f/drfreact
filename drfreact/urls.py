@@ -7,7 +7,7 @@ from django.conf import settings
 from django.urls import path, include, re_path
 
 from django.views.generic import TemplateView
-from drfreact_api.views import ItemViewSet, MessageViewSet
+from drfreact_api.views import ItemViewSet, MessageViewSet, PaymentsViewSet
 from posts.views import PostsViewSet
 from user_profile.views import UserViewSet
 
@@ -18,6 +18,7 @@ router.register(r'item', ItemViewSet, base_name='item')
 router.register(r'messages', MessageViewSet, base_name='messages')
 router.register(r'posts', PostsViewSet, base_name='posts')
 router.register(r'user', UserViewSet, base_name='user')
+router.register(r'payments', PaymentsViewSet, base_name='payments')
 
 urlpatterns = [	
 	url(r'^api/', include(router.urls)),
@@ -27,6 +28,7 @@ urlpatterns = [
     # url(r'', TemplateView.as_view(template_name="index.html")),
     #url(r'user/menu/$', message_list),
     url(r'messages', TemplateView.as_view(template_name="index.html", )),
+    url(r'payments', TemplateView.as_view(template_name="index.html", )),
     path('api/posts/', include('posts.urls')),
     path(r'walking', TemplateView.as_view(template_name='index.html')),
     re_path(r'^react/posts/', TemplateView.as_view(template_name='index.html')),

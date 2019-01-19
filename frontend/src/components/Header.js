@@ -44,7 +44,10 @@ class Header extends Component {
                 
                     <Nav className="mr-auto" navbar>
                         <NavItem key="messages">
-                            <NavLink className="nav-link" onClick={this.forceUpdate} href={"/messages"}>Messages</NavLink>
+                            <NavLink className="nav-link" onClick={this.forceUpdate} href={"/messages"}>Investors</NavLink>
+                        </NavItem>
+                        <NavItem key="payments">
+                            <NavLink className="nav-link" onClick={this.forceUpdate} href={"/payments"}>Payments</NavLink>
                         </NavItem>
                         <NavItem key="profile">
                             <NavLink className="nav-link" href="/profile">{renderUser(user)}</NavLink>
@@ -75,8 +78,7 @@ class Header extends Component {
             <Navbar color="info" dark expand="md">
                 <NavbarBrand href="/">Lead Platform</NavbarBrand>
                 <NavbarToggler onClick={this.toggleNavbar} />
-                  <Collapse isOpen={!this.state.collapsed} navbar>
-                    
+                  <Collapse isOpen={!this.state.collapsed} navbar>                    
                         {this.renderLinks()}
                   </Collapse>
             </Navbar>

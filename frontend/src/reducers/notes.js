@@ -18,6 +18,28 @@ export default function notes(state=initialState, action) {
 
 
                 ];
+        case 'SEARCH_NOTES':
+            //удаление дубликатов
+            // noteList = noteList.filter((noteList, index, self) => self.findIndex(t => t.created_at === noteList.created_at && t.id === noteList.id) === index)
+            noteList = action.notes
+            // console.log(action.notes);          
+            return [                    
+
+                    {...state,
+                    ...action.notes},
+                ];
+
+        case 'ORDER_NOTES':
+            //удаление дубликатов
+            // noteList = noteList.filter((noteList, index, self) => self.findIndex(t => t.created_at === noteList.created_at && t.id === noteList.id) === index)
+            noteList = action.notes
+            // console.log(action.notes);          
+            return [                    
+
+                    {...state,
+                    ...action.notes},
+                ];
+
 
         case 'ADD_NOTE':
             // Добавляем заметку
@@ -45,6 +67,7 @@ export default function notes(state=initialState, action) {
             noteToUpdate.phone = action.note.phone;
             noteToUpdate.status = action.note.status;
             noteToUpdate.is_corporate = action.note.is_corporate;
+            noteToUpdate.is_payed = action.note.is_payed;
             noteToUpdate.email = action.note.email;
             noteToUpdate.linkedin_profile = action.note.linkedin_profile;
             noteToUpdate.website = action.note.website;

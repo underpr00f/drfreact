@@ -1,6 +1,7 @@
 from rest_framework import serializers
-from .models import Item, Message
+from .models import Item, Message, Payments
 from user_profile.serializers import UserSerializer
+from django.core.exceptions import ValidationError
 
 class ItemSerializer(serializers.HyperlinkedModelSerializer):
 	# current_user = serializers.SerializerMethodField('_user')
@@ -50,15 +51,19 @@ class ItemSerializer(serializers.HyperlinkedModelSerializer):
 class MessageSerializer(serializers.ModelSerializer):
 	status = serializers.ChoiceField(choices=Message.STATUS_CHOICES)
 	is_corporate = serializers.BooleanField(default=False)
+	is_payed = serializers.BooleanField(default=False)
 	email = serializers.EmailField()
 	linkedin_profile = serializers.URLField()
+	# lead_count = serializers.SerializerMethodField()
+	# lead_status_count = serializers.SerializerMethodField()
 
 	class Meta:
 		model = Message
-		fields = 'id', 'text', 'created_at', 'owner', 'phone', 'status', 'is_corporate', 'email', 'linkedin_profile', 'website'
+		fields = 'id', 'text', 'created_at', 'owner', 'phone', 'status', 'is_corporate', 'email', 'linkedin_profile', 'website', 'is_payed',
 		extra_kwargs = {'phone': {'required': True}, 
 						'text': {'required': True},
 						'is_corporate': {'required': True},
+						'is_payed': {'required': False},
 						'status': {'required': True},
 						'email': {'required': True},
 						'linkedin_profile': {'required': True},
@@ -69,6 +74,7 @@ class MessageSerializer(serializers.ModelSerializer):
 		message = Message.objects.create(**validated_data)
 		return message
 	def update(self, instance, validated_data):
+		check_staff=self.context['request'].user.is_staff
 		instance.email = validated_data.get('email', instance.email)
 		instance.text = validated_data.get('text', instance.text)
 		instance.phone = validated_data.get('phone', instance.phone)
@@ -76,8 +82,66 @@ class MessageSerializer(serializers.ModelSerializer):
 		instance.status = validated_data.get('status', instance.status)
 		instance.is_corporate = validated_data.get('is_corporate', instance.is_corporate)
 		instance.website = validated_data.get('website', instance.website)
+		
+		#only staff users can edit is_payed to True
+		if check_staff:
+			if instance.status != "Candidate":
+				instance.is_payed = validated_data.get('is_payed', instance.is_payed)
+			else:
+				instance.is_payed = False
+				# raise ValidationError('Cannot update Candidate')
+
 		instance.save()
 		return instance
+	# def get_lead_count(self, obj):
+	# 	lead_count=Message.objects.filter(owner=obj.owner).count()
+	# 	# payments = Payments(owner=obj.owner, lead_count=lead_count)
+	# 	# payments.save()
+	# 	return lead_count
+	# def get_lead_status_count(self, obj):
+	# 	return Message.objects.filter(owner=obj.owner, status=obj.status).count()
+
+	# payments = Payments(owner=owner, lead_count=lead_count)
+	# payments.save()
+
+class PaymentsSerializer(serializers.Serializer):
+	
+	class Meta:
+		fields = '__all__',
+		read_only_fields = '__all__',
+
+	# lead_count = Message.objects.all().count()
+	# message = MessageSerializer()
+	# def get_lead_count(self, obj):
+	# 	lead_count = obj.text.count
+	# 	#time = #hours since created
+	# 	return lead_count
+	# lead_count = serializers.ReadOnlyField()
+	# lead_count = serializers.Field(source='lead_count')
+	# # lead_count = serializers.SerializerMethodField()
+	# # # lead_status_count = serializers.SerializerMethodField()
+	# class Meta:
+	# 	model = Message
+	# 	# fields = 'leadcount', "lead_count"
+	# 	fields = "lead_count",
+	# For validation
+	# def get_lead_count(self, obj):
+	# 	message = Message.objects.all().count()
+		
+	# 	return message
+	# def get_lead_count(self, obj):
+	# 	lead_count=Message.objects.filter(owner=obj.owner).count()
+	# 	return lead_count
+	# 	extra_kwargs = {
+	# 			'lead_count': {'read_only': True},
+	# 			#'lead_status_count': {'read_only': True},
+	# 			} 
+	# def get_lead_count(self, obj):
+	# 	lead_count=Message.objects.filter(owner=obj.owner).count()
+	# 	return lead_count
+	# lead_count = serializers.IntegerField()
+
+
 # class UserSerializer(UserDetailsSerializer):
 #     #print(self.context['request'])
 #     website = serializers.URLField(source="userprofile.website", allow_blank=True, required=False)

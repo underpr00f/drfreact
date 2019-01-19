@@ -31,7 +31,14 @@ export default function(ComposedComponent) {
     }
 
     function mapStateToProps(state) {
-        return { authenticated: state.auth.authenticated }
+        // provide is_staff to props
+        let is_staff = false;
+        if (state.auth.user && state.auth.user.is_staff) {
+            is_staff = true;
+        }
+        return { authenticated: state.auth.authenticated, 
+                is_staff: is_staff, 
+            }
     }
     return withRouter(connect(mapStateToProps)(Authentication));
 }

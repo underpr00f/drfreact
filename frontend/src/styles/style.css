@@ -1,4 +1,16 @@
 /*define styles here*/
-.table th, .table td {
+.table th, .table td, .table thead th {
     vertical-align: inherit;
+}
+.centering {
+  display: flex;
+}
+.centering-left, .centering-right {
+  flex: 1;
+}
+
+.centering-right__tablepreffix {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
 }

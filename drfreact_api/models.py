@@ -9,6 +9,13 @@ class Item(models.Model):
 	image = models.ImageField(upload_to="images")
 	slug = models.SlugField(unique=True)
 
+class Payments(models.Model):
+	owner = models.ForeignKey(User, related_name="payments_user", on_delete=models.CASCADE, 
+		null=True)
+	# message = models.ForeignKey(Message, related_name="payments", on_delete=models.CASCADE, 
+	# 	null=True)
+	#lead_count = models.IntegerField(default=0)
+
 class Message(models.Model):
 	# slug = models.SlugField(Item)
 	STATUS_CHOICES = (
@@ -25,11 +32,28 @@ class Message(models.Model):
 	owner = models.ForeignKey(User, related_name="messages", on_delete=models.CASCADE, 
 		null=True)
 	status = models.CharField(max_length=10, blank=True, null=True, choices=STATUS_CHOICES, default="Candidate")
+	is_payed = models.BooleanField(blank=True, null=True, default=False)
 	is_corporate = models.BooleanField(blank=True, null=True, default=False)
 	email = models.EmailField(blank=True, null=True)
 	linkedin_profile = models.URLField(blank=True, null=True, max_length=250)
 	website = models.URLField(blank=True, null=True, max_length=250)
+
 	def __str__(self):
 		return self.text
 
+# from django.db.models.signals import post_save
+# def create_payments(sender, instance, created, **kwargs):
+# 	"""Creates a UserProfile Object Whenever a User Object is Created"""
+# 	if created:
+# 		lead_count=Message.objects.filter(owner=instance.owner).count()
+# 		Payments.objects.create(owner=instance.owner, lead_count=lead_count)
 
+# post_save.connect(create_payments, sender=Message)
+
+# from django.db.models.signals import post_save
+# from django.dispatch import receiver
+# # method for updating
+# @receiver(post_save, sender=TransactionDetail, dispatch_uid="update_stock_count")
+# def update_stock(sender, instance, **kwargs):
+#      instance.product.stock -= instance.amount
+#      instance.product.save()

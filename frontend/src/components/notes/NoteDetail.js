@@ -10,7 +10,8 @@ import { Form, FormText,
   DropdownMenu, DropdownItem, Table } from 'reactstrap';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faMale, faUsers, faUndoAlt, faSave } from '@fortawesome/free-solid-svg-icons'
+import { faMale, faUsers, faUndoAlt, faSave,
+      faCheckCircle, faHandHoldingUsd } from '@fortawesome/free-solid-svg-icons'
 
 class NoteDetail extends Component {
     constructor(props){
@@ -23,6 +24,7 @@ class NoteDetail extends Component {
           linkedin_profile: "",
           website: "",
           is_corporate: false,
+          is_payed: false,
           id: null,
           doneLoading: false,
           errors: {},
@@ -42,12 +44,12 @@ class NoteDetail extends Component {
       }
     }
     componentWillReceiveProps(nextProps) {
-      console.log('nextProps', nextProps.detail.detail);
       this.setState({
         text: nextProps.detail.text,
         phone: nextProps.detail.phone,
         status: nextProps.detail.status,
         is_corporate: nextProps.detail.is_corporate,
+        is_payed: nextProps.detail.is_payed,
         email: nextProps.detail.email,
         linkedin_profile: nextProps.detail.linkedin_profile,
         website: nextProps.detail.website,
@@ -144,15 +146,20 @@ class NoteDetail extends Component {
       this.setState({errors: errors}); 
       return formIsValid;
     }
-    onCheckboxBtnClick = () => {
+    onCheckboxIsCorpBtnClick = () => {
       this.setState({
         is_corporate: !this.state.is_corporate,
+      });
+    }
+    onCheckboxIsPayBtnClick = () => {
+      this.setState({
+        is_payed: !this.state.is_payed,
       });
     }
     submitNote = (e) => {
         e.preventDefault();
         if(this.handleValidation()){
-          this.props.updateDetailNote(this.state.id, this.state.text, this.state.phone, this.state.status, this.state.is_corporate, this.state.email, this.state.linkedin_profile, this.state.website)
+          this.props.updateDetailNote(this.state.id, this.state.text, this.state.phone, this.state.status, this.state.is_corporate, this.state.is_payed, this.state.email, this.state.linkedin_profile, this.state.website)
         }
 
     }
@@ -161,6 +168,7 @@ class NoteDetail extends Component {
         if (!this.props.detail.detail) {
           // const {doneLoading} = this.state
           const { detail } = this.props;
+          const { is_staff } = this.props;
           const { errors } = this.state;
           return (
                 <div>
@@ -224,21 +232,31 @@ class NoteDetail extends Component {
                     />
                     {errors.website ? <FormText color="danger">{errors.website}</FormText>: ""}
                 </FormGroup>   
-                  <FormGroup>
-                      <Button className="btn btn-block" onClick={this.onCheckboxBtnClick} active={this.state.is_corporate}>{this.state.is_corporate ? 'Corporate' : 'Individual'}</Button>
-                  </FormGroup>
+                <FormGroup>
+                    <Label>Individual <FontAwesomeIcon icon={faMale} color={!this.state.is_corporate ? "black": "grey"}/> / Corporate <FontAwesomeIcon icon={faUsers} color={this.state.is_corporate ? "black": "grey"}/></Label>
+                    <Button className="btn btn-block" onClick={this.onCheckboxIsCorpBtnClick} active={this.state.is_corporate}>{this.state.is_corporate ? 'Change to Individual' : 'Change to Corporate'}</Button>
+                </FormGroup>   
+                <FormGroup>
+                  <Label>Status</Label>
                   <Dropdown className="form-group" isOpen={this.state.dropdownOpen} toggle={this.toggle}>
-                    <DropdownToggle caret>
+                    <DropdownToggle className="btn-block" caret>
                       {this.state.status || ''}
                     </DropdownToggle>
-                    <DropdownMenu>
+                    <DropdownMenu className="btn-block">
                       <DropdownItem onClick={this.changeValue}>Candidate</DropdownItem>
                       <DropdownItem onClick={this.changeValue}>Processed</DropdownItem>
                       <DropdownItem onClick={this.changeValue}>Converted</DropdownItem>
                       <DropdownItem onClick={this.changeValue}>Rejected</DropdownItem>
                     </DropdownMenu>
                   </Dropdown>
-                  <Button color="info" size="lg" type="submit"><FontAwesomeIcon icon={faSave} color="white"/></Button>
+                </FormGroup>
+                {this.state.status !== "Candidate" && is_staff ?
+                <FormGroup>
+                    <Label>New <FontAwesomeIcon icon={faHandHoldingUsd} color={!this.state.is_payed ? "black": "grey"}/> / Payed <FontAwesomeIcon icon={faCheckCircle} color={this.state.is_payed ? "black": "grey"}/></Label>
+                    <Button className="btn btn-block" onClick={this.onCheckboxIsPayBtnClick} active={this.state.is_payed}>{this.state.is_payed ? 'Change to New' : 'Change to Payed'}</Button>
+                </FormGroup>
+                : null}
+                <Button color="info" size="lg" type="submit"><FontAwesomeIcon icon={faSave} color="white"/></Button>
               </Form>
               <h3>Detailed View</h3>
               <Table striped className="text-center">
@@ -251,6 +269,7 @@ class NoteDetail extends Component {
                     <td>Email</td>
                     <td>Linkedin</td>
                     <td>Website</td>
+                    <td>Payment</td>
                   </tr>
                 </thead>
                 <tbody>
@@ -262,6 +281,7 @@ class NoteDetail extends Component {
                     <td>{detail.email}</td>
                     <td>{detail.linkedin_profile}</td>
                     <td>{detail.website}</td>
+                    <td>{detail.is_payed ? <FontAwesomeIcon icon={faCheckCircle} color="black"/> : <FontAwesomeIcon icon={faHandHoldingUsd} color="black"/>}</td>
                   </tr>
                 </tbody>
               </Table>
@@ -299,8 +319,8 @@ const mapDispatchToProps = dispatch => {
       fetchDetailNote: (id) => {
           dispatch(detail.fetchDetailNote(id));
       },
-      updateDetailNote: (id, text, phone, status, is_corporate, email, linkedin_profile, website) => {
-          dispatch(detail.updateDetailNote(id, text, phone, status, is_corporate, email, linkedin_profile, website));
+      updateDetailNote: (id, text, phone, status, is_corporate, is_payed, email, linkedin_profile, website) => {
+          dispatch(detail.updateDetailNote(id, text, phone, status, is_corporate, is_payed, email, linkedin_profile, website));
       }
     }
 }

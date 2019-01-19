@@ -21,6 +21,7 @@ import PostCreate from '../reactify/PostCreate'
 import InputForm from '../routingComps/InputForm'
 import NoteDetail from './notes/NoteDetail'
 import NewNote from './notes/NewNote'
+import Payments from './notes/Payments'
 
 const MainContent = () => (
     <div>
@@ -43,7 +44,8 @@ const MainContent = () => (
             <Route exact path='/messages' component={RequireAuth(InputForm)} />
             <Route path='/messages/add' component={RequireAuth(NewNote)}/>
             <Route path='/messages/:id' component={RequireAuth(NoteDetail)}/>
-            
+            <Route exact path='/payments' component={RequireAuth(Payments)} />
+
             <Route component={NoMatch}/>
         </Switch>
     </div>
