@@ -2,7 +2,7 @@ export const fetchNotes = (nextEndpoint) => {
     return (dispatch, getState) => {
         let headers = {"Content-Type": "application/json"};
         let {token} = getState().auth;
-        let endpoint = '/api/messages/' 
+        let endpoint = '/api/investors/' 
         // console.log(nextEndpoint)
         if (nextEndpoint !== undefined && nextEndpoint !== null) {
           endpoint = nextEndpoint
@@ -26,7 +26,6 @@ export const fetchNotes = (nextEndpoint) => {
             // getState().notes[0].concat(res.data)}
             .then(res => {
                 if (res.status === 200) {
-                    console.log(res.data)
                     return dispatch({type: 'FETCH_NOTES', notes: notes.push(res.data)});
                 } else if (res.status === 401 || res.status === 403) {
                     dispatch({type: "AUTHENTICATION_ERROR", data: res.data});
@@ -39,9 +38,9 @@ export const searchNotes = (searchtext) => {
     return (dispatch, getState) => {
         let headers = {"Content-Type": "application/json"};
         let {token} = getState().auth;
-        let endpoint = '/api/messages/' 
+        let endpoint = '/api/investors/' 
         if (searchtext !== undefined && searchtext !== null) {
-          endpoint = `/api/messages/?search=${searchtext}`
+          endpoint = `/api/investors/?search=${searchtext}`
         }
         if (token) {
             headers["Authorization"] = `Token ${token}`;
@@ -73,9 +72,9 @@ export const orderNotes = (order) => {
     return (dispatch, getState) => {
         let headers = {"Content-Type": "application/json"};
         let {token} = getState().auth;
-        let endpoint = '/api/messages/' 
+        let endpoint = '/api/investors/' 
         if (order !== undefined && order !== null) {
-          endpoint = `/api/messages/?ordering=${order}`
+          endpoint = `/api/investors/?ordering=${order}`
         }
         if (token) {
             headers["Authorization"] = `Token ${token}`;
@@ -103,7 +102,7 @@ export const orderNotes = (order) => {
             })
     }
 }
-export const addNote = (text, phone, status, is_corporate, is_payed, email, linkedin_profile, website) => {
+export const addNote = (text, phone, status, is_corporate, is_payed, email, linkedin_profile, website, correspondence) => {
     return (dispatch, getState) => {
         let headers = {"Content-Type": "application/json"};
         let {token} = getState().auth;
@@ -112,8 +111,8 @@ export const addNote = (text, phone, status, is_corporate, is_payed, email, link
             headers["Authorization"] = `Token ${token}`;
         }
 
-        let body = JSON.stringify({text, phone, status, is_corporate, is_payed, email, linkedin_profile, website });
-        return fetch("/api/messages/", {headers, method: "POST", body})
+        let body = JSON.stringify({text, phone, status, is_corporate, is_payed, email, linkedin_profile, website, correspondence });
+        return fetch("/api/investors/", {headers, method: "POST", body})
             .then(res => {
                 if (res.status < 500) {
                     return res.json().then(data => {
@@ -135,7 +134,7 @@ export const addNote = (text, phone, status, is_corporate, is_payed, email, link
     }
 }
 
-export const updateNote = (index, id, text, phone, status, is_corporate, is_payed, email, linkedin_profile, website) => {
+export const updateNote = (index, id, text, phone, status, is_corporate, is_payed, email, linkedin_profile, website, correspondence) => {
     return (dispatch, getState) => {
 
         let headers = {"Content-Type": "application/json"};
@@ -145,11 +144,11 @@ export const updateNote = (index, id, text, phone, status, is_corporate, is_paye
             headers["Authorization"] = `Token ${token}`;
         }
 
-        let body = JSON.stringify({text, phone, status, is_corporate, is_payed, email, linkedin_profile, website });
+        let body = JSON.stringify({text, phone, status, is_corporate, is_payed, email, linkedin_profile, website, correspondence });
         console.log("id", id, "index", index)
         let noteId = getState().notes[index].noteitems[id].id;
 
-        return fetch(`/api/messages/${noteId}/`, {headers, method: "PUT", body})
+        return fetch(`/api/investors/${noteId}/`, {headers, method: "PUT", body})
             .then(res => {
                 if (res.status < 500) {
                     return res.json().then(data => {
@@ -180,11 +179,9 @@ export const deleteNote = (id, index) => {
         if (token) {
             headers["Authorization"] = `Token ${token}`;
         }
-        console.log('id', id);
-        console.log('index', index);
         let noteId = getState().notes[id].noteitems[index].id;
 
-        return fetch(`/api/messages/${noteId}/`, {headers, method: "DELETE"})
+        return fetch(`/api/investors/${noteId}/`, {headers, method: "DELETE"})
             .then(res => {
                 if (res.status === 204) {
                     return {status: res.status, data: {}};

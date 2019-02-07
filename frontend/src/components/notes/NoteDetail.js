@@ -4,18 +4,26 @@ import React, {Component} from 'react'
 import { Link } from 'react-router-dom'
 import * as detail from "../../actions/noteDetailActions";
 import {connect} from 'react-redux';
-import { Form, FormText, 
+import { Form, FormText, Container, Row,
   FormGroup, Label, Input, Button,
   Dropdown, DropdownToggle, 
   DropdownMenu, DropdownItem, Table } from 'reactstrap';
-
+// import PropTypes from "prop-types";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMale, faUsers, faUndoAlt, faSave,
-      faCheckCircle, faHandHoldingUsd } from '@fortawesome/free-solid-svg-icons'
+      faCheckCircle, faHandHoldingUsd,
+       } from '@fortawesome/free-solid-svg-icons'
+import DatePicker from "react-datepicker";
+import FileDrop from './FileDrop/FileDrop';
+import moment from "moment";
+
+import "react-datepicker/dist/react-datepicker.css";
 
 class NoteDetail extends Component {
+
     constructor(props){
-        super(props)       
+        super(props);
+        // this.handleValidation = handleValidation.bind(this)   
         this.state = {
           text: "",
           phone: "",
@@ -23,13 +31,19 @@ class NoteDetail extends Component {
           email:"",
           linkedin_profile: "",
           website: "",
+          correspondence: "",
           is_corporate: false,
           is_payed: false,
           id: null,
-          doneLoading: false,
+          isLoading: true,
           errors: {},
+          hasError: false,
           dropdownOpen: false,
-          detail: {},          
+          detail: {},
+          add_call: false,
+          last_call: "", 
+          documents: null,
+          attached: false,      
         }
     }
 
@@ -40,20 +54,33 @@ class NoteDetail extends Component {
             id: id,
             doneLoading: false,
         })
-        this.props.fetchDetailNote(id)
+        this.props.fetchDetailNote(id)        
       }
+      
     }
     componentWillReceiveProps(nextProps) {
-      this.setState({
-        text: nextProps.detail.text,
-        phone: nextProps.detail.phone,
-        status: nextProps.detail.status,
-        is_corporate: nextProps.detail.is_corporate,
-        is_payed: nextProps.detail.is_payed,
-        email: nextProps.detail.email,
-        linkedin_profile: nextProps.detail.linkedin_profile,
-        website: nextProps.detail.website,
-      })
+      console.log(Object.keys(nextProps.detail).length)
+      if (Object.keys(nextProps.detail).length) {
+        this.setState({
+          text: nextProps.detail.text,
+          phone: nextProps.detail.phone,
+          status: nextProps.detail.status,
+          is_corporate: nextProps.detail.is_corporate,
+          is_payed: nextProps.detail.is_payed,
+          email: nextProps.detail.email,
+          linkedin_profile: nextProps.detail.linkedin_profile,
+          website: nextProps.detail.website,
+          correspondence: nextProps.detail.correspondence,
+          last_call: moment(nextProps.detail.last_call, moment.defaultFormat).toDate(),
+          documents: nextProps.detail.documents,
+          hasError: false
+        }) 
+      } else {
+        this.setState({
+          hasError: true
+        })
+      }
+       
     }    
     toggle = () => {
       this.setState(prevState => ({
@@ -69,6 +96,10 @@ class NoteDetail extends Component {
           errors: {}
       })
     }
+    changeDate = (date) => {
+      this.setState({last_call: date})
+    }
+
     changeValue = (e) => {
       this.setState({status: e.currentTarget.textContent})
     }
@@ -146,6 +177,13 @@ class NoteDetail extends Component {
       this.setState({errors: errors}); 
       return formIsValid;
     }
+    getData = (documents) => {
+      this.setState({
+        documents: documents[0],
+        attached: true,
+      })
+    }
+
     onCheckboxIsCorpBtnClick = () => {
       this.setState({
         is_corporate: !this.state.is_corporate,
@@ -156,136 +194,214 @@ class NoteDetail extends Component {
         is_payed: !this.state.is_payed,
       });
     }
+    onAddCallClick = () => {
+      this.setState({
+        add_call: true,
+        last_call: moment(new Date(), moment.defaultFormat).toDate(),
+      });
+    }
+
+    onResetCallClick = () => {
+      this.setState({
+        add_call: false,
+        last_call: "",
+      });
+    }
     submitNote = (e) => {
         e.preventDefault();
         if(this.handleValidation()){
-          this.props.updateDetailNote(this.state.id, this.state.text, this.state.phone, this.state.status, this.state.is_corporate, this.state.is_payed, this.state.email, this.state.linkedin_profile, this.state.website)
+          this.props.updateDetailNote(this.state.id, this.state.text, 
+            this.state.phone, this.state.status, this.state.is_corporate, 
+            this.state.is_payed, this.state.email, this.state.linkedin_profile, 
+            this.state.website, this.state.correspondence, this.state.last_call,
+            this.state.documents, this.state.attached,)
         }
 
     }
 
     renderNote() {
-        if (!this.props.detail.detail) {
+        if (!this.props.detail.detail && !this.state.hasError) {
+          console.log(this.state)
           // const {doneLoading} = this.state
           const { detail } = this.props;
           const { is_staff } = this.props;
           const { errors } = this.state;
           return (
-                <div>
-                <Form onSubmit={this.submitNote} className="form col col-sm-4 mt-2 p-2">
-                  
-                  <FormGroup>
-                    <Label>Name <span className="text-danger">*</span></Label>
-                    <Input
-                      name="text"
-                      value={this.state.text || ''}
-                      placeholder="Enter name..."
-                      onChange={this.handleChange}
-                      required />
-                      {errors.text ? <FormText color="danger">{errors.text}</FormText>: ""}
-                  </FormGroup>
-                  <FormGroup>
-                    <Label>Phone <span className="text-danger">*</span></Label>
-                    <Input
-                      className="form-group"
-                      name="phone"
-                      type='tel'
-                      value={this.state.phone || ''}
-                      placeholder="Enter phone..."
-                      onChange={this.handleChange}
-                      />
-                      {errors.phone ? <FormText color="danger">{errors.phone}</FormText>: ""}
-                  </FormGroup>
-                  <FormGroup>
-                    <Label>Email <span className="text-danger">*</span></Label>
-                    <Input
-                      className="form-group"
-                      name="email"
-                      type='text'
-                      value={this.state.email || ''}
-                      placeholder="Enter email..."
-                      onChange={this.handleChange}
-                      />
-                      {errors.email ? <FormText color="danger">{errors.email}</FormText>: ""}
-                  </FormGroup> 
-                  <FormGroup>
-                    <Label>Linkedin <span className="text-danger">*</span></Label>
-                    <Input
-                      className="form-group"
-                      name="linkedin_profile"
-                      type='text'
-                      value={this.state.linkedin_profile || ''}
-                      placeholder="Enter Linkedin profile..."
-                      onChange={this.handleChange}
-                      />
-                      {errors.linkedin_profile ? <FormText color="danger">{errors.linkedin_profile}</FormText>: ""}
-                  </FormGroup> 
-                  <FormGroup>
-                  <Label>Website</Label>
-                  <Input
-                    className="form-group"
-                    name="website"
-                    type='text'
-                    value={this.state.website || ''}
-                    placeholder="Enter your website..."
-                    onChange={this.handleChange}
-                    />
-                    {errors.website ? <FormText color="danger">{errors.website}</FormText>: ""}
-                </FormGroup>   
-                <FormGroup>
-                    <Label>Individual <FontAwesomeIcon icon={faMale} color={!this.state.is_corporate ? "black": "grey"}/> / Corporate <FontAwesomeIcon icon={faUsers} color={this.state.is_corporate ? "black": "grey"}/></Label>
-                    <Button className="btn btn-block" onClick={this.onCheckboxIsCorpBtnClick} active={this.state.is_corporate}>{this.state.is_corporate ? 'Change to Individual' : 'Change to Corporate'}</Button>
-                </FormGroup>   
-                <FormGroup>
-                  <Label>Status</Label>
-                  <Dropdown className="form-group" isOpen={this.state.dropdownOpen} toggle={this.toggle}>
-                    <DropdownToggle className="btn-block" caret>
-                      {this.state.status || ''}
-                    </DropdownToggle>
-                    <DropdownMenu className="btn-block">
-                      <DropdownItem onClick={this.changeValue}>Candidate</DropdownItem>
-                      <DropdownItem onClick={this.changeValue}>Processed</DropdownItem>
-                      <DropdownItem onClick={this.changeValue}>Converted</DropdownItem>
-                      <DropdownItem onClick={this.changeValue}>Rejected</DropdownItem>
-                    </DropdownMenu>
-                  </Dropdown>
-                </FormGroup>
-                {this.state.status !== "Candidate" && is_staff ?
-                <FormGroup>
-                    <Label>New <FontAwesomeIcon icon={faHandHoldingUsd} color={!this.state.is_payed ? "black": "grey"}/> / Payed <FontAwesomeIcon icon={faCheckCircle} color={this.state.is_payed ? "black": "grey"}/></Label>
-                    <Button className="btn btn-block" onClick={this.onCheckboxIsPayBtnClick} active={this.state.is_payed}>{this.state.is_payed ? 'Change to New' : 'Change to Payed'}</Button>
-                </FormGroup>
-                : null}
-                <Button color="info" size="lg" type="submit"><FontAwesomeIcon icon={faSave} color="white"/></Button>
-              </Form>
-              <h3>Detailed View</h3>
-              <Table striped className="text-center">
-                <thead>
-                  <tr>
-                    <td><FontAwesomeIcon icon={faMale} color="black"/> / <FontAwesomeIcon icon={faUsers} color="black"/></td>
-                    <td>Name</td>
-                    <td>Phone</td>
-                    <td>Status</td>
-                    <td>Email</td>
-                    <td>Linkedin</td>
-                    <td>Website</td>
-                    <td>Payment</td>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr> 
-                    <td>{detail.is_corporate ? <FontAwesomeIcon icon={faUsers} color="black"/> : <FontAwesomeIcon icon={faMale} color="black"/>}</td>
-                    <td>{detail.text}</td>
-                    <td>{detail.phone}</td>
-                    <td>{detail.status}</td>
-                    <td>{detail.email}</td>
-                    <td>{detail.linkedin_profile}</td>
-                    <td>{detail.website}</td>
-                    <td>{detail.is_payed ? <FontAwesomeIcon icon={faCheckCircle} color="black"/> : <FontAwesomeIcon icon={faHandHoldingUsd} color="black"/>}</td>
-                  </tr>
-                </tbody>
-              </Table>
-            </div>              
+                <Container fluid>
+                  <Row>
+                    <Form onSubmit={this.submitNote} className="form col col-lg-4 mt-2 p-2">
+                      
+                      <FormGroup>
+                        <Label>Name <span className="text-danger">*</span></Label>
+                        <Input
+                          name="text"
+                          value={this.state.text || ''}
+                          placeholder="Enter name..."
+                          onChange={this.handleChange}
+                          required />
+                          {errors.text ? <FormText color="danger">{errors.text}</FormText>: ""}
+                      </FormGroup>
+                      <FormGroup>
+                        <Label>Phone <span className="text-danger">*</span></Label>
+                        <Input
+                          className="form-group"
+                          name="phone"
+                          type='tel'
+                          value={this.state.phone || ''}
+                          placeholder="Enter phone..."
+                          onChange={this.handleChange}
+                          />
+                          {errors.phone ? <FormText color="danger">{errors.phone}</FormText>: ""}
+                      </FormGroup>
+                      <FormGroup>
+                        <Label>Email <span className="text-danger">*</span></Label>
+                        <Input
+                          className="form-group"
+                          name="email"
+                          type='text'
+                          value={this.state.email || ''}
+                          placeholder="Enter email..."
+                          onChange={this.handleChange}
+                          />
+                          {errors.email ? <FormText color="danger">{errors.email}</FormText>: ""}
+                      </FormGroup> 
+                      <FormGroup>
+                        <Label>Linkedin <span className="text-danger">*</span></Label>
+                        <Input
+                          className="form-group"
+                          name="linkedin_profile"
+                          type='text'
+                          value={this.state.linkedin_profile || ''}
+                          placeholder="Enter Linkedin profile..."
+                          onChange={this.handleChange}
+                          />
+                          {errors.linkedin_profile ? <FormText color="danger">{errors.linkedin_profile}</FormText>: ""}
+                      </FormGroup> 
+                      <FormGroup>
+                      <Label>Website</Label>
+                      <Input
+                        className="form-group"
+                        name="website"
+                        type='text'
+                        value={this.state.website || ''}
+                        placeholder="Enter your website..."
+                        onChange={this.handleChange}
+                        />
+                        {errors.website ? <FormText color="danger">{errors.website}</FormText>: ""}
+                    </FormGroup>
+                    <FormGroup>
+                      <Label>Correspondence</Label>
+                      <Input
+                        className="form-group"
+                        name="correspondence"
+                        type='textarea'
+                        value={this.state.correspondence || ''}
+                        placeholder="Enter your correspondence..."
+                        onChange={this.handleChange}
+                        />
+                        {errors.correspondence ? <FormText color="danger">{errors.correspondence}</FormText>: ""}
+                    </FormGroup>    
+                    <FormGroup>
+                        <Label>Individual <FontAwesomeIcon icon={faMale} color={!this.state.is_corporate ? "black": "grey"}/> / Corporate <FontAwesomeIcon icon={faUsers} color={this.state.is_corporate ? "black": "grey"}/></Label>
+                        <Button className="btn btn-block" onClick={this.onCheckboxIsCorpBtnClick} active={this.state.is_corporate}>{this.state.is_corporate ? 'Change to Individual' : 'Change to Corporate'}</Button>
+                    </FormGroup>   
+                    <FormGroup>
+                      <Label>Status</Label>
+                      <Dropdown className="form-group" isOpen={this.state.dropdownOpen} toggle={this.toggle}>
+                        <DropdownToggle className="btn-block" caret>
+                          {this.state.status || ''}
+                        </DropdownToggle>
+                        <DropdownMenu className="btn-block">
+                          <DropdownItem onClick={this.changeValue}>Candidate</DropdownItem>
+                          <DropdownItem onClick={this.changeValue}>Processed</DropdownItem>
+                          <DropdownItem onClick={this.changeValue}>Converted</DropdownItem>
+                          <DropdownItem onClick={this.changeValue}>Rejected</DropdownItem>
+                        </DropdownMenu>
+                      </Dropdown>
+                    </FormGroup>
+                    {this.state.status !== "Candidate" && is_staff ?
+                    <FormGroup>
+                        <Label>New <FontAwesomeIcon icon={faHandHoldingUsd} color={!this.state.is_payed ? "black": "grey"}/> / Payed <FontAwesomeIcon icon={faCheckCircle} color={this.state.is_payed ? "black": "grey"}/></Label>
+                        <Button className="btn btn-block" onClick={this.onCheckboxIsPayBtnClick} active={this.state.is_payed}>{this.state.is_payed ? 'Change to New' : 'Change to Payed'}</Button>
+                    </FormGroup>
+                    : null}                
+                    <FormGroup>
+                      <Label>Last Call {this.state.add_call ? <Button className="btn" onClick={this.onResetCallClick}>Reset</Button>: ""}</Label>
+                      {moment(this.state.last_call).isValid() ?
+                      <div>
+                        <DatePicker     
+                          selected={moment(this.state.last_call, moment.defaultFormat).toDate()}
+                          onChange={this.changeDate}
+                          showTimeSelect
+                          timeFormat="HH:mm"
+                          timeIntervals={15}
+                          dateFormat="d MMMM yyyy HH:mm"
+                          timeCaption="time"
+                        />
+                      </div>
+                      :                     
+                        <Button className="btn btn-block" onClick={this.onAddCallClick}>Add Last Call</Button>
+                      }
+                    </FormGroup>
+                    <div>Documents:
+                    {detail.documents ? " ("+detail.documents.split("/").slice(-1)[0]+")" : ""}
+                    </div>
+                    <FileDrop onSelectDrop={this.getData} documents={this.state.documents} detail={`${detail.documents}`}/>
+                    <Button color="info" size="lg" type="submit"><FontAwesomeIcon icon={faSave} color="white"/></Button>
+                  </Form>
+                  <div className="col col-lg-8">
+                    <h3>Detailed Preview</h3>
+                    <Table striped>
+                      <tbody>
+                        <tr>
+                          <th>Investor</th>
+                          <td>{detail.is_corporate ? "Corporate" : "Individual" }</td>
+                        </tr>
+                        <tr>
+                          <th>Name</th>
+                          <td>{detail.text}</td>
+                        </tr>
+                        <tr>
+                          <th>Phone</th>
+                          <td>{detail.phone}</td>
+                        </tr>
+                        <tr>
+                          <th>Status</th>
+                          <td>{detail.status}</td>
+                        </tr>
+                        <tr>
+                          <th>Email</th>
+                          <td>{detail.email}</td>
+                        </tr>
+                        <tr>
+                          <th>Linkedin</th>
+                          <td className="table-correspondence__data"><a href={`${detail.linkedin_profile}`} >{detail.linkedin_profile}</a></td>
+                        </tr>
+                        <tr>
+                          <th>Website</th>
+                          <td className="table-correspondence__data"><a href={`${detail.website}`} >{detail.website}</a></td>
+                        </tr>
+                        <tr>
+                          <th>Correspondence</th>
+                          <td className="table-correspondence__data">{detail.correspondence}</td>
+                        </tr>
+                        <tr>
+                          <th>Payment</th>
+                          <td>{detail.is_payed ? "Payed" : "New" }</td>
+                        </tr>
+                        <tr>
+                          <th>Calls</th>
+                          <td>{detail.last_call ? moment(detail.last_call).format("D MMM YYYY HH:mm") : ""}</td>
+                        </tr>
+                        <tr>
+                          <th>Documents</th>
+                          <td>{detail.documents ? <a href={`${detail.documents}`} >{detail.documents.split("/").slice(-1)[0]}</a> : ""}</td>
+                        </tr>
+                      </tbody>
+                    </Table>
+                  </div>
+              </Row>
+            </Container>              
           );
 
         } else {
@@ -300,14 +416,13 @@ class NoteDetail extends Component {
         return(
             <div>
                 <div className="mt-2 mb-2">
-                  <Link to={"/messages"} onClick={this.forceUpdate}><Button><FontAwesomeIcon icon={faUndoAlt} color="white"/></Button></Link>
+                  <Link to={"/investors"} onClick={this.forceUpdate}><Button><FontAwesomeIcon icon={faUndoAlt} color="white"/> Return</Button></Link>
                 </div>
               {this.renderNote()}
           </div>               
         )
     }
 }
-
 const mapStateToProps = state => {
     return {
       detail: state.detail,
@@ -319,11 +434,10 @@ const mapDispatchToProps = dispatch => {
       fetchDetailNote: (id) => {
           dispatch(detail.fetchDetailNote(id));
       },
-      updateDetailNote: (id, text, phone, status, is_corporate, is_payed, email, linkedin_profile, website) => {
-          dispatch(detail.updateDetailNote(id, text, phone, status, is_corporate, is_payed, email, linkedin_profile, website));
+      updateDetailNote: (id, text, phone, status, is_corporate, is_payed, email, linkedin_profile, website, correspondence, last_call, documents, attached) => {
+          dispatch(detail.updateDetailNote(id, text, phone, status, is_corporate, is_payed, email, linkedin_profile, website, correspondence, last_call, documents, attached));
       }
     }
 }
 
-// export default NoteDetail;
 export default connect(mapStateToProps, mapDispatchToProps)(NoteDetail);

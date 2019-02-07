@@ -37,6 +37,9 @@ class Message(models.Model):
 	email = models.EmailField(blank=True, null=True)
 	linkedin_profile = models.URLField(blank=True, null=True, max_length=250)
 	website = models.URLField(blank=True, null=True, max_length=250)
+	last_call = models.DateTimeField(null=True, blank=True)
+	correspondence = models.CharField(max_length=2000, blank=True, null=True)
+	documents = models.FileField(upload_to="files", blank=True, default='')
 
 	def __str__(self):
 		return self.text

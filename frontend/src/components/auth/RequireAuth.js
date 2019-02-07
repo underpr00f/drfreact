@@ -33,7 +33,7 @@ export default function(ComposedComponent) {
     function mapStateToProps(state) {
         // provide is_staff to props
         let is_staff = false;
-        if (state.auth.user && state.auth.user.is_staff) {
+        if (state.auth.user && (state.auth.user.is_staff || state.auth.user.is_superuser)) {
             is_staff = true;
         }
         return { authenticated: state.auth.authenticated, 

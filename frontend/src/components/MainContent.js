@@ -18,7 +18,7 @@ import NoMatch from "./NoMatch";
 import ReactifyComp from '../routingComps/ReactifyComp'
 import PostDetail from '../reactify/PostDetail';
 import PostCreate from '../reactify/PostCreate'
-import InputForm from '../routingComps/InputForm'
+import InputForm from './notes/InputForm'
 import NoteDetail from './notes/NoteDetail'
 import NewNote from './notes/NewNote'
 import Payments from './notes/Payments'
@@ -41,9 +41,9 @@ const MainContent = () => (
             <Route path='/react/posts/create' component={RequireAuth(PostCreate)}/>
             <Route path='/react/posts/:slug' component={RequireAuth(PostDetail)}/>
             <Route path='/react/posts' component={RequireAuth(ReactifyComp)} />
-            <Route exact path='/messages' component={RequireAuth(InputForm)} />
-            <Route path='/messages/add' component={RequireAuth(NewNote)}/>
-            <Route path='/messages/:id' component={RequireAuth(NoteDetail)}/>
+            <Route exact path='/investors' component={RequireAuth(InputForm)} />
+            <Route path='/investors/add' component={RequireAuth(NewNote)}/>
+            <Route path='/investors/:id' component={RequireAuth(NoteDetail)}/>
             <Route exact path='/payments' component={RequireAuth(Payments)} />
 
             <Route component={NoMatch}/>

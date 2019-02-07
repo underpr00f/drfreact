@@ -52,13 +52,13 @@ class MessagePageNumberPagination(pagination.PageNumberPagination):
 
 class MessageViewSet(viewsets.ModelViewSet):
 
-	queryset = Message.objects.all()
+	# queryset = Message.objects.all()
 	serializer_class = MessageSerializer
 	permission_classes = [permissions.IsAuthenticated] #убрать Attribute error с /api/messages/
 	pagination_class    = MessagePageNumberPagination
 	filter_backends = (filters.SearchFilter, filters.OrderingFilter,)
 	search_fields = ('text',)
-	ordering_fields = ('text', 'status')
+	ordering_fields = ('text', 'status', 'is_payed', 'owner' )
 
 	def get_queryset(self):
 		if self.request.user.is_staff or self.request.user.is_superuser:
@@ -86,7 +86,6 @@ class PaymentsViewSet(viewsets.ModelViewSet):
 			return Message.objects.filter(owner=self.request.user).values('owner', 'status', 'is_payed')
 	
 	def list(self, request):
-
 		queryset = self.get_queryset()
 		output = []
 
@@ -104,34 +103,13 @@ class PaymentsViewSet(viewsets.ModelViewSet):
 				total = queryset.filter(owner=user).count()
 				if total:
 					output_data = {};	
-					price = 0;
-					price_payed = 0;
 
 					#get count payed investors
 					count_payed = queryset.filter(owner=user, is_payed=True).count();
 					# get true_investors (without candidate status)
-					candidate_count = queryset.filter(owner=user, status='Candidate').count()					
-					true_investors = total - candidate_count
-					
-					# Calculating price
-					for key, value in prices.items():
-						# Calculating price for investors without Candidate status						
-						if true_investors >=10: 
-							if true_investors >= key:
-								price += 10*value
-							else:
-								if (math.ceil(true_investors/10) == key/10):
-									price += (true_investors+10-key)*value
-						# Get payed price 
-						if count_payed and true_investors >=10: 
-							if count_payed >= key:
-								price_payed += 10*value
-							else:
-								if (math.ceil(count_payed/10) == key/10):
-									price_payed += (count_payed+10-key)*value
-					# output price without payed prices
-					output_data['price'] = price-price_payed
-					# output other data
+					candidate_count = queryset.filter(owner=user, status='Candidate').count()
+					output_data['prices'] = prices
+					output_data['payed'] = count_payed
 					output_data['owner'] = user.username
 					output_data['total'] = total		
 					output_data['processed'] = queryset.filter(owner=user, status='Processed').count()
@@ -143,34 +121,15 @@ class PaymentsViewSet(viewsets.ModelViewSet):
 			total = queryset.all().count()
 			if total:
 				output_data = {};
-				price = 0;
-				price_payed = 0;
 
 				#get count payed investors
 				count_payed = queryset.filter(is_payed=True).count();
 				# get true_investors (without candidate status)
 				candidate_count = queryset.filter(status='Candidate').count()					
-				true_investors = total - candidate_count
-				
-				# Calculating price
-				for key, value in prices.items():
-					# Calculating price for investors without Candidate status						
-					if true_investors >=10: 
-						if true_investors >= key:
-							price += 10*value
-						else:
-							if (math.ceil(true_investors/10) == key/10):
-								price += (true_investors+10-key)*value
-					# Get payed price 
-					if count_payed and true_investors >=10: 
-						if count_payed >= key:
-							price_payed += 10*value
-						else:
-							if (math.ceil(count_payed/10) == key/10):
-								price_payed += (count_payed+10-key)*value
 				
 				# output price without payed prices
-				output_data['price'] = price-price_payed			
+				output_data['prices'] = prices
+				output_data['payed'] = count_payed			
 				output_data['owner'] = request.user.username
 				output_data['total'] = total		
 				output_data['processed'] = queryset.filter(status='Processed').count()

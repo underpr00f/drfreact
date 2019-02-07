@@ -14,3 +14,32 @@
   flex-direction: column;
   align-items: flex-end;
 }
+
+/*datepicker*/
+.react-datepicker-wrapper, .react-datepicker__input-container, 
+.react-datepicker__input-container input {
+	width: 100%;
+}
+
+.table-correspondence__data {
+	flex-wrap: wrap;
+  word-break: break-all;
+}
+.dropzone-field {
+  display: flex;
+	border: 1px dashed #000;
+	background: lightgrey;
+  height: 60px;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+}
+
+.btn-sort__clear svg{
+  -webkit-transition: -webkit-transform .5s ease-in-out;
+          transition: transform .5s ease-in-out;
+}
+.btn-sort__clear:hover svg{
+  -webkit-transform: rotate(180deg);
+          transform: rotate(180deg);
+}

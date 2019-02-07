@@ -15,7 +15,7 @@ from user_profile.views import UserViewSet
 
 router = routers.DefaultRouter()
 router.register(r'item', ItemViewSet, base_name='item')
-router.register(r'messages', MessageViewSet, base_name='messages')
+router.register(r'investors', MessageViewSet, base_name='investors')
 router.register(r'posts', PostsViewSet, base_name='posts')
 router.register(r'user', UserViewSet, base_name='user')
 router.register(r'payments', PaymentsViewSet, base_name='payments')
@@ -27,7 +27,7 @@ urlpatterns = [
     url(r'^$', TemplateView.as_view(template_name="index.html")),
     # url(r'', TemplateView.as_view(template_name="index.html")),
     #url(r'user/menu/$', message_list),
-    url(r'messages', TemplateView.as_view(template_name="index.html", )),
+    url(r'investors', TemplateView.as_view(template_name="index.html", )),
     url(r'payments', TemplateView.as_view(template_name="index.html", )),
     path('api/posts/', include('posts.urls')),
     path(r'walking', TemplateView.as_view(template_name='index.html')),

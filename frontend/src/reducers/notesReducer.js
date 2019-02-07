@@ -71,6 +71,7 @@ export default function notes(state=initialState, action) {
             noteToUpdate.email = action.note.email;
             noteToUpdate.linkedin_profile = action.note.linkedin_profile;
             noteToUpdate.website = action.note.website;
+            noteToUpdate.correspondence = action.note.correspondence;
             noteList.splice(indexEdit, 1, noteToUpdate);
             return [
                     {...state[state.length-1],
@@ -89,6 +90,7 @@ export default function notes(state=initialState, action) {
                     ];
 
         default:
-            return state;
+            
     }
+    return state;
 }

@@ -2,20 +2,21 @@ export const fetchDetailNote = (id) => {
     return (dispatch, getState) => {
         let headers = {"Content-Type": "application/json"};
         let {token} = getState().auth;
-        const endpoint = `/api/messages/${id}/` 
+        const endpoint = `/api/investors/${id}/` 
         if (token) {
             headers["Authorization"] = `Token ${token}`;
         }
         
         return fetch(endpoint, {headers, })
             .then(res => {
-                if (res.status < 500) {
+                if (res.status < 500 && res.status !== 404) {
                     return res.json().then(data => {
                         return {status: res.status, data};
                     })
-                // } else if (res.status === 404) {
-                //     dispatch({type: "MESSAGE_NOT_FOUND", data: res.data});
-                //     throw res.data;
+                } else if (res.status === 404) {
+                    //redirect page need fix
+                    window.location.href = '/404';
+                    throw res;                
                 } else {
                     console.log("Server Error!");
                     throw res;
@@ -24,33 +25,58 @@ export const fetchDetailNote = (id) => {
 
             .then(res => {
                 if (res.status === 200) {
-                    console.log(res.data)
                     return dispatch({type: 'FETCH_DETAIL_NOTE', detail: res.data});
                 } else if (res.status === 401 || res.status === 403) {
-                    dispatch({type: "AUTHENTICATION_ERROR", data: res.data});
-                    throw res.data;
-                } else if (res.status === 404) {
-                    dispatch({type: "MESSAGE_NOT_FOUND", detail: res.data});
+                    dispatch({type: "AUTHENTICATION_ERROR", detail: res.data});
                     throw res.data;
                 }
             })
+            .catch(error => {                
+                //error.redirect('/404');
+                //Handle error
+                // console.log("error": error);
+                // dispatch({type: "MESSAGE_NOT_FOUND", detail: error});
+            });
     }
 }
 
-export const updateDetailNote = (id, text, phone, status, is_corporate, is_payed, email, linkedin_profile, website) => {
+export const updateDetailNote = (id, text, phone, status, is_corporate, is_payed, email, linkedin_profile, website, correspondence, last_call, documents, attached) => {
     return (dispatch, getState) => {
 
-        let headers = {"Content-Type": "application/json"};
+        let headers = {'Accept': 'application/json'};
+        // let headers = {"Content-Type": "multipart/form-data"};
+
         let {token} = getState().auth;
 
         if (token) {
             headers["Authorization"] = `Token ${token}`;
         }
+        let formData = new FormData();
+        formData.append('text', text);
+        formData.append('phone', phone);
+        formData.append('status', status);
+        formData.append('is_corporate', is_corporate);
+        formData.append('is_payed', is_payed);
+        formData.append('email', email);
+        formData.append('linkedin_profile', linkedin_profile);
+        formData.append('website', website);
 
-        let body = JSON.stringify({text, phone, status, is_corporate, is_payed, email, linkedin_profile, website });
+        // Not required fields
+        if (correspondence) {
+            formData.append('correspondence', correspondence);
+        }
+        if (attached) {
+            formData.append('documents', documents);
+        }
+
+        // formData need to convert ISO format string
+        if (last_call && String(last_call) !=="Invalid Date") {
+            formData.append('last_call', last_call.toISOString());
+        }
+
         let noteId = id;
 
-        return fetch(`/api/messages/${noteId}/`, {headers, method: "PUT", body})
+        return fetch(`/api/investors/${noteId}/`, {headers, method: "PUT", body: formData})
             .then(res => {
                 if (res.status < 500) {
                     return res.json().then(data => {
@@ -72,7 +98,7 @@ export const updateDetailNote = (id, text, phone, status, is_corporate, is_payed
     }
 }
 
-export const addDetailNote = (text, phone, status, is_corporate, email, linkedin_profile, website) => {
+export const addDetailNote = (text, phone, status, is_corporate, email, linkedin_profile, website, correspondence) => {
     return (dispatch, getState) => {
         let headers = {"Content-Type": "application/json"};
         let {token} = getState().auth;
@@ -81,8 +107,8 @@ export const addDetailNote = (text, phone, status, is_corporate, email, linkedin
             headers["Authorization"] = `Token ${token}`;
         }
 
-        let body = JSON.stringify({text, phone, status, is_corporate, email, linkedin_profile, website });
-        return fetch("/api/messages/", {headers, method: "POST", body})
+        let body = JSON.stringify({text, phone, status, is_corporate, email, linkedin_profile, website, correspondence });
+        return fetch("/api/investors/", {headers, method: "POST", body})
             .then(res => {
                 if (res.status < 500) {
                     return res.json().then(data => {

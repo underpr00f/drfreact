@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import * as notes from "../learn/notes";
+import * as notes from "../../actions/notesActions";
 import {connect} from 'react-redux';
 import { Link } from 'react-router-dom'
 import { Form, FormText,  
@@ -13,12 +13,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEdit, faTrash, faMale, 
   faUsers, faSave, faPlusSquare, 
   faSearch, faExchangeAlt, faLongArrowAltDown,
-  faCheckCircle, faHandHoldingUsd } from '@fortawesome/free-solid-svg-icons'
-
-
-// import { library } from '@fortawesome/fontawesome-svg-core'
-// import { faFacebookF } from '@fortawesome/free-brands-svg-icons'  
-// library.add(faFacebookF); 
+  faCheckCircle, faHandHoldingUsd, faTimes } from '@fortawesome/free-solid-svg-icons'
+ 
 class InputForm extends Component {
   constructor(props) {
     super(props);
@@ -29,6 +25,7 @@ class InputForm extends Component {
       email: "",
       linkedin_profile: "",
       website: "",
+      correspondence: "",
       is_corporate: false,
       is_payed: false,
       searchtext: "",
@@ -68,13 +65,16 @@ class InputForm extends Component {
   }
 
   resetForm = () => {
-    this.setState({text: "", phone: '', email:'', errors: {}, updateNoteId: null, status: 'Candidate', is_corporate: false, is_payed: false, linkedin_profile: "", website: "", });
+    this.setState({text: "", phone: '', email:'', errors: {}, 
+      updateNoteId: null, status: 'Candidate', is_corporate: false, 
+      is_payed: false, linkedin_profile: "", website: "",
+      correspondence: "", });
   }
   addNew = () => {
     this.setState({text: "", phone: '', email:'', errors: {}, 
       updateNoteId: null, status: 'Candidate', is_corporate: false, 
       is_payed: false, linkedin_profile: "", website: "", 
-      modal: true, });
+      modal: true, correspondence: "", });
   }
   resetSearch = () => {
     this.setState({ searchtext: "" });
@@ -90,8 +90,8 @@ class InputForm extends Component {
         status: note.status, is_payed: note.is_payed, 
         is_corporate: note.is_corporate, email: note.email, 
         linkedin_profile: note.linkedin_profile, 
-        website: note.website, updateNoteId: id, 
-        updateNoteIndex: index, modal: true, });
+        website: note.website, correspondence:note.correspondence,
+        updateNoteId: id, updateNoteIndex: index, modal: true, });
   }
 
   selectForDelete = (index, id) => {
@@ -106,17 +106,14 @@ class InputForm extends Component {
     // this.setState({is_staff: nextProps.auth.user.is_staff,}) 
     if(this.props.notes[0].noteitems.length > nextProps.notes[0].noteitems.length && this.state.searchtext === "" && this.state.is_ordering_name === "") {
       nextForDelete = this.props.notes[0].next
-      console.log('nextForDeleteBefore', nextForDelete)
       if (nextForDelete) {
         let lastChar = parseInt(nextForDelete.slice(-1), 10)
-        console.log(lastChar)
         if ((lastChar-1) >= 2) {
           nextForDelete = nextForDelete.slice(0, -1)+(lastChar-1);
         } else {
           nextForDelete = nextForDelete.split('?')[0]
         }
       }
-      console.log('nextForDelete', nextForDelete)
       this.props.fetchNotes(nextForDelete);
     }
   }  
@@ -224,7 +221,6 @@ class InputForm extends Component {
   }
   loadMorePosts = () => {
       const {next} = this.props.notes[this.props.notes.length - 1] 
-      console.log('next', next)
       if (next !== null || next !== undefined) {
           this.props.fetchNotes(next)              
       }     
@@ -254,25 +250,38 @@ class InputForm extends Component {
     // Create a new array based on current state:
     let order = [...this.state.order];
     let newordername = "-"+ordername
-    // Add or remove item to it
-    if (order.includes(ordername)){
-      let index = order.indexOf(ordername)
+    let is_ordering_name = false
+    // if ordername starts from "C"-character - clear that order!
+    if (ordername.charAt(0) === "C"){
+      let index = order.indexOf(ordername.slice(1, ordername.length))
+      // Clear ordername (remove from array)
       if (index !== -1) {
         order.splice(index, 1);
       }
-      order.push(newordername);
-    } else if (order.includes(newordername)) {
-      let index = order.indexOf(newordername)
-      if (index !== -1) {
-        order.splice(index, 1);
-      }
-      order.push(ordername);
     } else {
-      order.push(ordername);
+      // Add or remove item to it
+      if (order.includes(ordername)){
+        let index = order.indexOf(ordername)
+        if (index !== -1) {
+          order.splice(index, 1);
+          order.splice(index, 0, newordername);
+        }
+      } else if (order.includes(newordername)) {
+        let index = order.indexOf(newordername)
+        if (index !== -1) {
+          order.splice(index, 1);
+          order.splice(index, 0, ordername);
+        }
+      } else {
+        order.push(ordername);
+      }
     }
-    
+    if (order.length > 0) {
+      is_ordering_name = true
+    } 
+
     // Set state
-    this.setState({is_ordering_name: !this.state.is_ordering_name, order}, function () {
+    this.setState({is_ordering_name: is_ordering_name, searchtext: "", order}, function () {
         this.handleOrderNotes();
     });
   }
@@ -291,14 +300,19 @@ class InputForm extends Component {
       e.preventDefault();
       if(this.handleValidation()){
         if (this.state.updateNoteId === null) {
-            this.props.addNote(this.state.text, this.state.phone, this.state.status, this.state.is_corporate, this.state.is_payed, this.state.email, this.state.linkedin_profile, this.state.website)
+            this.props.addNote(this.state.text, this.state.phone, this.state.status, 
+              this.state.is_corporate, this.state.is_payed, this.state.email, 
+              this.state.linkedin_profile, this.state.website, this.state.correspondence,)
               .then(this.resetForm)
               .then(this.toggleModal)            
               .catch(function (error) {
                  console.log("error", error);
                });
         } else {
-            this.props.updateNote(this.state.updateNoteIndex, this.state.updateNoteId, this.state.text, this.state.phone, this.state.status, this.state.is_corporate, this.state.is_payed, this.state.email, this.state.linkedin_profile, this.state.website)
+            this.props.updateNote(this.state.updateNoteIndex, this.state.updateNoteId, 
+              this.state.text, this.state.phone, this.state.status, this.state.is_corporate, 
+              this.state.is_payed, this.state.email, this.state.linkedin_profile, 
+              this.state.website, this.state.correspondence)
               .then(this.resetForm)
               .then(this.toggleModal)              
               .catch(function (error) {
@@ -311,6 +325,7 @@ class InputForm extends Component {
       if (this.state.modal) {
         const { errors } = this.state;
         const { is_staff } = this.props;
+
         return (
           <Modal isOpen={this.state.modal} toggle={this.toggleModal}>
             <Form onSubmit={this.submitNote}>            
@@ -376,6 +391,18 @@ class InputForm extends Component {
                     {errors.website ? <FormText color="danger">{errors.website}</FormText>: ""}
                 </FormGroup> 
                 <FormGroup>
+                  <Label>Correspondence</Label>
+                  <Input
+                    className="form-group"
+                    name="correspondence"
+                    type='textarea'
+                    value={this.state.correspondence || ''}
+                    placeholder="Enter your correspondence..."
+                    onChange={this.handleChange}
+                    />
+                    {errors.correspondence ? <FormText color="danger">{errors.correspondence}</FormText>: ""}
+                </FormGroup> 
+                <FormGroup>
                     <Label>Individual <FontAwesomeIcon icon={faMale} color={!this.state.is_corporate ? "black": "grey"}/> / Corporate <FontAwesomeIcon icon={faUsers} color={this.state.is_corporate ? "black": "grey"}/></Label>
                     <Button className="btn btn-block" onClick={this.onCheckboxIsCorpBtnClick} active={this.state.is_corporate}>{this.state.is_corporate ? 'Change to Individual' : 'Change to Corporate'}</Button>
                 </FormGroup>
@@ -424,7 +451,7 @@ class InputForm extends Component {
       <div>
         <div className="centering mt-2"> 
           <div className="centering-left"> 
-            <Link to={"/messages/add"}><Button className="rounded-0" color="info"><FontAwesomeIcon icon={faPlusSquare} color="white"/> Add New</Button></Link>
+            <Link to={"/investors/add"}><Button className="rounded-0" color="info"><FontAwesomeIcon icon={faPlusSquare} color="white"/> Add New</Button></Link>
           </div>
           <div className="centering-center"> 
             {this.renderModal()}
@@ -462,13 +489,36 @@ class InputForm extends Component {
               <th>Name <Button color="link" onClick={() => this.onBtnClickOrderingName("text")}>
                 {order.includes("text") ? <FontAwesomeIcon icon={faLongArrowAltDown} color="black"/>
                 :order.includes("-text") ? <FontAwesomeIcon rotation={180} icon={faLongArrowAltDown} color="black"/>
-                :<FontAwesomeIcon rotation={90} icon={faExchangeAlt} color="grey"/>}</Button></th>
+                :<FontAwesomeIcon rotation={90} icon={faExchangeAlt} color="grey"/>}</Button>
+                {order.includes("text") ? <Button color="link" className="btn-sort__clear" onClick={() => this.onBtnClickOrderingName("Ctext")}><FontAwesomeIcon icon={faTimes} color="black" /></Button>
+                :order.includes("-text") ? <Button color="link" className="btn-sort__clear" onClick={() => this.onBtnClickOrderingName("C-text")}><FontAwesomeIcon icon={faTimes} color="black" /></Button>
+                :""}
+              </th>
+              <th>Dev <Button color="link" onClick={() => this.onBtnClickOrderingName("owner")}>
+                {order.includes("owner") ? <FontAwesomeIcon icon={faLongArrowAltDown} color="black"/>
+                :order.includes("-owner") ? <FontAwesomeIcon rotation={180} icon={faLongArrowAltDown} color="black"/>
+                :<FontAwesomeIcon rotation={90} icon={faExchangeAlt} color="grey"/>}</Button>
+                {order.includes("owner") ? <Button color="link" className="btn-sort__clear" onClick={() => this.onBtnClickOrderingName("Cowner")}><FontAwesomeIcon icon={faTimes} color="black" /></Button>
+                :order.includes("-owner") ? <Button color="link" className="btn-sort__clear" onClick={() => this.onBtnClickOrderingName("C-owner")}><FontAwesomeIcon icon={faTimes} color="black" /></Button>
+                :""}
+              </th>
               <th>Phone</th>
               <th>Status <Button color="link" onClick={() => this.onBtnClickOrderingName("status")}>
                 {order.includes("status") ? <FontAwesomeIcon icon={faLongArrowAltDown} color="black"/>
                 :order.includes("-status") ? <FontAwesomeIcon rotation={180} icon={faLongArrowAltDown} color="black"/>
-                :<FontAwesomeIcon rotation={90} icon={faExchangeAlt} color="grey"/>}</Button></th>
-              <th>Payment</th>
+                :<FontAwesomeIcon rotation={90} icon={faExchangeAlt} color="grey"/>}</Button>
+                {order.includes("status") ? <Button color="link" className="btn-sort__clear" onClick={() => this.onBtnClickOrderingName("Cstatus")}><FontAwesomeIcon icon={faTimes} color="black" /></Button>
+                :order.includes("-status") ? <Button color="link" className="btn-sort__clear" onClick={() => this.onBtnClickOrderingName("C-status")}><FontAwesomeIcon icon={faTimes} color="black" /></Button>
+                :""}
+              </th>
+              <th>Payment <Button color="link" onClick={() => this.onBtnClickOrderingName("is_payed")}>
+                {order.includes("is_payed") ? <FontAwesomeIcon icon={faLongArrowAltDown} color="black"/>
+                :order.includes("-is_payed") ? <FontAwesomeIcon rotation={180} icon={faLongArrowAltDown} color="black"/>
+                :<FontAwesomeIcon rotation={90} icon={faExchangeAlt} color="grey"/>}</Button>
+                {order.includes("is_payed") ? <Button color="link" className="btn-sort__clear" onClick={() => this.onBtnClickOrderingName("Cis_payed")}><FontAwesomeIcon icon={faTimes} color="black" /></Button>
+                :order.includes("-is_payed") ? <Button color="link" className="btn-sort__clear" onClick={() => this.onBtnClickOrderingName("C-is_payed")}><FontAwesomeIcon icon={faTimes} color="black" /></Button>
+                :""}
+              </th>
               <th>Manage</th>
             </tr>
           </thead>  
@@ -482,10 +532,11 @@ class InputForm extends Component {
                               <th scope="row">{id+1}</th>
                               <td>{note.is_corporate ? <FontAwesomeIcon icon={faUsers} color="black"/> : <FontAwesomeIcon icon={faMale} color="black"/>}</td>
                               <td>
-                                <Link to={{pathname:`/messages/${note.id}`,
+                                <Link to={{pathname:`/investors/${note.id}`,
                                       state: {fromDashboard: false}
                                       }}>{note.text}</Link>
                               </td>
+                              <td>{note.owner_username}</td>
                               <td>{note.phone}</td>
                               <td>{note.status}</td>
                               <td>{note.is_payed ? <FontAwesomeIcon icon={faCheckCircle} color="black"/> : <FontAwesomeIcon icon={faHandHoldingUsd} color="black"/>}</td>
@@ -518,11 +569,11 @@ const mapDispatchToProps = dispatch => {
         fetchNotes: (next) => {
             dispatch(notes.fetchNotes(next));
         },
-        addNote: (text, phone, status, is_corporate, is_payed, email, linkedin_profile, website) => {
-            return dispatch(notes.addNote(text, phone, status, is_corporate, is_payed, email, linkedin_profile, website));
+        addNote: (text, phone, status, is_corporate, is_payed, email, linkedin_profile, website, correspondence) => {
+            return dispatch(notes.addNote(text, phone, status, is_corporate, is_payed, email, linkedin_profile, website, correspondence));
         },
-        updateNote: (index, id, text, phone, status, is_corporate, is_payed, email, linkedin_profile, website) => {
-            return dispatch(notes.updateNote(index, id, text, phone, status, is_corporate, is_payed, email, linkedin_profile, website));
+        updateNote: (index, id, text, phone, status, is_corporate, is_payed, email, linkedin_profile, website, correspondence) => {
+            return dispatch(notes.updateNote(index, id, text, phone, status, is_corporate, is_payed, email, linkedin_profile, website, correspondence));
         },
         deleteNote: (index, id) => {
             dispatch(notes.deleteNote(index, id));

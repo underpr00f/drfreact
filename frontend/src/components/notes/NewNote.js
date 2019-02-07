@@ -20,6 +20,7 @@ class NewNote extends Component {
           status: "Candidate",
           linkedin_profile: "",
           website: "",
+          correspondence: "",
           is_corporate: false,
           id: null,
           doneLoading: false,
@@ -47,7 +48,10 @@ class NewNote extends Component {
     }    
 
     resetForm = () => {
-      this.setState({text: "", phone: '', email:'', errors: {}, status: 'Candidate', is_corporate: false, linkedin_profile: "", website: "",});
+      this.setState({text: "", phone: '', email:'', errors: {}, status: 'Candidate', 
+        is_corporate: false, linkedin_profile: "", website: "",
+        correspondence: "",
+      });
     }
     handleChange = (e) => {
       e.preventDefault();
@@ -144,7 +148,9 @@ class NewNote extends Component {
     submitNote = (e) => {
       e.preventDefault();
       if(this.handleValidation()){
-        this.props.addDetailNote(this.state.text, this.state.phone, this.state.status, this.state.is_corporate, this.state.email, this.state.linkedin_profile, this.state.website)
+        this.props.addDetailNote(this.state.text, this.state.phone, this.state.status, 
+          this.state.is_corporate, this.state.email, this.state.linkedin_profile, 
+          this.state.website, this.state.correspondence)
           .then(this.setState({ redirectToNewPage: true }))            
           .catch(function (error) {
              console.log("error", error);
@@ -160,13 +166,13 @@ class NewNote extends Component {
           // const { detail } = this.state;
           // console.log(this.state.id)
           return (
-            <Redirect to={{pathname:`/messages/${this.state.id}`}} />
+            <Redirect to={{pathname:`/investors/${this.state.id}`}} />
           )
         }
         return(
             <div>
               <div className="mt-2 mb-2">
-                <Link className="mt-2 mb-2" to={"/messages"} onClick={this.forceUpdate}><Button><FontAwesomeIcon icon={faUndoAlt} color="white"/></Button></Link>
+                <Link className="mt-2 mb-2" to={"/investors"} onClick={this.forceUpdate}><Button><FontAwesomeIcon icon={faUndoAlt} color="white"/></Button></Link>
                 <h3>Add New</h3>
               </div>
               <Form onSubmit={this.submitNote} className="form col col-sm-4 mt-2 p-2">
@@ -228,7 +234,19 @@ class NewNote extends Component {
                     onChange={this.handleChange}
                     />
                     {errors.website ? <FormText color="danger">{errors.website}</FormText>: ""}
-                </FormGroup>                 
+                </FormGroup>
+                <FormGroup>
+                  <Label>Correspondence</Label>
+                  <Input
+                    className="form-group"
+                    name="correspondence"
+                    type='textarea'
+                    value={this.state.correspondence || ''}
+                    placeholder="Enter your correspondence..."
+                    onChange={this.handleChange}
+                    />
+                    {errors.correspondence ? <FormText color="danger">{errors.correspondence}</FormText>: ""}
+                </FormGroup>                  
                 <FormGroup>
                     <Label>Individual <FontAwesomeIcon icon={faMale} color="black"/> / Corporate <FontAwesomeIcon icon={faUsers} color="black"/></Label>
                     <Button className="btn btn-block" onClick={this.onCheckboxBtnClick} active={this.state.is_corporate}>{this.state.is_corporate ? 'Corporate' : 'Individual'}</Button>
@@ -250,8 +268,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        addDetailNote: (text, phone, status, is_corporate, email, linkedin_profile, website) => {
-            return dispatch(detail.addDetailNote(text, phone, status, is_corporate, email, linkedin_profile, website));
+        addDetailNote: (text, phone, status, is_corporate, email, linkedin_profile, website, correspondence) => {
+            return dispatch(detail.addDetailNote(text, phone, status, is_corporate, email, linkedin_profile, website, correspondence));
         },
     }
 }
