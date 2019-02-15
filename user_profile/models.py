@@ -19,9 +19,12 @@ class UserProfile(models.Model):
 def create_user_profile(sender, instance, created, **kwargs):
     """Creates a UserProfile Object Whenever a User Object is Created"""
     if created:
-        UserProfile.objects.create(user=instance)
+        profile = UserProfile.objects.create(user=instance)
+        profile.save()
 
 post_save.connect(create_user_profile, sender=User)
+
+
 # class CustomUser(AbstractUser):
 #     name = models.CharField(blank=True, max_length=255)
 

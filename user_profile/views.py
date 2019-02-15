@@ -14,6 +14,7 @@ class UserViewSet(viewsets.ModelViewSet):
     #authentication_classes = (authentication.TokenAuthentication, authentication.SessionAuthentication)
     queryset = User.objects.all().order_by('-date_joined')
     serializer_class = UserSerializer
+
     
 
 
