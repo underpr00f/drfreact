@@ -39,7 +39,7 @@ class Message(models.Model):
 	website = models.URLField(blank=True, null=True, max_length=250)
 	last_call = models.DateTimeField(null=True, blank=True)
 	correspondence = models.CharField(max_length=2000, blank=True, null=True)
-	documents = models.FileField(upload_to="files", blank=True, default='')
+	documents = models.FileField(upload_to="static/files", blank=True, default='')
 
 	def __str__(self):
 		return self.text
