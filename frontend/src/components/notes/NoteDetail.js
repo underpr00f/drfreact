@@ -8,6 +8,7 @@ import { Form, FormText, Container, Row,
   FormGroup, Label, Input, Button,
   Dropdown, DropdownToggle, 
   DropdownMenu, DropdownItem, Table } from 'reactstrap';
+import { LoadScreen } from './LoadScreen/LoadScreen'
 // import PropTypes from "prop-types";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMale, faUsers, faUndoAlt, faSave,
@@ -23,7 +24,7 @@ class NoteDetail extends Component {
 
     constructor(props){
         super(props);
-        // this.handleValidation = handleValidation.bind(this)   
+  
         this.state = {
           text: "",
           phone: "",
@@ -35,7 +36,7 @@ class NoteDetail extends Component {
           is_corporate: false,
           is_payed: false,
           id: null,
-          isLoading: true,
+          loading: true,
           errors: {},
           hasError: false,
           dropdownOpen: false,
@@ -52,34 +53,36 @@ class NoteDetail extends Component {
         const {id} = this.props.match.params
         this.setState({
             id: id,
-            doneLoading: false,
         })
         this.props.fetchDetailNote(id)        
       }
       
     }
     componentWillReceiveProps(nextProps) {
-      console.log(Object.keys(nextProps.detail).length)
-      if (Object.keys(nextProps.detail).length) {
+      const detailed = nextProps.detail
+
+      if (Object.keys(detailed).length) {
         this.setState({
-          text: nextProps.detail.text,
-          phone: nextProps.detail.phone,
-          status: nextProps.detail.status,
-          is_corporate: nextProps.detail.is_corporate,
-          is_payed: nextProps.detail.is_payed,
-          email: nextProps.detail.email,
-          linkedin_profile: nextProps.detail.linkedin_profile,
-          website: nextProps.detail.website,
-          correspondence: nextProps.detail.correspondence,
-          last_call: moment(nextProps.detail.last_call, moment.defaultFormat).toDate(),
-          documents: nextProps.detail.documents,
-          hasError: false
+          text: detailed.text,
+          phone: detailed.phone,
+          status: detailed.status,
+          is_corporate: detailed.is_corporate,
+          is_payed: detailed.is_payed,
+          email: detailed.email,
+          linkedin_profile: detailed.linkedin_profile,
+          website: detailed.website,
+          correspondence: detailed.correspondence,
+          last_call: moment(detailed.last_call, moment.defaultFormat).toDate(),
+          documents: detailed.documents,
+          hasError: detailed.hasError,
+          loading: detailed.loading,
         }) 
-      } else {
-        this.setState({
-          hasError: true
-        })
-      }
+      } 
+      // else {
+      //   this.setState({
+      //     hasError: true
+      //   })
+      // }
        
     }    
     toggle = () => {
@@ -220,12 +223,14 @@ class NoteDetail extends Component {
     }
 
     renderNote() {
-        if (!this.props.detail.detail && !this.state.hasError) {
-          console.log(this.state)
-          // const {doneLoading} = this.state
-          const { detail } = this.props;
-          const { is_staff } = this.props;
-          const { errors } = this.state;
+        // const { loading } = this.state
+        const { detail } = this.props;
+        const { is_staff } = this.props;
+        const { errors } = this.state;
+        const { hasError } = this.state;
+        // console.log(loading)
+        // console.log(hasError)
+        if (!detail.detail && !hasError) {
           return (
                 <Container fluid>
                   <Row>
@@ -413,12 +418,14 @@ class NoteDetail extends Component {
         }
     }
     render () {
+        const {loading} = this.state
         return(
             <div>
-                <div className="mt-2 mb-2">
-                  <Link to={"/investors"} onClick={this.forceUpdate}><Button><FontAwesomeIcon icon={faUndoAlt} color="white"/> Return</Button></Link>
-                </div>
-              {this.renderNote()}
+              <div className="mt-2 mb-2">
+                <Link to={"/investors"} onClick={this.forceUpdate}><Button><FontAwesomeIcon icon={faUndoAlt} color="white"/> Return</Button></Link>
+              </div>
+              {loading ?<LoadScreen />:this.renderNote()}
+
           </div>               
         )
     }

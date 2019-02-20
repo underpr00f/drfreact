@@ -8,7 +8,7 @@ import { Form, FormText,
   Dropdown, DropdownToggle, 
   DropdownMenu, DropdownItem, Table, CustomInput,
   Modal, ModalHeader, ModalBody, ModalFooter, } from 'reactstrap';
-
+import { LoadScreen } from './LoadScreen/LoadScreen'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEdit, faTrash, faMale, 
   faUsers, faSave, faPlusSquare, 
@@ -34,8 +34,9 @@ class InputForm extends Component {
       dropdownOpen: false,
       is_ordering_name: false,
       modal: false,
+      modaldelete: false,
       is_staff: false,
-      // loading: true,
+      loading: true,
       order: [],
       errors: {},
       notes: [
@@ -86,15 +87,23 @@ class InputForm extends Component {
 
   selectForDelete = (index, id) => {
     this.props.deleteNote(index, id)
+    this.setState({
+      modaldelete: false,
+    })     
   }
   componentWillReceiveProps(nextProps) {
+    this.setState({
+      loading: nextProps.notes[0].loading,
+    }) 
     // если длина массива меньше чем предыдущая длина (один элемент удален)
     // то пересчитываем эндпоинт для фетча (вычитаем из последнего символа next
     // число "1" чтобы получить текущий фетч), если в нексте на конце "1", то обрезаем
     // до знака "?"
     let nextForDelete = null;
     // this.setState({is_staff: nextProps.auth.user.is_staff,}) 
-    if(this.props.notes[0].noteitems.length > nextProps.notes[0].noteitems.length && this.state.searchtext === "" && this.state.is_ordering_name === "") {
+    if(this.props.notes[0].noteitems.length > nextProps.notes[0].noteitems.length && 
+          this.state.searchtext === "" && 
+          this.state.is_ordering_name === "") {
       nextForDelete = this.props.notes[0].next
       if (nextForDelete) {
         let lastChar = parseInt(nextForDelete.slice(-1), 10)
@@ -104,7 +113,6 @@ class InputForm extends Component {
           nextForDelete = nextForDelete.split('?')[0]
         }
       }
-      this.props.fetchNotes(nextForDelete);
     }
   }  
     
@@ -118,7 +126,14 @@ class InputForm extends Component {
       modal: !prevState.modal,
     }));
   }
-
+  toggleModalDelete = (index, id) => {
+    console.log(index, id)
+    this.setState(prevState => ({
+      modaldelete: !prevState.modaldelete,
+      index: index,
+      id: id,
+    }));
+  }
   handleValidation = () => {
       let fields = this.state;
       let errors = {};
@@ -193,7 +208,7 @@ class InputForm extends Component {
       this.setState({errors: errors}); 
 
       return formIsValid;
- }
+  }
   handleChange = (e) => {
     e.preventDefault();
     let key = e.target.name
@@ -431,20 +446,36 @@ class InputForm extends Component {
         );
       }
     }
-  render () {
+  renderModalDelete() {
+      if (this.state.modaldelete) {
+        return (
+          <Modal isOpen={this.state.modaldelete} toggle={this.toggleModalDelete}>           
+              <ModalHeader toggle={this.toggleModalDelete}>Delete Investor?</ModalHeader>
+              <ModalFooter> 
+                <FormGroup row>                   
+                <Button className="rounded-0" color="info" onClick={() => this.selectForDelete(this.state.index, this.state.id)}><FontAwesomeIcon icon={faTrash} color="white"/></Button>              
+                <Button className="rounded-0" onClick={this.toggleModalDelete}>Cancel</Button>
+                </FormGroup>
+              </ModalFooter>
+          </Modal>            
+        );
+      }
+  }
+
+  renderNotes () {
     const { notes } = this.props
-    const { errors } = this.state;
+    const { errors, modal, order, modaldelete } = this.state;
     const { next } = this.props.notes[this.props.notes.length - 1];
-    const { order } = this.state;
-    
+
     return (
       <div>
         <div className="centering mt-2"> 
           <div className="centering-left"> 
             <Link to={"/investors/add"}><Button className="rounded-0" color="info"><FontAwesomeIcon icon={faPlusSquare} color="white"/> Add New</Button></Link>
           </div>
-          <div className="centering-center"> 
-            {this.renderModal()}
+          <div className="centering-center">
+          {modal ? this.renderModal() : null}
+          {modaldelete ? this.renderModalDelete() : null}
             <FormGroup row>
               <Button className="rounded-0" color="info" onClick={this.addNew}>Add New</Button>
               <CustomInput inline
@@ -532,7 +563,7 @@ class InputForm extends Component {
                               <td>{note.is_payed ? <FontAwesomeIcon icon={faCheckCircle} color="black"/> : <FontAwesomeIcon icon={faHandHoldingUsd} color="black"/>}</td>
                               <td>
                                 <Button className="mr-1" color="info" onClick={() => this.selectForEdit(index, id)}><FontAwesomeIcon icon={faEdit} color="white"/></Button>
-                                <Button onClick={() => this.selectForDelete(index, id)}><FontAwesomeIcon icon={faTrash} color="white"/></Button>
+                                <Button onClick={() => this.toggleModalDelete(index, id)}><FontAwesomeIcon icon={faTrash} color="white"/></Button>
                               </td>
                           </tr>                                        
                         )
@@ -546,11 +577,20 @@ class InputForm extends Component {
       </div>
     )
   }
+  render () {
+    const { loading } = this.state
+    return(
+      <div>
+        { loading ? <LoadScreen /> : this.renderNotes() }
+      </div>      
+    )
+  }
 }
+// <Button onClick={() => this.selectForDelete(index, id)}><FontAwesomeIcon icon={faTrash} color="white"/></Button>
 
 const mapStateToProps = state => {
     return {
-        notes: state.notes,
+      notes: state.notes,
     }
 }
 

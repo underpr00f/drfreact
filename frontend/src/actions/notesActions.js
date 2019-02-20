@@ -202,5 +202,6 @@ export const deleteNote = (id, index) => {
                     throw res.data;
                 }
             })
+            .then(res => {dispatch(fetchNotes())})
     }
 }

@@ -1,42 +1,28 @@
 import React, {Component} from 'react'
-// import 'whatwg-fetch'
-// import cookie from 'react-cookies'
-// import { Link } from 'react-router-dom'
 import * as lead from "../../actions/paymentsActions";
 import {connect} from 'react-redux';
-// import { Form, FormText, 
-//   FormGroup, Label, Input, Button,
-//   Dropdown, DropdownToggle, 
-//   DropdownMenu, DropdownItem, Table } from 'reactstrap';
+import { LoadScreen } from './LoadScreen/LoadScreen'
 import { Table } from 'reactstrap';
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-// import { faMale, faUsers, faSave } from '@fortawesome/free-solid-svg-icons'
 
 class Payments extends Component {
-    constructor(props){
-        super(props)       
-        this.state = {
-          doneLoading: false,
-          errors: {},
-          lead: {},          
-        }
+    constructor(props) {
+      super(props);
+      this.state = {         
+        loading: true,
+        errors: {},
+        lead: {},
+      };
     }
 
     componentDidMount(){
       if (this.props.match){
-        this.setState({
-            doneLoading: false,
-        })
         this.props.fetchPaymentsLead()
       }
     }
    
-    renderNote() {
-        if (this.props.lead) {
-          // const {doneLoading} = this.state
-          const { lead } = this.props;
-          // const { errors } = this.state;
-
+    renderPayments() {
+      const { lead } = this.props;
+        if (lead.leads) {
           return (
             <div>
               <h3>Leads View</h3>
@@ -53,7 +39,7 @@ class Payments extends Component {
                   </tr>
                 </thead>  
                 <tbody>
-                  {lead.length > 0 ? lead.map((item,id) => (
+                  {lead.leads.length > 0 ? lead.leads.map((item,id) => (
                     <tr key={id}>
                         <th scope="row">{id+1}</th>
                         <td>{item.owner}</td>
@@ -63,33 +49,27 @@ class Payments extends Component {
                         <td>{item.rejected}</td>
                         <td>{item.price}</td>
                     </tr>
-                  )) : null}
+                  )) : <tr><td colspan="7">Table is empty. Add your investors</td></tr>}
                 </tbody>                     
-
               </Table>
             </div>              
           );
-
-        } else {
-            return (
-              <div>
-                <h1>404 error. Message Not Found</h1>
-              </div>
-            );
         }
     }
     render () {
-        return(
-            <div>
-              {this.renderNote()}
-          </div>               
-        )
+      const { loading } = this.props
+      return(
+          <div>
+            { loading ? <LoadScreen /> : this.renderPayments() }
+        </div>               
+      )
     }
 }
 
 const mapStateToProps = state => {
     return {
       lead: state.lead,
+      loading: state.lead.loading
     }
 }
 
@@ -98,11 +78,7 @@ const mapDispatchToProps = dispatch => {
       fetchPaymentsLead: () => {
           dispatch(lead.fetchPaymentsLead());
       },
-      // updateDetailNote: (id, text, phone, status, is_corporate, email, linkedin_profile, website) => {
-      //     dispatch(detail.updateDetailNote(id, text, phone, status, is_corporate, email, linkedin_profile, website));
-      // }
     }
 }
 
-// export default NoteDetail;
 export default connect(mapStateToProps, mapDispatchToProps)(Payments);

@@ -3,6 +3,9 @@
 .tox/
 htmlcov/
 staticfiles/
+static/images
+static/files
+images
 frontend/node_modules/
 tmp/
 venv/

@@ -9,14 +9,11 @@ export const fetchDetailNote = (id) => {
         
         return fetch(endpoint, {headers, })
             .then(res => {
-                if (res.status < 500 && res.status !== 404) {
+                if (res.status < 500) {
                     return res.json().then(data => {
                         return {status: res.status, data};
                     })
-                } else if (res.status === 404) {
-                    //redirect page need fix
-                    window.location.href = '/404';
-                    throw res;                
+               
                 } else {
                     console.log("Server Error!");
                     throw res;
@@ -29,12 +26,20 @@ export const fetchDetailNote = (id) => {
                 } else if (res.status === 401 || res.status === 403) {
                     dispatch({type: "AUTHENTICATION_ERROR", detail: res.data});
                     throw res.data;
+                } 
+                else if (res.status === 404) {
+                    //redirect page need fix
+                    // window.location.href = '/404';
+                    // throw res.data; 
+                    dispatch({type: "MESSAGE_NOT_FOUND"});
+
                 }
             })
             .catch(error => {                
                 //error.redirect('/404');
                 //Handle error
-                // console.log("error": error);
+                console.log("error", error);
+                // return dispatch({type: "MESSAGE_NOT_FOUND", detail: error});
                 // dispatch({type: "MESSAGE_NOT_FOUND", detail: error});
             });
     }

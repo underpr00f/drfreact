@@ -1,5 +1,5 @@
 const initialState = [{noteitems: [], 
-                        // loading: false
+                       loading: true
                     }]
 
 export default function notes(state=initialState, action) {
@@ -15,7 +15,7 @@ export default function notes(state=initialState, action) {
             return [                    
                     {...state[state.length-1],
                     noteitems: noteList,
-                    // loading: action.loading
+                    loading: false,
                     // ...action.notes
                     },
                 ];
@@ -25,7 +25,8 @@ export default function notes(state=initialState, action) {
             return [                    
 
                     {...state,
-                    ...action.notes},
+                    ...action.notes,
+                    loading: false,},
                 ];
 
         case 'ORDER_NOTES':
@@ -34,7 +35,8 @@ export default function notes(state=initialState, action) {
             return [                    
 
                     {...state,
-                    ...action.notes},
+                    ...action.notes,
+                    loading: false,},
                 ];
 
 
@@ -49,7 +51,8 @@ export default function notes(state=initialState, action) {
             return [
                         //берем последний стейт и добавляем к нему общий массив
                         {...state[state.length-1],
-                            noteitems: noteList},
+                            noteitems: noteList,
+                            loading: false,},
 
                     ];
 
@@ -72,7 +75,8 @@ export default function notes(state=initialState, action) {
             noteList.splice(indexEdit, 1, noteToUpdate);
             return [
                     {...state[state.length-1],
-                        noteitems: noteList},
+                        noteitems: noteList,
+                        loading: false,},
                     ];
 
         case 'DELETE_NOTE':
@@ -83,7 +87,8 @@ export default function notes(state=initialState, action) {
             noteList.splice(indexDel, 1);
             return [
                         {...state[state.length-1],
-                            noteitems: noteList}
+                            noteitems: noteList,
+                            loading: false,}
                     ];
 
         default:

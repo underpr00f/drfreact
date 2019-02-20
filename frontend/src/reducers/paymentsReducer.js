@@ -1,11 +1,9 @@
-export default function paymentsReducer(state = [], action) {
+export default function paymentsReducer(state = {leads: "", loading: true}, action) {
     switch(action.type) {
 
         case 'FETCH_PAYMENTS_LEAD':
-            console.log([...action.lead]) 
-            console.log([...state, ...action.lead]) 
             // initialize newstate for reducer (to add calculated parameter lead.price)
-            let newstate =  [...state, ...action.lead];
+            let newstate =  [...action.leads];
             // calculating next payment
             newstate.forEach(item=>{
               // get true_investors (without candidate status)
@@ -40,13 +38,11 @@ export default function paymentsReducer(state = [], action) {
                 }
               }
               // output price without payed prices
-              item.price =price_all-price_payed;
+              item.price =price_all-price_payed;              
             });
-
-            return newstate;
-
-        case 'MESSAGE_NOT_FOUND':
-            return [ ...state, ...action.lead];
+            return { ...state, leads: [...newstate], loading: false }
+        case 'LEAD_NOT_FOUND':
+            return {...state, loading: false, error: "Not found"};
         default:
           // will NOT execute because of the line preceding the switch.
     }

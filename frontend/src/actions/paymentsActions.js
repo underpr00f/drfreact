@@ -24,12 +24,12 @@ export const fetchPaymentsLead = () => {
 
             .then(res => {
                 if (res.status === 200) {
-                    return dispatch({type: 'FETCH_PAYMENTS_LEAD', lead: res.data});
+                    return dispatch({type: 'FETCH_PAYMENTS_LEAD', leads: res.data});
                 } else if (res.status === 401 || res.status === 403) {
                     dispatch({type: "AUTHENTICATION_ERROR", data: res.data});
                     throw res.data;
                 } else if (res.status === 404) {
-                    dispatch({type: "MESSAGE_NOT_FOUND", lead: res.data});
+                    dispatch({type: "ERROR_NOT_FOUND", leads: res.data});
                     throw res.data;
                 }
             })
