@@ -16,6 +16,7 @@ export default function notes(state=initialState, action) {
                     {...state[state.length-1],
                     noteitems: noteList,
                     loading: false,
+                    // deleted: false
                     // ...action.notes
                     },
                 ];
@@ -82,13 +83,15 @@ export default function notes(state=initialState, action) {
         case 'DELETE_NOTE':
             //Поиск в общем массиве элемента по id и index (2мерный массив)
             let deleteById = state[action.id].noteitems[action.index].id
-            let indexDel = noteList.findIndex(p => p.id === deleteById)            
-
+            let indexDel = noteList.findIndex(p => p.id === deleteById)                      
             noteList.splice(indexDel, 1);
             return [
                         {...state[state.length-1],
                             noteitems: noteList,
-                            loading: false,}
+                            loading: false,
+                            nextafterdelete: state[0].next,
+                            deleted: true
+                        }
                     ];
 
         default:

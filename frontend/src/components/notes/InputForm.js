@@ -37,6 +37,8 @@ class InputForm extends Component {
       modaldelete: false,
       is_staff: false,
       loading: true,
+      nextafterdelete: "",
+      deleted: false,
       order: [],
       errors: {},
       notes: [
@@ -99,20 +101,17 @@ class InputForm extends Component {
     // то пересчитываем эндпоинт для фетча (вычитаем из последнего символа next
     // число "1" чтобы получить текущий фетч), если в нексте на конце "1", то обрезаем
     // до знака "?"
-    let nextForDelete = null;
-    // this.setState({is_staff: nextProps.auth.user.is_staff,}) 
-    if(this.props.notes[0].noteitems.length > nextProps.notes[0].noteitems.length && 
-          this.state.searchtext === "" && 
-          this.state.is_ordering_name === "") {
-      nextForDelete = this.props.notes[0].next
-      if (nextForDelete) {
-        let lastChar = parseInt(nextForDelete.slice(-1), 10)
-        if ((lastChar-1) >= 2) {
-          nextForDelete = nextForDelete.slice(0, -1)+(lastChar-1);
-        } else {
-          nextForDelete = nextForDelete.split('?')[0]
-        }
+    let nextForDelete = "";
+    if(nextProps.notes[0].deleted) {
+      nextForDelete = nextProps.notes[0].next
+      let lastChar = parseInt(nextForDelete.slice(-1), 10)
+      if ((lastChar-1) >= 2) {
+        nextForDelete = nextForDelete.slice(0, -1)+(lastChar-1);
       }
+      
+      //add flag nextafterdelete to correctly fetch
+      this.setState({nextafterdelete: nextForDelete,
+        deleted: false})
     }
   }  
     
@@ -225,10 +224,18 @@ class InputForm extends Component {
     this.setState({status: e.currentTarget.textContent})
   }
   loadMorePosts = () => {
-      const {next} = this.props.notes[this.props.notes.length - 1] 
+    const {next} = this.props.notes[this.props.notes.length - 1]
+    // Check if investor is after delete to correct fetch 
+    if (this.state.nextafterdelete) {
+      this.props.fetchNotes(this.state.nextafterdelete)
+      //clear flag nextafterdelete
+      this.setState({nextafterdelete: ""})
+    } else {
       if (next !== null || next !== undefined) {
-          this.props.fetchNotes(next)              
-      }     
+        this.props.fetchNotes(next)              
+      }
+    }
+     
   }
   searchNotes = () => {
       const {searchtext} = this.state
@@ -591,6 +598,7 @@ class InputForm extends Component {
 const mapStateToProps = state => {
     return {
       notes: state.notes,
+      deleted: state.deleted,
     }
 }
 
