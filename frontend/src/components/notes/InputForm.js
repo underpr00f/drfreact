@@ -9,6 +9,7 @@ import { Form, FormText,
   DropdownMenu, DropdownItem, Table, CustomInput,
   Modal, ModalHeader, ModalBody, ModalFooter, } from 'reactstrap';
 import { LoadScreen } from './LoadScreen/LoadScreen'
+import { ModalDelete } from './Modal/Modal'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEdit, faTrash, faMale, 
   faUsers, faSave, faPlusSquare, 
@@ -102,11 +103,13 @@ class InputForm extends Component {
     // число "1" чтобы получить текущий фетч), если в нексте на конце "1", то обрезаем
     // до знака "?"
     let nextForDelete = "";
-    if(nextProps.notes[0].deleted) {
+    if(nextProps.notes[0].deleted && nextProps.notes[0].next) {
       nextForDelete = nextProps.notes[0].next
+      console.log(nextForDelete)
       let lastChar = parseInt(nextForDelete.slice(-1), 10)
       if ((lastChar-1) >= 2) {
         nextForDelete = nextForDelete.slice(0, -1)+(lastChar-1);
+        console.log(nextForDelete)
       }
       
       //add flag nextafterdelete to correctly fetch
@@ -126,11 +129,15 @@ class InputForm extends Component {
     }));
   }
   toggleModalDelete = (index, id) => {
-    console.log(index, id)
+    let text = ""
+    if (id !== undefined) {
+      text = this.props.notes[index].noteitems[id].text
+    }
     this.setState(prevState => ({
       modaldelete: !prevState.modaldelete,
       index: index,
       id: id,
+      text: text
     }));
   }
   handleValidation = () => {
@@ -334,10 +341,10 @@ class InputForm extends Component {
       }
   }
   renderModal() {
+      const { errors } = this.state;
+      const { is_staff } = this.props;
+      
       if (this.state.modal) {
-        const { errors } = this.state;
-        const { is_staff } = this.props;
-
         return (
           <Modal isOpen={this.state.modal} toggle={this.toggleModal}>
             <Form onSubmit={this.submitNote}>            
@@ -453,25 +460,10 @@ class InputForm extends Component {
         );
       }
     }
-  renderModalDelete() {
-      if (this.state.modaldelete) {
-        return (
-          <Modal isOpen={this.state.modaldelete} toggle={this.toggleModalDelete}>           
-              <ModalHeader toggle={this.toggleModalDelete}>Delete Investor?</ModalHeader>
-              <ModalFooter> 
-                <FormGroup row>                   
-                <Button className="rounded-0" color="info" onClick={() => this.selectForDelete(this.state.index, this.state.id)}><FontAwesomeIcon icon={faTrash} color="white"/></Button>              
-                <Button className="rounded-0" onClick={this.toggleModalDelete}>Cancel</Button>
-                </FormGroup>
-              </ModalFooter>
-          </Modal>            
-        );
-      }
-  }
 
   renderNotes () {
     const { notes } = this.props
-    const { errors, modal, order, modaldelete } = this.state;
+    const { errors, modal, order, modaldelete, index, id, text } = this.state;
     const { next } = this.props.notes[this.props.notes.length - 1];
 
     return (
@@ -482,9 +474,16 @@ class InputForm extends Component {
           </div>
           <div className="centering-center">
           {modal ? this.renderModal() : null}
-          {modaldelete ? this.renderModalDelete() : null}
+          {modaldelete ? 
+            <ModalDelete 
+              modaldelete={modaldelete} index={index} 
+              id={id} text={text}
+              toggle={this.toggleModalDelete}
+              onSelectForDelete={this.selectForDelete}
+            /> 
+          : null}
             <FormGroup row>
-              <Button className="rounded-0" color="info" onClick={this.addNew}>Add New</Button>
+              <Button className="rounded-0" color="info" onClick={this.addNew}>Quick Add</Button>
               <CustomInput inline
                 id="searchtext"
                 type="text" 
@@ -593,7 +592,6 @@ class InputForm extends Component {
     )
   }
 }
-// <Button onClick={() => this.selectForDelete(index, id)}><FontAwesomeIcon icon={faTrash} color="white"/></Button>
 
 const mapStateToProps = state => {
     return {

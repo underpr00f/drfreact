@@ -49,7 +49,7 @@ class Payments extends Component {
                         <td>{item.rejected}</td>
                         <td>{item.price}</td>
                     </tr>
-                  )) : <tr><td colspan="7">Table is empty. Add your investors</td></tr>}
+                  )) : <tr><td colSpan="7">Table is empty. Add your investors</td></tr>}
                 </tbody>                     
               </Table>
             </div>              

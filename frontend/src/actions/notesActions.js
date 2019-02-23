@@ -145,7 +145,7 @@ export const updateNote = (index, id, text, phone, status, is_corporate, is_paye
         }
 
         let body = JSON.stringify({text, phone, status, is_corporate, is_payed, email, linkedin_profile, website, correspondence });
-        console.log("id", id, "index", index)
+        // console.log("id", id, "index", index)
         let noteId = getState().notes[index].noteitems[id].id;
 
         return fetch(`/api/investors/${noteId}/`, {headers, method: "PUT", body})

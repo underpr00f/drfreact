@@ -4,18 +4,21 @@ import React, {Component} from 'react'
 import { Link } from 'react-router-dom'
 import * as detail from "../../actions/noteDetailActions";
 import {connect} from 'react-redux';
-import { Form, FormText, Container, Row,
-  FormGroup, Label, Input, Button,
+import { Form, Container, Row,
+  FormGroup, Label, Button,
   Dropdown, DropdownToggle, 
   DropdownMenu, DropdownItem, Table } from 'reactstrap';
 import { LoadScreen } from './LoadScreen/LoadScreen'
 // import PropTypes from "prop-types";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faMale, faUsers, faUndoAlt, faSave,
+import { faUndoAlt, faSave,
       faCheckCircle, faHandHoldingUsd,
        } from '@fortawesome/free-solid-svg-icons'
 import DatePicker from "react-datepicker";
 import FileDrop from './FileDrop/FileDrop';
+
+import { InputFormNoteDetail } from './Molecules/InputFormNoteDetail'
+
 import moment from "moment";
 
 import "react-datepicker/dist/react-datepicker.css";
@@ -223,93 +226,32 @@ class NoteDetail extends Component {
     }
 
     renderNote() {
-        // const { loading } = this.state
-        const { detail } = this.props;
-        const { is_staff } = this.props;
-        const { errors } = this.state;
-        const { hasError } = this.state;
-        // console.log(loading)
-        // console.log(hasError)
+        const { detail, is_staff } = this.props;
+        const { text, phone, email, 
+          linkedin_profile, website,
+          correspondence, is_corporate,
+          errors, hasError } = this.state;
+
         if (!detail.detail && !hasError) {
           return (
                 <Container fluid>
                   <Row>
                     <Form onSubmit={this.submitNote} className="form col col-lg-4 mt-2 p-2">
-                      
-                      <FormGroup>
-                        <Label>Name <span className="text-danger">*</span></Label>
-                        <Input
-                          name="text"
-                          value={this.state.text || ''}
-                          placeholder="Enter name..."
-                          onChange={this.handleChange}
-                          required />
-                          {errors.text ? <FormText color="danger">{errors.text}</FormText>: ""}
-                      </FormGroup>
-                      <FormGroup>
-                        <Label>Phone <span className="text-danger">*</span></Label>
-                        <Input
-                          className="form-group"
-                          name="phone"
-                          type='tel'
-                          value={this.state.phone || ''}
-                          placeholder="Enter phone..."
-                          onChange={this.handleChange}
-                          />
-                          {errors.phone ? <FormText color="danger">{errors.phone}</FormText>: ""}
-                      </FormGroup>
-                      <FormGroup>
-                        <Label>Email <span className="text-danger">*</span></Label>
-                        <Input
-                          className="form-group"
-                          name="email"
-                          type='text'
-                          value={this.state.email || ''}
-                          placeholder="Enter email..."
-                          onChange={this.handleChange}
-                          />
-                          {errors.email ? <FormText color="danger">{errors.email}</FormText>: ""}
-                      </FormGroup> 
-                      <FormGroup>
-                        <Label>Linkedin <span className="text-danger">*</span></Label>
-                        <Input
-                          className="form-group"
-                          name="linkedin_profile"
-                          type='text'
-                          value={this.state.linkedin_profile || ''}
-                          placeholder="Enter Linkedin profile..."
-                          onChange={this.handleChange}
-                          />
-                          {errors.linkedin_profile ? <FormText color="danger">{errors.linkedin_profile}</FormText>: ""}
-                      </FormGroup> 
-                      <FormGroup>
-                      <Label>Website</Label>
-                      <Input
-                        className="form-group"
-                        name="website"
-                        type='text'
-                        value={this.state.website || ''}
-                        placeholder="Enter your website..."
-                        onChange={this.handleChange}
-                        />
-                        {errors.website ? <FormText color="danger">{errors.website}</FormText>: ""}
-                    </FormGroup>
-                    <FormGroup>
-                      <Label>Correspondence</Label>
-                      <Input
-                        className="form-group"
-                        name="correspondence"
-                        type='textarea'
-                        value={this.state.correspondence || ''}
-                        placeholder="Enter your correspondence..."
-                        onChange={this.handleChange}
-                        />
-                        {errors.correspondence ? <FormText color="danger">{errors.correspondence}</FormText>: ""}
-                    </FormGroup>    
-                    <FormGroup>
-                        <Label>Individual <FontAwesomeIcon icon={faMale} color={!this.state.is_corporate ? "black": "grey"}/> / Corporate <FontAwesomeIcon icon={faUsers} color={this.state.is_corporate ? "black": "grey"}/></Label>
-                        <Button className="btn btn-block" onClick={this.onCheckboxIsCorpBtnClick} active={this.state.is_corporate}>{this.state.is_corporate ? 'Change to Individual' : 'Change to Corporate'}</Button>
-                    </FormGroup>   
+                      <InputFormNoteDetail 
+                        onInputChange={this.handleChange}
+                        handleCheckboxIsCorpBtnClick={this.onCheckboxIsCorpBtnClick} 
+ 
+                        text={text} 
+                        phone={phone}
+                        email={email}
+                        linkedin_profile={linkedin_profile}
+                        website={website}
+                        correspondence={correspondence}
+                        is_corporate={is_corporate}
+
+                        errors={errors} 
+                      />
+   
                     <FormGroup>
                       <Label>Status</Label>
                       <Dropdown className="form-group" isOpen={this.state.dropdownOpen} toggle={this.toggle}>
