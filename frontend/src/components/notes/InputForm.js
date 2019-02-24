@@ -483,7 +483,7 @@ class InputForm extends Component {
             /> 
           : null}
             <FormGroup row>
-              <Button className="rounded-0" color="info" onClick={this.addNew}>Quick Add</Button>
+              <Button className="rounded-0" color="info" onClick={this.addNew}><FontAwesomeIcon icon={faPlusSquare} color="white"/> Quick Add</Button>
               <CustomInput inline
                 id="searchtext"
                 type="text" 
@@ -568,8 +568,8 @@ class InputForm extends Component {
                               <td>{note.status}</td>
                               <td>{note.is_payed ? <FontAwesomeIcon icon={faCheckCircle} color="black"/> : <FontAwesomeIcon icon={faHandHoldingUsd} color="black"/>}</td>
                               <td>
-                                <Button className="mr-1" color="info" onClick={() => this.selectForEdit(index, id)}><FontAwesomeIcon icon={faEdit} color="white"/></Button>
-                                <Button onClick={() => this.toggleModalDelete(index, id)}><FontAwesomeIcon icon={faTrash} color="white"/></Button>
+                                <Button className="mr-1" color="info" title="edit investor" onClick={() => this.selectForEdit(index, id)}><FontAwesomeIcon icon={faEdit} color="white"/></Button>
+                                <Button onClick={() => this.toggleModalDelete(index, id)} title="delete investor"><FontAwesomeIcon icon={faTrash} color="white"/></Button>
                               </td>
                           </tr>                                        
                         )

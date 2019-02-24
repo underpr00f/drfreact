@@ -42,19 +42,21 @@ class Header extends Component {
             const { user } = this.props
             return (
                 
-                    <Nav className="mr-auto" navbar>
+                    <Nav navbar>
                         <NavItem key="investors">
-                            <NavLink className="nav-link" onClick={this.forceUpdate} href={"/investors"}>Investors</NavLink>
+                            <NavLink onClick={this.forceUpdate} href={"/investors"}>Investors</NavLink>
                         </NavItem>
                         <NavItem key="payments">
-                            <NavLink className="nav-link" onClick={this.forceUpdate} href={"/payments"}>Payments</NavLink>
+                            <NavLink onClick={this.forceUpdate} href={"/payments"}>Payments</NavLink>
                         </NavItem>
-                        <NavItem key="profile">
-                            <NavLink className="nav-link" href="/profile">{renderUser(user)}</NavLink>
-                        </NavItem>
-                        <NavItem key="logout">
-                            <NavLink className="nav-link" href="/logout">Logout</NavLink>
-                        </NavItem>
+                        <div className="navbar-profile">
+                            <NavItem key="profile">
+                                <NavLink href="/profile">{renderUser(user)}</NavLink>
+                            </NavItem>
+                            <NavItem key="logout">
+                                <NavLink href="/logout">Logout</NavLink>
+                            </NavItem>
+                        </div>
                     </Nav>
                 
             );
@@ -63,10 +65,10 @@ class Header extends Component {
             return (
                     <Nav className="ml-auto" navbar>
                         <NavItem key="login">
-                            <NavLink className="nav-link" href="/login">Login</NavLink>
+                            <NavLink href="/login">Login</NavLink>
                         </NavItem>,
                         <NavItem key="signup">
-                            <NavLink className="nav-link" href="/signup">Sign Up</NavLink>
+                            <NavLink href="/signup">Sign Up</NavLink>
                         </NavItem>
                     </Nav>
             );

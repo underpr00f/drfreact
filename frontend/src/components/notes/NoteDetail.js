@@ -1,27 +1,23 @@
 import React, {Component} from 'react'
-// import 'whatwg-fetch'
-// import cookie from 'react-cookies'
 import { Link } from 'react-router-dom'
 import * as detail from "../../actions/noteDetailActions";
 import {connect} from 'react-redux';
 import { Form, Container, Row,
   FormGroup, Label, Button,
-  Dropdown, DropdownToggle, 
-  DropdownMenu, DropdownItem, Table } from 'reactstrap';
+  Table } from 'reactstrap';
+
+import DatePicker from "react-datepicker";
+import moment from "moment";
+import "react-datepicker/dist/react-datepicker.css";
+
 import { LoadScreen } from './LoadScreen/LoadScreen'
-// import PropTypes from "prop-types";
+import FileDrop from './Atoms/FileDrop/FileDrop';
+import { InputFormNoteDetail } from './Molecules/InputFormNoteDetail'
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUndoAlt, faSave,
       faCheckCircle, faHandHoldingUsd,
        } from '@fortawesome/free-solid-svg-icons'
-import DatePicker from "react-datepicker";
-import FileDrop from './FileDrop/FileDrop';
-
-import { InputFormNoteDetail } from './Molecules/InputFormNoteDetail'
-
-import moment from "moment";
-
-import "react-datepicker/dist/react-datepicker.css";
 
 class NoteDetail extends Component {
 
@@ -230,6 +226,7 @@ class NoteDetail extends Component {
         const { text, phone, email, 
           linkedin_profile, website,
           correspondence, is_corporate,
+          status, dropdownOpen,
           errors, hasError } = this.state;
 
         if (!detail.detail && !hasError) {
@@ -240,7 +237,9 @@ class NoteDetail extends Component {
                       <InputFormNoteDetail 
                         onInputChange={this.handleChange}
                         handleCheckboxIsCorpBtnClick={this.onCheckboxIsCorpBtnClick} 
- 
+                        onToggle={this.toggle} 
+                        onChangeValue={this.changeValue}
+
                         text={text} 
                         phone={phone}
                         email={email}
@@ -248,25 +247,12 @@ class NoteDetail extends Component {
                         website={website}
                         correspondence={correspondence}
                         is_corporate={is_corporate}
-
+                        status={status}
+                        dropdownOpen={dropdownOpen}
                         errors={errors} 
                       />
    
-                    <FormGroup>
-                      <Label>Status</Label>
-                      <Dropdown className="form-group" isOpen={this.state.dropdownOpen} toggle={this.toggle}>
-                        <DropdownToggle className="btn-block" caret>
-                          {this.state.status || ''}
-                        </DropdownToggle>
-                        <DropdownMenu className="btn-block">
-                          <DropdownItem onClick={this.changeValue}>Candidate</DropdownItem>
-                          <DropdownItem onClick={this.changeValue}>Processed</DropdownItem>
-                          <DropdownItem onClick={this.changeValue}>Converted</DropdownItem>
-                          <DropdownItem onClick={this.changeValue}>Rejected</DropdownItem>
-                        </DropdownMenu>
-                      </Dropdown>
-                    </FormGroup>
-                    {this.state.status !== "Candidate" && is_staff ?
+                    {status !== "Candidate" && is_staff ?
                     <FormGroup>
                         <Label>New <FontAwesomeIcon icon={faHandHoldingUsd} color={!this.state.is_payed ? "black": "grey"}/> / Payed <FontAwesomeIcon icon={faCheckCircle} color={this.state.is_payed ? "black": "grey"}/></Label>
                         <Button className="btn btn-block" onClick={this.onCheckboxIsPayBtnClick} active={this.state.is_payed}>{this.state.is_payed ? 'Change to New' : 'Change to Payed'}</Button>

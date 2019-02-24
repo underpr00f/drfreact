@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import {   
-  FormGroup, Button,  
-  Modal, ModalBody, ModalFooter, } from 'reactstrap';
-
+  FormGroup, Button, Modal, 
+  ModalHeader, ModalBody, 
+  ModalFooter, } from 'reactstrap';
+import './styles.scss'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
 
@@ -12,7 +13,8 @@ export class ModalDelete extends Component {
 
     return (
       <div>
-        <Modal isOpen={modaldelete} toggle={toggle}>           
+        <Modal isOpen={modaldelete} toggle={toggle}>
+            <ModalHeader color="info">Are you sure?</ModalHeader>           
             <ModalBody>Delete <b>{text}</b> Investor?</ModalBody>
             <ModalFooter> 
               <FormGroup row>                   

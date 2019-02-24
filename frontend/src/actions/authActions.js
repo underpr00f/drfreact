@@ -27,7 +27,7 @@ export function loginUser(formValues, dispatch, props) {
             localStorage.setItem("token", token);
 
             // redirect to the route '/'
-            props.history.push("/");
+            props.history.push("/investors");
             // to getUserProfile in Header
             dispatch(getUserProfile())
         }).catch(error => {

@@ -1,13 +1,18 @@
 import React, { Component } from 'react'
 
-import * as Inputs from '../Atoms/AddInputs'
-import { CheckboxIsCorp } from '../Atoms/CheckboxIsCorp'
+import * as Inputs from '../Atoms/AddInputs/AddInputs'
+import { CheckboxIsCorp } from '../Atoms/CheckboxIsCorp/CheckboxIsCorp'
+import { CustomDropdown } from '../Atoms/Dropdown/Dropdown'
+
 export class InputFormNoteDetail extends Component {
   render() {
-    const { text, phone, email, errors, linkedin_profile, website,
-      correspondence, is_corporate } = this.props;
+    const { text, phone, email,  
+      linkedin_profile, website, 
+      correspondence, is_corporate,
+      status, dropdownOpen,
+      errors, } = this.props;
     // console.log(this.props)
-    
+
     return (
       <div>
         <Inputs.InputName onInputChange={this.props.onInputChange} text={text} errors={errors} />
@@ -18,6 +23,7 @@ export class InputFormNoteDetail extends Component {
         <Inputs.InputCorrespondence onInputChange={this.props.onInputChange} correspondence={correspondence} errors={errors} />      
         
         <CheckboxIsCorp handleCheckboxIsCorpBtnClick={this.props.handleCheckboxIsCorpBtnClick} is_corporate={is_corporate} />      
+        <CustomDropdown onChangeValue={this.props.onChangeValue} onToggle={this.props.onToggle} status={status} dropdownOpen={dropdownOpen} />      
       
       </div>
     )

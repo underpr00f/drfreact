@@ -50,7 +50,7 @@ class Signup extends Component {
                     { renderError(error) }
 
                     <fieldset className="form-group">
-                        <button action="submit" className="btn btn-primary">Sign Up</button>
+                        <button action="submit" className="btn btn-info">Sign Up</button>
                     </fieldset>
                 </form>
             </div>
