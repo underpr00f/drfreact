@@ -49,7 +49,7 @@ export class InputEmail extends Component {
     return (
       <div>
         <FormGroup>
-          <Label>Phone <span className="text-danger">*</span></Label>
+          <Label>Email <span className="text-danger">*</span></Label>
           <Input
             name="email"
             value={email || ''}

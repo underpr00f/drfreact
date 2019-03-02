@@ -1,22 +1,16 @@
 import React, {Component} from 'react'
-import { Link } from 'react-router-dom'
 import * as detail from "../../actions/noteDetailActions";
 import {connect} from 'react-redux';
 import { Form, Container, Row,
-  FormGroup, Label, Button,
-  Table } from 'reactstrap';
+  Button, } from 'reactstrap';
 
-import DatePicker from "react-datepicker";
 import moment from "moment";
-import "react-datepicker/dist/react-datepicker.css";
 
-import { LoadScreen } from './LoadScreen/LoadScreen'
-import FileDrop from './Atoms/FileDrop/FileDrop';
-import { InputFormNoteDetail } from './Molecules/InputFormNoteDetail'
-
+import { LoadScreen } from './Molecules/LoadScreen/LoadScreen'
+import { InputFormNoteDetail } from './Molecules/Forms/InputFormNoteDetail'
+import { DetailPreviewTable } from './Molecules/Tables/DetailPreviewTable'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUndoAlt, faSave,
-      faCheckCircle, faHandHoldingUsd,
        } from '@fortawesome/free-solid-svg-icons'
 
 class NoteDetail extends Component {
@@ -76,13 +70,7 @@ class NoteDetail extends Component {
           hasError: detailed.hasError,
           loading: detailed.loading,
         }) 
-      } 
-      // else {
-      //   this.setState({
-      //     hasError: true
-      //   })
-      // }
-       
+      }        
     }    
     toggle = () => {
       this.setState(prevState => ({
@@ -98,7 +86,7 @@ class NoteDetail extends Component {
           errors: {}
       })
     }
-    changeDate = (date) => {
+    changeDate = (date) => {      
       this.setState({last_call: date})
     }
 
@@ -226,19 +214,25 @@ class NoteDetail extends Component {
         const { text, phone, email, 
           linkedin_profile, website,
           correspondence, is_corporate,
-          status, dropdownOpen,
+          status, dropdownOpen, is_payed,
+          add_call, last_call, documents,
           errors, hasError } = this.state;
 
         if (!detail.detail && !hasError) {
           return (
                 <Container fluid>
                   <Row>
-                    <Form onSubmit={this.submitNote} className="form col col-lg-4 mt-2 p-2">
+                    <Form onSubmit={this.submitNote} className="form col-12 col-xs-12 col-sm-12 col-md-4 col-lg-4 mt-2 p-2">
                       <InputFormNoteDetail 
                         onInputChange={this.handleChange}
-                        handleCheckboxIsCorpBtnClick={this.onCheckboxIsCorpBtnClick} 
+                        handleCheckboxIsCorpBtnClick={this.onCheckboxIsCorpBtnClick}
+                        handleCheckboxIsPayBtnClick={this.onCheckboxIsPayBtnClick} 
                         onToggle={this.toggle} 
                         onChangeValue={this.changeValue}
+                        handleChangeDate={this.changeDate}
+                        handleResetCallClick={this.onResetCallClick}
+                        handleAddCallClick={this.onAddCallClick}
+                        onSelectDrop={this.getData}
 
                         text={text} 
                         phone={phone}
@@ -248,91 +242,24 @@ class NoteDetail extends Component {
                         correspondence={correspondence}
                         is_corporate={is_corporate}
                         status={status}
+                        is_staff={is_staff}
+                        is_payed={is_payed}
                         dropdownOpen={dropdownOpen}
+                        add_call={add_call}
+                        last_call={last_call}
+                        documents={documents}
+                        detail={`${detail.documents}`}
+
                         errors={errors} 
-                      />
-   
-                    {status !== "Candidate" && is_staff ?
-                    <FormGroup>
-                        <Label>New <FontAwesomeIcon icon={faHandHoldingUsd} color={!this.state.is_payed ? "black": "grey"}/> / Payed <FontAwesomeIcon icon={faCheckCircle} color={this.state.is_payed ? "black": "grey"}/></Label>
-                        <Button className="btn btn-block" onClick={this.onCheckboxIsPayBtnClick} active={this.state.is_payed}>{this.state.is_payed ? 'Change to New' : 'Change to Payed'}</Button>
-                    </FormGroup>
-                    : null}                
-                    <FormGroup>
-                      <Label>Last Call {this.state.add_call ? <Button className="btn" onClick={this.onResetCallClick}>Reset</Button>: ""}</Label>
-                      {moment(this.state.last_call).isValid() ?
-                      <div>
-                        <DatePicker     
-                          selected={moment(this.state.last_call, moment.defaultFormat).toDate()}
-                          onChange={this.changeDate}
-                          showTimeSelect
-                          timeFormat="HH:mm"
-                          timeIntervals={15}
-                          dateFormat="d MMMM yyyy HH:mm"
-                          timeCaption="time"
-                        />
-                      </div>
-                      :                     
-                        <Button className="btn btn-block" onClick={this.onAddCallClick}>Add Last Call</Button>
-                      }
-                    </FormGroup>
-                    <div>Documents:
-                    {detail.documents ? " ("+detail.documents.split("/").slice(-1)[0]+")" : ""}
-                    </div>
-                    <FileDrop onSelectDrop={this.getData} documents={this.state.documents} detail={`${detail.documents}`}/>
+                      />                
+
                     <Button color="info" size="lg" type="submit"><FontAwesomeIcon icon={faSave} color="white"/></Button>
+                    <a href={"/investors"} ><Button size="lg"><FontAwesomeIcon icon={faUndoAlt} color="white"/> Cancel</Button></a>
                   </Form>
-                  <div className="col col-lg-8">
-                    <h3>Detailed Preview</h3>
-                    <Table striped>
-                      <tbody>
-                        <tr>
-                          <th>Investor</th>
-                          <td>{detail.is_corporate ? "Corporate" : "Individual" }</td>
-                        </tr>
-                        <tr>
-                          <th>Name</th>
-                          <td>{detail.text}</td>
-                        </tr>
-                        <tr>
-                          <th>Phone</th>
-                          <td>{detail.phone}</td>
-                        </tr>
-                        <tr>
-                          <th>Status</th>
-                          <td>{detail.status}</td>
-                        </tr>
-                        <tr>
-                          <th>Email</th>
-                          <td>{detail.email}</td>
-                        </tr>
-                        <tr>
-                          <th>Linkedin</th>
-                          <td className="table-correspondence__data"><a href={`${detail.linkedin_profile}`} >{detail.linkedin_profile}</a></td>
-                        </tr>
-                        <tr>
-                          <th>Website</th>
-                          <td className="table-correspondence__data"><a href={`${detail.website}`} >{detail.website}</a></td>
-                        </tr>
-                        <tr>
-                          <th>Correspondence</th>
-                          <td className="table-correspondence__data">{detail.correspondence}</td>
-                        </tr>
-                        <tr>
-                          <th>Payment</th>
-                          <td>{detail.is_payed ? "Payed" : "New" }</td>
-                        </tr>
-                        <tr>
-                          <th>Calls</th>
-                          <td>{detail.last_call ? moment(detail.last_call).format("D MMM YYYY HH:mm") : ""}</td>
-                        </tr>
-                        <tr>
-                          <th>Documents</th>
-                          <td>{detail.documents ? <a href={`${detail.documents}`} >{detail.documents.split("/").slice(-1)[0]}</a> : ""}</td>
-                        </tr>
-                      </tbody>
-                    </Table>
-                  </div>
+
+                  <DetailPreviewTable 
+                    {...detail}
+                  />
               </Row>
             </Container>              
           );
@@ -349,15 +276,12 @@ class NoteDetail extends Component {
         const {loading} = this.state
         return(
             <div>
-              <div className="mt-2 mb-2">
-                <Link to={"/investors"} onClick={this.forceUpdate}><Button><FontAwesomeIcon icon={faUndoAlt} color="white"/> Return</Button></Link>
-              </div>
               {loading ?<LoadScreen />:this.renderNote()}
-
           </div>               
         )
     }
 }
+
 const mapStateToProps = state => {
     return {
       detail: state.detail,

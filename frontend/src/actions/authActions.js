@@ -1,13 +1,13 @@
 import axios from "axios";
 import { SubmissionError } from 'redux-form';
-import { actions as notifActions } from 'redux-notifications';
+// import { actions as notifActions } from 'redux-notifications';
 import { AuthTypes } from "../constants/actionTypes";
 import { AuthUrls } from "../constants/urls";
 import store from "../store";
 import { getUserToken } from "../utils/authUtils";
+import { toast } from 'react-toastify';
 
-
-const { notifSend } = notifActions;
+// const { notifSend } = notifActions;
 export function authLogin(token) {
     return {
         type: AuthTypes.LOGIN,
@@ -32,6 +32,7 @@ export function loginUser(formValues, dispatch, props) {
             dispatch(getUserProfile())
         }).catch(error => {
             const processedError = processServerError(error.response.data);
+            toast.error("Error, you can't login. Try one more...")
             throw new SubmissionError(processedError);
         });
 }
@@ -106,11 +107,12 @@ export function changePassword(formValues, dispatch, props) {
             }
         })
             .then((response) => {
-                dispatch(notifSend({
-                    message: "Password has been changed successfully",
-                    kind: "info",
-                    dismissAfter: 5000
-                }));
+                toast.info('Password has been changed successfully')
+                // dispatch(notifSend({
+                //     message: "Password has been changed successfully",
+                //     kind: "info",
+                //     dismissAfter: 5000
+                // }));
                 // redirect to the route '/profile'
                 props.history.push("/profile");
             })
@@ -145,11 +147,7 @@ export function confirmPasswordChange(formValues, dispatch, props) {
 
     return axios.post(resetPasswordConfirmUrl, data)
         .then(response => {
-            dispatch(notifSend({
-                message: "Password has been reset successfully, please log in",
-                kind: "info",
-                dismissAfter: 5000
-            }));
+            toast.info('Password has been reset successfully, please log in')
             props.history.push("/login");
         }).catch((error) => {
             // If request is bad...
@@ -166,11 +164,7 @@ export function activateUserAccount(formValues, dispatch, props) {
 
     return axios.post(activateUserUrl, data)
         .then(response => {
-            dispatch(notifSend({
-                message: "Your account has been activated successfully, please log in",
-                kind: "info",
-                dismissAfter: 5000
-            }));
+            toast.info('Your account has been activated successfully, please log in')
             props.history.push("/login");
         }).catch((error) => {
             // If request is bad...
@@ -189,11 +183,7 @@ export function updateUserProfile(formValues, dispatch, props) {
         }
     })
         .then(response => {
-            dispatch(notifSend({
-                message: "Your profile has been updated successfully",
-                kind: "info",
-                dismissAfter: 5000
-            }));
+            toast.info('Your profile has been updated successfully')
             props.history.push("/profile");
         }).catch((error) => {
             // If request is bad...

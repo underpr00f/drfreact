@@ -44,10 +44,10 @@ class Header extends Component {
                 
                     <Nav navbar>
                         <NavItem key="investors">
-                            <NavLink onClick={this.forceUpdate} href={"/investors"}>Investors</NavLink>
+                            <NavLink href={"/investors"}>Investors</NavLink>
                         </NavItem>
                         <NavItem key="payments">
-                            <NavLink onClick={this.forceUpdate} href={"/payments"}>Payments</NavLink>
+                            <NavLink href={"/payments"}>Payments</NavLink>
                         </NavItem>
                         <div className="navbar-profile">
                             <NavItem key="profile">

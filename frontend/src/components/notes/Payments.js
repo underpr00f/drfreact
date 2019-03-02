@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import * as lead from "../../actions/paymentsActions";
 import {connect} from 'react-redux';
-import { LoadScreen } from './LoadScreen/LoadScreen'
+import { LoadScreen } from './Molecules/LoadScreen/LoadScreen'
 import { Table } from 'reactstrap';
 
 class Payments extends Component {
@@ -29,7 +29,7 @@ class Payments extends Component {
               <Table className="table text-center" striped>
                 <thead>
                   <tr>
-                    <th>#</th>
+                    <th className="table-num__title">#</th>
                     <th>Developer</th>
                     <th>Total Leads</th>
                     <th>Processed</th>
@@ -41,7 +41,7 @@ class Payments extends Component {
                 <tbody>
                   {lead.leads.length > 0 ? lead.leads.map((item,id) => (
                     <tr key={id}>
-                        <th scope="row">{id+1}</th>
+                        <th scope="row" className="table-num__text">{id+1}</th>
                         <td>{item.owner}</td>
                         <td>{item.total}</td>
                         <td>{item.processed}</td>

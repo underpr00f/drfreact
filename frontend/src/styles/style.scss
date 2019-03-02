@@ -9,6 +9,7 @@
 .table th, .table td, .table thead th {
     vertical-align: inherit;
 }
+
 .centering {
   display: flex;
 }
@@ -32,6 +33,11 @@
 	flex-wrap: wrap;
   word-break: break-all;
 }
+.table-correspondence__url {
+  flex-wrap: wrap;
+  word-break: break-all;
+}
+
 .dropzone-field {
   display: flex;
 	border: 1px dashed #000;
@@ -50,12 +56,46 @@
   -webkit-transform: rotate(180deg);
           transform: rotate(180deg);
 }
-
-
-
+.svg-inline--fa.fa-w-18, .svg-inline--fa.fa-w-14 {
+  width: 1em;
+}
+@media only screen and (max-width: 992px) {
+  .container {
+    max-width: 100%;
+  }
+}
 @media only screen and (max-width: 767px) {
+  .container {
+    max-width: 100%;
+  }
   .navbar-profile {
     display: block;
     position: fixed;
   }
+  .table th, .table td {
+    padding: 0;
+  }
+  .table-num__title, .table-num__text {
+    display: none;
+  }
+  .btn-add {
+    display: none;
+  }
+
 }
+
+@media (max-width: 576px) {
+  .container {
+    max-width: 100%;
+  }
+  .table th, .table td {
+    font-size: 14px;
+  }
+  .table-phone__title, .table-phone__text {
+    display: none;
+  }
+  .btn-quick__text{
+    display: none;
+  }
+}
+

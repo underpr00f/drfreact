@@ -72,8 +72,9 @@ class MessageSerializer(serializers.ModelSerializer):
 		instance.correspondence = validated_data.get('correspondence', instance.correspondence)
 		instance.documents = validated_data.get('documents', instance.documents)		
 		# For not required field last_call (in detailed view and input form)
-		if validated_data.get('last_call', instance.last_call) != None:
-			instance.last_call = validated_data.get('last_call', instance.last_call)
+		
+		instance.last_call = validated_data.get('last_call', instance.last_call)
+			
 	
 		#only staff users can edit is_payed to True
 		if check_staff:

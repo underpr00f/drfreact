@@ -28,9 +28,6 @@ export const fetchDetailNote = (id) => {
                     throw res.data;
                 } 
                 else if (res.status === 404) {
-                    //redirect page need fix
-                    // window.location.href = '/404';
-                    // throw res.data; 
                     dispatch({type: "MESSAGE_NOT_FOUND"});
 
                 }
@@ -75,8 +72,12 @@ export const updateDetailNote = (id, text, phone, status, is_corporate, is_payed
         }
 
         // formData need to convert ISO format string
-        if (last_call && String(last_call) !=="Invalid Date") {
-            formData.append('last_call', last_call.toISOString());
+        if (last_call){
+            if (String(last_call) !=="Invalid Date") {
+                formData.append('last_call', last_call.toISOString());
+            }            
+        } else {
+            formData.append('last_call', "");
         }
 
         let noteId = id;

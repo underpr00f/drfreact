@@ -1,3 +1,5 @@
+import { toast } from 'react-toastify';
+
 export const fetchNotes = (nextEndpoint) => {
     return (dispatch, getState) => {
         let headers = {"Content-Type": "application/json"};
@@ -18,6 +20,7 @@ export const fetchNotes = (nextEndpoint) => {
                         return {status: res.status, data};
                     })
                 } else {
+                    toast.error("Error! Can't load investors...")
                     console.log("Server Error!");
                     throw res;
                 }
@@ -25,9 +28,10 @@ export const fetchNotes = (nextEndpoint) => {
 
             // getState().notes[0].concat(res.data)}
             .then(res => {
-                if (res.status === 200) {
+                if (res.status === 200) {                    
                     return dispatch({type: 'FETCH_NOTES', notes: notes.push(res.data), loading: false});
                 } else if (res.status === 401 || res.status === 403) {
+                    toast.error("Authetication error...")
                     dispatch({type: "AUTHENTICATION_ERROR", data: res.data});
                     throw res.data;
                 }
@@ -53,6 +57,7 @@ export const searchNotes = (searchtext) => {
                         return {status: res.status, data};
                     })
                 } else {
+                    toast.error("Error! Can't load investors...")
                     console.log("Server Error!");
                     throw res;
                 }
@@ -62,6 +67,7 @@ export const searchNotes = (searchtext) => {
                 if (res.status === 200) {
                     return dispatch({type: 'SEARCH_NOTES', notes: res.data});
                 } else if (res.status === 401 || res.status === 403) {
+                    toast.error("Authetication error...")
                     dispatch({type: "AUTHENTICATION_ERROR", data: res.data});
                     throw res.data;
                 }
@@ -87,6 +93,7 @@ export const orderNotes = (order) => {
                         return {status: res.status, data};
                     })
                 } else {
+                    toast.error("Error! Can't load investors...")
                     console.log("Server Error!");
                     throw res;
                 }
@@ -96,6 +103,7 @@ export const orderNotes = (order) => {
                 if (res.status === 200) {
                     return dispatch({type: 'ORDER_NOTES', notes: res.data});
                 } else if (res.status === 401 || res.status === 403) {
+                    toast.error("Authetication error...")
                     dispatch({type: "AUTHENTICATION_ERROR", data: res.data});
                     throw res.data;
                 }
@@ -119,14 +127,17 @@ export const addNote = (text, phone, status, is_corporate, is_payed, email, link
                         return {status: res.status, data};
                     })
                 } else {
+                    toast.error("Error! Can't load investors...")
                     console.log("Server Error!");
                     throw res;
                 }
             })
             .then(res => {
                 if (res.status === 201) {
+                    toast.info("Investor "+res.data.text+" added")
                     return dispatch({type: 'ADD_NOTE', note: res.data});
                 } else if (res.status === 401 || res.status === 403) {
+                    toast.error("Authetication error...")
                     dispatch({type: "AUTHENTICATION_ERROR", data: res.data});
                     throw res.data;
                 }
@@ -155,14 +166,17 @@ export const updateNote = (index, id, text, phone, status, is_corporate, is_paye
                         return {status: res.status, data};
                     })
                 } else {
+                    toast.error("Error! Can't load investors...")
                     console.log("Server Error!");
                     throw res;
                 }
             })
             .then(res => {
                 if (res.status === 200) {
+                    toast.info("Investor "+res.data.text+" edited")
                     return dispatch({type: 'UPDATE_NOTE', note: res.data, index, id});
                 } else if (res.status === 401 || res.status === 403) {
+                    toast.error("Authetication error...")
                     dispatch({type: "AUTHENTICATION_ERROR", data: res.data});
                     throw res.data;
                 }
@@ -184,6 +198,7 @@ export const deleteNote = (id, index) => {
         return fetch(`/api/investors/${noteId}/`, {headers, method: "DELETE"})
             .then(res => {
                 if (res.status === 204) {
+                    toast.info("Investor deleted")
                     return {status: res.status, data: {}};
                 } else if (res.status < 500) {
                     return res.json().then(data => {
@@ -196,8 +211,10 @@ export const deleteNote = (id, index) => {
             })
             .then(res => {
                 if (res.status === 204) {
+                    // toast.info("Investor deleted")
                     return dispatch({type: 'DELETE_NOTE', id, index});
                 } else if (res.status === 401 || res.status === 403) {
+                    toast.error("Authetication error...")
                     dispatch({type: "AUTHENTICATION_ERROR", data: res.data});
                     throw res.data;
                 }

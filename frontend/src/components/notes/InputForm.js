@@ -4,18 +4,21 @@ import * as notes from "../../actions/notesActions";
 import {connect} from 'react-redux';
 import { Link } from 'react-router-dom'
 import { Form, FormText,  
-  FormGroup, Label, Input, Button,
-  Dropdown, DropdownToggle, 
-  DropdownMenu, DropdownItem, Table, CustomInput,
+  FormGroup, Button,
+  Table, CustomInput,
   Modal, ModalHeader, ModalBody, ModalFooter, } from 'reactstrap';
-import { LoadScreen } from './LoadScreen/LoadScreen'
+import { LoadScreen } from './Molecules/LoadScreen/LoadScreen'
 import { ModalDelete } from './Modal/Modal'
+
+import { InputFormNoteQuickAdd } from './Molecules/Forms/InputFormNoteQuickAdd'
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEdit, faTrash, faMale, 
   faUsers, faSave, faPlusSquare, 
   faSearch, faExchangeAlt, faLongArrowAltDown,
   faCheckCircle, faHandHoldingUsd, faTimes } from '@fortawesome/free-solid-svg-icons'
- 
+
+
 class InputForm extends Component {
   constructor(props) {
     super(props);
@@ -79,13 +82,13 @@ class InputForm extends Component {
     });
   }  
   selectForEdit = (index, id) => {
-      let note = this.props.notes[index].noteitems[id];
-      this.setState({text: note.text, phone: note.phone, 
-        status: note.status, is_payed: note.is_payed, 
-        is_corporate: note.is_corporate, email: note.email, 
-        linkedin_profile: note.linkedin_profile, 
-        website: note.website, correspondence:note.correspondence,
-        updateNoteId: id, updateNoteIndex: index, modal: true, });
+    let note = this.props.notes[index].noteitems[id];
+    this.setState({text: note.text, phone: note.phone, 
+      status: note.status, is_payed: note.is_payed, 
+      is_corporate: note.is_corporate, email: note.email, 
+      linkedin_profile: note.linkedin_profile, 
+      website: note.website, correspondence:note.correspondence,
+      updateNoteId: id, updateNoteIndex: index, modal: true, });
   }
 
   selectForDelete = (index, id) => {
@@ -341,7 +344,11 @@ class InputForm extends Component {
       }
   }
   renderModal() {
-      const { errors } = this.state;
+      const { text, phone, email, linkedin_profile,
+        website, correspondence, is_corporate,
+        status, is_payed, dropdownOpen,
+        updateNoteId,
+        errors } = this.state;
       const { is_staff } = this.props;
       
       if (this.state.modal) {
@@ -349,109 +356,35 @@ class InputForm extends Component {
           <Modal isOpen={this.state.modal} toggle={this.toggleModal}>
             <Form onSubmit={this.submitNote}>            
 
-              <ModalHeader toggle={this.toggleModal}>{this.state.updateNoteId === null ? "New Investor" : "Edit Investor"}</ModalHeader>
+              <ModalHeader toggle={this.toggleModal}>{updateNoteId === null ? "New Investor" : "Edit Investor"}</ModalHeader>
               <ModalBody>                    
-                <FormGroup>
-                  <Label>Name <span className="text-danger">*</span></Label>
-                  <Input
-                    name="text"
-                    value={this.state.text || ''}
-                    placeholder="Enter name..."
-                    onChange={this.handleChange}
-                    required />
-                    {errors.text ? <FormText color="danger">{errors.text}</FormText>: ""}
-                </FormGroup>
-                <FormGroup>
-                  <Label>Phone <span className="text-danger">*</span></Label>
-                  <Input
-                    className="form-group"
-                    name="phone"
-                    type='tel'
-                    value={this.state.phone || ''}
-                    placeholder="Enter phone..."
-                    onChange={this.handleChange}
-                    />
-                    {errors.phone ? <FormText color="danger">{errors.phone}</FormText>: ""}
-                </FormGroup>
-                <FormGroup>
-                  <Label>Email <span className="text-danger">*</span></Label>
-                  <Input
-                    className="form-group"
-                    name="email"
-                    type='text'
-                    value={this.state.email || ''}
-                    placeholder="Enter email..."
-                    onChange={this.handleChange}
-                    />
-                    {errors.email ? <FormText color="danger">{errors.email}</FormText>: ""}
-                </FormGroup> 
-                <FormGroup>
-                  <Label>Linkedin <span className="text-danger">*</span></Label>
-                  <Input
-                    className="form-group"
-                    name="linkedin_profile"
-                    type='text'
-                    value={this.state.linkedin_profile || ''}
-                    placeholder="Enter Linkedin profile..."
-                    onChange={this.handleChange}
-                    />
-                    {errors.linkedin_profile ? <FormText color="danger">{errors.linkedin_profile}</FormText>: ""}
-                </FormGroup> 
-                <FormGroup>
-                  <Label>Website</Label>
-                  <Input
-                    className="form-group"
-                    name="website"
-                    type='text'
-                    value={this.state.website || ''}
-                    placeholder="Enter your website..."
-                    onChange={this.handleChange}
-                    />
-                    {errors.website ? <FormText color="danger">{errors.website}</FormText>: ""}
-                </FormGroup> 
-                <FormGroup>
-                  <Label>Correspondence</Label>
-                  <Input
-                    className="form-group"
-                    name="correspondence"
-                    type='textarea'
-                    value={this.state.correspondence || ''}
-                    placeholder="Enter your correspondence..."
-                    onChange={this.handleChange}
-                    />
-                    {errors.correspondence ? <FormText color="danger">{errors.correspondence}</FormText>: ""}
-                </FormGroup> 
-                <FormGroup>
-                    <Label>Individual <FontAwesomeIcon icon={faMale} color={!this.state.is_corporate ? "black": "grey"}/> / Corporate <FontAwesomeIcon icon={faUsers} color={this.state.is_corporate ? "black": "grey"}/></Label>
-                    <Button className="btn btn-block" onClick={this.onCheckboxIsCorpBtnClick} active={this.state.is_corporate}>{this.state.is_corporate ? 'Change to Individual' : 'Change to Corporate'}</Button>
-                </FormGroup>
-                {this.state.updateNoteId !== null ?
-                <FormGroup>
-                <Label>Status</Label>
-                  <Dropdown className="form-group" isOpen={this.state.dropdownOpen} toggle={this.toggle}>              
-                    <DropdownToggle className="btn-block" caret>
-                      {this.state.status}
-                    </DropdownToggle>
-                    <DropdownMenu className="btn-block">
-                      <DropdownItem onClick={this.changeValue}>Candidate</DropdownItem>
-                      <DropdownItem onClick={this.changeValue}>Processed</DropdownItem>
-                      <DropdownItem onClick={this.changeValue}>Converted</DropdownItem>
-                      <DropdownItem onClick={this.changeValue}>Rejected</DropdownItem>
-                    </DropdownMenu>
-                  </Dropdown>
-                </FormGroup>
-                : null}
-                {this.state.updateNoteId !== null && this.state.status !=="Candidate" && is_staff ?
-                <FormGroup>
-                    <Label>New <FontAwesomeIcon icon={faHandHoldingUsd} color={!this.state.is_payed ? "black": "grey"}/> / Payed <FontAwesomeIcon icon={faCheckCircle} color={this.state.is_payed ? "black": "grey"}/></Label>
-                    <Button className="btn btn-block" onClick={this.onCheckboxIsPayBtnClick} active={this.state.is_payed}>{this.state.is_payed ? 'Change to New' : 'Change to Payed'}</Button>
-                </FormGroup>
-                : null}                            
+                <InputFormNoteQuickAdd
+                  onInputChange={this.handleChange}
+                  handleCheckboxIsCorpBtnClick={this.onCheckboxIsCorpBtnClick}
+                  handleCheckboxIsPayBtnClick={this.onCheckboxIsPayBtnClick} 
+                  onToggle={this.toggle} 
+                  onChangeValue={this.changeValue}
+
+                  text={text} 
+                  phone={phone}
+                  email={email}
+                  linkedin_profile={linkedin_profile}
+                  website={website}
+                  correspondence={correspondence}
+                  is_corporate={is_corporate}
+                  is_staff={is_staff}
+                  status={status}
+                  is_payed={is_payed}
+                  dropdownOpen={dropdownOpen}
+                  updateNoteId={updateNoteId}
+
+                  errors={errors} 
+                />                              
               </ModalBody>
               <ModalFooter> 
                 <FormGroup row>                   
                 <Button className="rounded-0" color="info" type="submit"><FontAwesomeIcon icon={faSave} color="white"/></Button>              
-                {this.state.updateNoteId === null ? <Button className="rounded-0" onClick={this.resetForm}>Reset</Button> : null}
+                {updateNoteId === null ? <Button className="rounded-0" onClick={this.resetForm}>Reset</Button> : null}
                 <Button className="rounded-0" onClick={this.toggleModal}>Cancel</Button>
                 </FormGroup>
               </ModalFooter>
@@ -470,7 +403,7 @@ class InputForm extends Component {
       <div>
         <div className="centering mt-2"> 
           <div className="centering-left"> 
-            <Link to={"/investors/add"}><Button className="rounded-0" color="info"><FontAwesomeIcon icon={faPlusSquare} color="white"/> Add New</Button></Link>
+            <Link to={"/investors/add"}><Button className="rounded-0 btn-add" color="info"><FontAwesomeIcon icon={faPlusSquare} color="white"/> Add New</Button></Link>
           </div>
           <div className="centering-center">
           {modal ? this.renderModal() : null}
@@ -483,7 +416,7 @@ class InputForm extends Component {
             /> 
           : null}
             <FormGroup row>
-              <Button className="rounded-0" color="info" onClick={this.addNew}><FontAwesomeIcon icon={faPlusSquare} color="white"/> Quick Add</Button>
+              <Button className="rounded-0" color="info" onClick={this.addNew}><FontAwesomeIcon icon={faPlusSquare} color="white"/><span className="btn-quick__text"> Quick Add</span></Button>
               <CustomInput inline
                 id="searchtext"
                 type="text" 
@@ -511,7 +444,7 @@ class InputForm extends Component {
         <Table className="table text-center" striped>
           <thead>
             <tr>
-              <th>#</th>
+              <th className="table-num__title">#</th>
               <th><FontAwesomeIcon icon={faMale} color="black"/> / <FontAwesomeIcon icon={faUsers} color="black"/></th>
               <th>Name <Button color="link" onClick={() => this.onBtnClickOrderingName("text")}>
                 {order.includes("text") ? <FontAwesomeIcon icon={faLongArrowAltDown} color="black"/>
@@ -529,7 +462,7 @@ class InputForm extends Component {
                 :order.includes("-owner") ? <Button color="link" className="btn-sort__clear" onClick={() => this.onBtnClickOrderingName("C-owner")}><FontAwesomeIcon icon={faTimes} color="black" /></Button>
                 :""}
               </th>
-              <th>Phone</th>
+              <th className="table-phone__title">Phone</th>
               <th>Status <Button color="link" onClick={() => this.onBtnClickOrderingName("status")}>
                 {order.includes("status") ? <FontAwesomeIcon icon={faLongArrowAltDown} color="black"/>
                 :order.includes("-status") ? <FontAwesomeIcon rotation={180} icon={faLongArrowAltDown} color="black"/>
@@ -556,7 +489,7 @@ class InputForm extends Component {
                     {post.noteitems !== undefined && post.noteitems.length > 0 ? post.noteitems.map((note, id) => {
                       return (                                    
                           <tr key={id}>
-                              <th scope="row">{id+1}</th>
+                              <th scope="row" className="table-num__text">{id+1}</th>
                               <td>{note.is_corporate ? <FontAwesomeIcon icon={faUsers} color="black"/> : <FontAwesomeIcon icon={faMale} color="black"/>}</td>
                               <td>
                                 <Link to={{pathname:`/investors/${note.id}`,
@@ -564,12 +497,12 @@ class InputForm extends Component {
                                       }}>{note.text}</Link>
                               </td>
                               <td>{note.owner_username}</td>
-                              <td>{note.phone}</td>
+                              <td className="table-phone__text">{note.phone}</td>
                               <td>{note.status}</td>
                               <td>{note.is_payed ? <FontAwesomeIcon icon={faCheckCircle} color="black"/> : <FontAwesomeIcon icon={faHandHoldingUsd} color="black"/>}</td>
                               <td>
-                                <Button className="mr-1" color="info" title="edit investor" onClick={() => this.selectForEdit(index, id)}><FontAwesomeIcon icon={faEdit} color="white"/></Button>
-                                <Button onClick={() => this.toggleModalDelete(index, id)} title="delete investor"><FontAwesomeIcon icon={faTrash} color="white"/></Button>
+                                <Button className="rounded-0" color="info" title="edit investor" onClick={() => this.selectForEdit(index, id)}><FontAwesomeIcon icon={faEdit} color="white"/></Button>
+                                <Button className="rounded-0" onClick={() => this.toggleModalDelete(index, id)} title="delete investor"><FontAwesomeIcon icon={faTrash} color="white"/></Button>
                               </td>
                           </tr>                                        
                         )
