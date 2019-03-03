@@ -7,6 +7,7 @@ static/images
 static/files
 images
 frontend/node_modules/
+frontend/package-lock.json
 tmp/
 venv/
 drfreact/development.py

@@ -1,16 +1,15 @@
 import React, {Component} from 'react'
-// import 'whatwg-fetch'
-// import cookie from 'react-cookies'
-import { Link, Redirect } from 'react-router-dom'
-import * as detail from "../../actions/noteDetailActions";
-import {connect} from 'react-redux';
-import { Form, FormText, 
-  FormGroup, Label, Input, Button,
-   } from 'reactstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUndoAlt, faSave, faMale, faUsers } from '@fortawesome/free-solid-svg-icons'
 
-class NewNote extends Component {
+import { Link, Redirect } from 'react-router-dom'
+import * as detail from "../../../actions/noteDetailActions";
+import {connect} from 'react-redux';
+import { Form, Button } from 'reactstrap';
+
+import { InputFormNoteAdd } from '../Molecules/Forms/InputFormNoteAdd'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faUndoAlt, faSave, } from '@fortawesome/free-solid-svg-icons'
+
+class NoteNew extends Component {
     constructor(props){
         super(props)       
         this.state = {
@@ -29,16 +28,6 @@ class NewNote extends Component {
         }
     }
 
-    componentDidMount(){
-      if (this.props.match){
-        // const {id} = this.props.match.params
-        // this.setState({
-        //     id: id,
-        //     doneLoading: false,
-        // })
-        // this.props.fetchDetailNote(id)
-      }
-    }
     componentWillReceiveProps(nextProps) {
       if (this.state.redirectToNewPage) {  
         this.setState({
@@ -140,10 +129,14 @@ class NewNote extends Component {
       this.setState({errors: errors}); 
       return formIsValid;
     }
-    onCheckboxBtnClick = () => {
+    onCheckboxIsCorpBtnClick = () => {
       this.setState({
         is_corporate: !this.state.is_corporate,
       });
+    }
+    // Force update page to /investors
+    refreshPage = () => {
+      window.location.href = '/investors';
     }
     submitNote = (e) => {
       e.preventDefault();
@@ -159,12 +152,12 @@ class NewNote extends Component {
     }
 
     render () {
-        // const {doneLoading} = this.state
-        const { errors } = this.state;
+        const { text, phone, email, 
+          linkedin_profile, website,
+          correspondence, is_corporate,
+          errors } = this.state;
         // The part that makes the redirect happen
         if (this.state.redirectToNewPage && this.state.id) {
-          // const { detail } = this.state;
-          // console.log(this.state.id)
           return (
             <Redirect to={{pathname:`/investors/${this.state.id}`}} />
           )
@@ -172,88 +165,27 @@ class NewNote extends Component {
         return(
             <div>
               <div className="mt-2 mb-2">
-                <Link className="mt-2 mb-2" to={"/investors"} onClick={this.forceUpdate}><Button><FontAwesomeIcon icon={faUndoAlt} color="white"/></Button></Link>
                 <h3>Add New</h3>
               </div>
               <Form onSubmit={this.submitNote} className="form col col-sm-4 mt-2 p-2">
-                
-                <FormGroup>
-                  <Label>Name <span className="text-danger">*</span></Label>
-                  <Input
-                    name="text"
-                    value={this.state.text || ''}
-                    placeholder="Enter name..."
-                    onChange={this.handleChange}
-                    required />
-                    {errors.text ? <FormText color="danger">{errors.text}</FormText>: ""}
-                </FormGroup>
-                <FormGroup>
-                  <Label>Phone <span className="text-danger">*</span></Label>
-                  <Input
-                    className="form-group"
-                    name="phone"
-                    type='tel'
-                    value={this.state.phone || ''}
-                    placeholder="Enter phone..."
-                    onChange={this.handleChange}
-                    />
-                    {errors.phone ? <FormText color="danger">{errors.phone}</FormText>: ""}
-                </FormGroup>
-                <FormGroup>
-                  <Label>Email <span className="text-danger">*</span></Label>
-                  <Input
-                    className="form-group"
-                    name="email"
-                    type='text'
-                    value={this.state.email || ''}
-                    placeholder="Enter email..."
-                    onChange={this.handleChange}
-                    />
-                    {errors.email ? <FormText color="danger">{errors.email}</FormText>: ""}
-                </FormGroup> 
-                <FormGroup>
-                  <Label>Linkedin <span className="text-danger">*</span></Label>
-                  <Input
-                    className="form-group"
-                    name="linkedin_profile"
-                    type='text'
-                    value={this.state.linkedin_profile || ''}
-                    placeholder="Enter Linkedin profile..."
-                    onChange={this.handleChange}
-                    />
-                    {errors.linkedin_profile ? <FormText color="danger">{errors.linkedin_profile}</FormText>: ""}
-                </FormGroup> 
-                <FormGroup>
-                  <Label>Website</Label>
-                  <Input
-                    className="form-group"
-                    name="website"
-                    type='text'
-                    value={this.state.website || ''}
-                    placeholder="Enter your website..."
-                    onChange={this.handleChange}
-                    />
-                    {errors.website ? <FormText color="danger">{errors.website}</FormText>: ""}
-                </FormGroup>
-                <FormGroup>
-                  <Label>Correspondence</Label>
-                  <Input
-                    className="form-group"
-                    name="correspondence"
-                    type='textarea'
-                    value={this.state.correspondence || ''}
-                    placeholder="Enter your correspondence..."
-                    onChange={this.handleChange}
-                    />
-                    {errors.correspondence ? <FormText color="danger">{errors.correspondence}</FormText>: ""}
-                </FormGroup>                  
-                <FormGroup>
-                    <Label>Individual <FontAwesomeIcon icon={faMale} color="black"/> / Corporate <FontAwesomeIcon icon={faUsers} color="black"/></Label>
-                    <Button className="btn btn-block" onClick={this.onCheckboxBtnClick} active={this.state.is_corporate}>{this.state.is_corporate ? 'Corporate' : 'Individual'}</Button>
-                </FormGroup>
+                <InputFormNoteAdd
+                  onInputChange={this.handleChange}
+                  handleCheckboxIsCorpBtnClick={this.onCheckboxIsCorpBtnClick} 
 
-                <Button color="info" onClick={this.resetForm}>Reset</Button>
-                <Button type="submit"><FontAwesomeIcon icon={faSave} color="white"/></Button>
+                  text={text} 
+                  phone={phone}
+                  email={email}
+                  linkedin_profile={linkedin_profile}
+                  website={website}
+                  correspondence={correspondence}
+                  is_corporate={is_corporate}
+
+                  errors={errors} 
+                /> 
+                <Button size="lg" className="rounded-0" color="info" type="submit"><FontAwesomeIcon icon={faSave} color="white"/></Button>
+                <Button size="lg" className="rounded-0" outline onClick={this.resetForm}>Clear</Button>
+                <Link to="/investors" onClick={this.refreshPage} ><Button className="rounded-0" size="lg"><FontAwesomeIcon icon={faUndoAlt} color="white"/> Cancel</Button></Link>
+
             </Form>
           </div>               
         )
@@ -275,4 +207,4 @@ const mapDispatchToProps = dispatch => {
 }
 
 // export default NewNote;
-export default connect(mapStateToProps, mapDispatchToProps)(NewNote);
+export default connect(mapStateToProps, mapDispatchToProps)(NoteNew);

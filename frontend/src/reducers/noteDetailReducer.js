@@ -1,10 +1,10 @@
-export default function noteDetailReducer(state = {loading: true}, action) {
+export default function noteDetailReducer(state = {loading: true, updated: false}, action) {
     switch(action.type) {
 
         case 'FETCH_DETAIL_NOTE':
             return { ...state, ...action.detail, loading: false};
         case 'UPDATE_DETAIL_NOTE':
-            return { ...state, ...action.detail, loading: false};
+            return { ...state, ...action.detail, loading: false, updated: true};
         case 'ADD_DETAIL_NOTE':
             return { ...state, ...action.detail, loading: false};
 

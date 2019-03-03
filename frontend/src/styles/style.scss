@@ -41,7 +41,7 @@
 .dropzone-field {
   display: flex;
 	border: 1px dashed #000;
-	background: lightgrey;
+	background: #359dbb;
   height: 60px;
   align-items: center;
   justify-content: center;
@@ -58,6 +58,9 @@
 }
 .svg-inline--fa.fa-w-18, .svg-inline--fa.fa-w-14 {
   width: 1em;
+}
+.Toastify__toast--info {
+  background: #359dbb!important;
 }
 @media only screen and (max-width: 992px) {
   .container {

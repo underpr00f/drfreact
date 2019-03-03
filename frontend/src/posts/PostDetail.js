@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 
-import '../index.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import {
 	Row, Col, Card, CardBody, CardTitle, CardText, CardImg

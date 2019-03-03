@@ -38,7 +38,7 @@ class FileDrop extends Component {
 
 		return (
 		  <div>Documents:
-            <span className="document-title">{detail ? " ("+detail.split("/").slice(-1)[0]+")" : ""}</span>
+            <span className="document-title">{detail !== "null" ? " ("+detail.split("/").slice(-1)[0]+")" : ""}</span>
 		    <Dropzone
 	            onDrop={this.onDrop}		            
 	            multiple={false}

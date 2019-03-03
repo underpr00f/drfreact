@@ -28,20 +28,3 @@ export class ModalDelete extends Component {
     
   }
 }
-// renderModalDelete() {
-//     if (this.state.modaldelete) {
-//       return (
-//         <div>
-//         <Modal isOpen={this.state.modaldelete} toggle={this.toggleModalDelete}>           
-//             <ModalBody>Delete <b>{this.state.text}</b> Investor?</ModalBody>
-//             <ModalFooter> 
-//               <FormGroup row>                   
-//               <Button className="rounded-0" color="info" onClick={() => this.selectForDelete(this.state.index, this.state.id)}><FontAwesomeIcon icon={faTrash} color="white"/></Button>              
-//               <Button className="rounded-0" onClick={this.toggleModalDelete}>Cancel</Button>
-//               </FormGroup>
-//             </ModalFooter>
-//         </Modal> 
-//         </div>           
-//       );
-//     }
-// }

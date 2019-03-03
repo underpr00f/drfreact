@@ -1,14 +1,16 @@
 import React, {Component} from 'react'
-import * as detail from "../../actions/noteDetailActions";
+import { Link } from "react-router-dom";
+import * as detail from "../../../actions/noteDetailActions";
 import {connect} from 'react-redux';
 import { Form, Container, Row,
   Button, } from 'reactstrap';
 
 import moment from "moment";
 
-import { LoadScreen } from './Molecules/LoadScreen/LoadScreen'
-import { InputFormNoteDetail } from './Molecules/Forms/InputFormNoteDetail'
-import { DetailPreviewTable } from './Molecules/Tables/DetailPreviewTable'
+import { LoadScreen } from '../Molecules/LoadScreen/LoadScreen'
+import { InputFormNoteDetail } from '../Molecules/Forms/InputFormNoteDetail'
+import { DetailPreviewTable } from '../Molecules/Tables/DetailPreviewTable'
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUndoAlt, faSave,
        } from '@fortawesome/free-solid-svg-icons'
@@ -51,6 +53,7 @@ class NoteDetail extends Component {
       }
       
     }
+
     componentWillReceiveProps(nextProps) {
       const detailed = nextProps.detail
 
@@ -168,6 +171,7 @@ class NoteDetail extends Component {
       return formIsValid;
     }
     getData = (documents) => {
+      console.log("getData!")
       this.setState({
         documents: documents[0],
         attached: true,
@@ -196,6 +200,10 @@ class NoteDetail extends Component {
         add_call: false,
         last_call: "",
       });
+    }
+    // Force update page to /investors
+    refreshPage = () => {
+      window.location.href = '/investors';
     }
     submitNote = (e) => {
         e.preventDefault();
@@ -253,8 +261,8 @@ class NoteDetail extends Component {
                         errors={errors} 
                       />                
 
-                    <Button color="info" size="lg" type="submit"><FontAwesomeIcon icon={faSave} color="white"/></Button>
-                    <a href={"/investors"} ><Button size="lg"><FontAwesomeIcon icon={faUndoAlt} color="white"/> Cancel</Button></a>
+                    <Button color="info" className="rounded-0" size="lg" type="submit"><FontAwesomeIcon icon={faSave} color="white"/></Button>
+                    <Link to="/investors" onClick={this.refreshPage} ><Button className="rounded-0" size="lg"><FontAwesomeIcon icon={faUndoAlt} color="white"/> Cancel</Button></Link>
                   </Form>
 
                   <DetailPreviewTable 

@@ -1,16 +1,16 @@
 import React, { Component } from 'react'
 
-import * as notes from "../../actions/notesActions";
+import * as notes from "../../../actions/notesActions";
 import {connect} from 'react-redux';
 import { Link } from 'react-router-dom'
 import { Form, FormText,  
   FormGroup, Button,
   Table, CustomInput,
   Modal, ModalHeader, ModalBody, ModalFooter, } from 'reactstrap';
-import { LoadScreen } from './Molecules/LoadScreen/LoadScreen'
-import { ModalDelete } from './Modal/Modal'
+import { LoadScreen } from '../Molecules/LoadScreen/LoadScreen'
+import { ModalDelete } from '../Organisms/Modal/Modal'
 
-import { InputFormNoteQuickAdd } from './Molecules/Forms/InputFormNoteQuickAdd'
+import { InputFormNoteQuickAdd } from '../Molecules/Forms/InputFormNoteQuickAdd'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEdit, faTrash, faMale, 
@@ -19,7 +19,7 @@ import { faEdit, faTrash, faMale,
   faCheckCircle, faHandHoldingUsd, faTimes } from '@fortawesome/free-solid-svg-icons'
 
 
-class InputForm extends Component {
+class Notes extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -557,4 +557,4 @@ const mapDispatchToProps = dispatch => {
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(InputForm);
+export default connect(mapStateToProps, mapDispatchToProps)(Notes);

@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
-import * as lead from "../../actions/paymentsActions";
+import * as lead from "../../../actions/paymentsActions";
 import {connect} from 'react-redux';
-import { LoadScreen } from './Molecules/LoadScreen/LoadScreen'
+import { LoadScreen } from '../Molecules/LoadScreen/LoadScreen'
 import { Table } from 'reactstrap';
 
 class Payments extends Component {

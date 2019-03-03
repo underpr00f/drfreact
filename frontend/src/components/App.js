@@ -1,6 +1,4 @@
 import React, {Component} from "react";
-// import { Notifs } from 'redux-notifications';
-// <Notifs />
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css'; 
 
@@ -16,7 +14,7 @@ export default class App extends Component {
                 <div className="container">
                     <ToastContainer 
                       hideProgressBar={true} 
-                      position="top-center"
+                      position="bottom-center"
                       autoClose={3000}
                       removeCloseButton={true}
                     />

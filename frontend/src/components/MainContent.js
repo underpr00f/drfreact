@@ -18,15 +18,16 @@ import NoMatch from "./NoMatch";
 import ReactifyComp from '../routingComps/ReactifyComp'
 import PostDetail from '../reactify/PostDetail';
 import PostCreate from '../reactify/PostCreate'
-import InputForm from './notes/InputForm'
-import NoteDetail from './notes/NoteDetail'
-import NewNote from './notes/NewNote'
-import Payments from './notes/Payments'
+import Notes from './notes/Templates/Notes'
+import NoteDetail from './notes/Templates/NoteDetail'
+import NoteNew from './notes/Templates/NoteNew'
+import Payments from './notes/Templates/Payments'
 
 const MainContent = () => (
     <div>
         <Switch>
             <Route exact path="/" component={props => <Landing {...props} />} />
+            <Route path="/reload" component={null} key="reload" />
             <Route path="/login" component={props => <Login {...props} />} />
             <Route path="/logout" component={props => <Logout {...props} />}/>
             <Route path="/signup" component={props => <Signup {...props} />}/>
@@ -41,8 +42,8 @@ const MainContent = () => (
             <Route path='/react/posts/create' component={RequireAuth(PostCreate)}/>
             <Route path='/react/posts/:slug' component={RequireAuth(PostDetail)}/>
             <Route path='/react/posts' component={RequireAuth(ReactifyComp)} />
-            <Route exact path='/investors' component={RequireAuth(InputForm)} />
-            <Route path='/investors/add' component={RequireAuth(NewNote)}/>
+            <Route exact path='/investors' component={RequireAuth(Notes)} />
+            <Route path='/investors/add' component={RequireAuth(NoteNew)}/>
             <Route path='/investors/:id' component={RequireAuth(NoteDetail)}/>
             <Route exact path='/payments' component={RequireAuth(Payments)} />
 
