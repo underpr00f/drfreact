@@ -26,14 +26,14 @@ export class DatePickLastCall extends Component {
 
   render() {
     // const { last_call } = this.state;
-    const { add_call, last_call } = this.props;
+    const { last_call } = this.props;
     const is_valid_date = moment(last_call).isValid()
 
     return ( 
       <div>
         <FormGroup>
-          <Label>Last Call {add_call ? <Button className="btn" onClick={this.props.handleResetCallClick}>Reset</Button>: ""}</Label>
-          {moment(last_call).isValid() ?
+          <Label>Last Call {is_valid_date ? <Button className="btn" onClick={this.props.handleResetCallClick}>Reset</Button>: ""}</Label>
+          {is_valid_date ?
           <div>
             <DatePicker     
               selected={is_valid_date ? moment(last_call, moment.defaultFormat).toDate() : moment(this.state.last_call, moment.defaultFormat).toDate()}

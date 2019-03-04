@@ -384,7 +384,7 @@ class Notes extends Component {
               <ModalFooter> 
                 <FormGroup row>                   
                 <Button className="rounded-0" color="info" type="submit"><FontAwesomeIcon icon={faSave} color="white"/></Button>              
-                {updateNoteId === null ? <Button className="rounded-0" onClick={this.resetForm}>Reset</Button> : null}
+                {updateNoteId === null ? <Button className="rounded-0" outline onClick={this.resetForm}>Clear</Button> : null}
                 <Button className="rounded-0" onClick={this.toggleModal}>Cancel</Button>
                 </FormGroup>
               </ModalFooter>

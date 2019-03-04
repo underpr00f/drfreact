@@ -28,7 +28,7 @@ export const fetchNotes = (nextEndpoint) => {
 
             // getState().notes[0].concat(res.data)}
             .then(res => {
-                if (res.status === 200) {                    
+                if (res.status === 200) {               
                     return dispatch({type: 'FETCH_NOTES', notes: notes.push(res.data), loading: false});
                 } else if (res.status === 401 || res.status === 403) {
                     toast.error("Authetication error...")

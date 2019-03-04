@@ -52,9 +52,8 @@ class MessagePageNumberPagination(pagination.PageNumberPagination):
 
 class MessageViewSet(viewsets.ModelViewSet):
 
-	# queryset = Message.objects.all()
 	serializer_class = MessageSerializer
-	permission_classes = [permissions.IsAuthenticated] #убрать Attribute error с /api/messages/
+	permission_classes = [permissions.IsAuthenticated] 
 	pagination_class    = MessagePageNumberPagination
 	filter_backends = (filters.SearchFilter, filters.OrderingFilter,)
 	search_fields = ('text',)

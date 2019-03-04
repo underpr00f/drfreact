@@ -20,11 +20,14 @@ class UserProfile extends Component {
         const user = this.props.user;
         if (user) {
             return (
-                <div className="mx-2">
-                    <h4>username: {user.username}</h4>
+
+                <div className="mx-2 mt-2 text-center">
+                    <h3>Your Profile</h3>
+                    <hr />
+                    <h4>Username: {user.username}</h4>
                     <h4>First Name: {user.first_name}</h4>
                     <h4>Last Name: {user.last_name}</h4>
-                    <h4>email: {user.email}</h4>
+                    <h4>Email: {user.email}</h4>
                     <h4>Website: {user.website}</h4>
                     <hr />
                     <h4>About Myself:</h4>
@@ -42,8 +45,8 @@ class UserProfile extends Component {
                 {this.renderUser()}
                 {" "}
                 <hr />
-                <Link className="btn btn-primary mr-2" to="/profile_edit">Update Profile</Link>
-                <Link className="btn btn-primary" to="/change_password">Change Password</Link>
+                <Link className="btn btn-info mr-2 rounded-0" to="/profile_edit">Update Profile</Link>
+                <Link className="btn btn-info rounded-0" to="/change_password">Change Password</Link>
             </div>
         );
     }
