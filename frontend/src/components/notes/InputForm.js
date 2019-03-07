@@ -1,16 +1,16 @@
 import React, { Component } from 'react'
 
-import * as notes from "../../../actions/notesActions";
+import * as notes from "../../actions/notesActions";
 import {connect} from 'react-redux';
 import { Link } from 'react-router-dom'
 import { Form, FormText,  
   FormGroup, Button,
   Table, CustomInput,
   Modal, ModalHeader, ModalBody, ModalFooter, } from 'reactstrap';
-import { LoadScreen } from '../Molecules/LoadScreen/LoadScreen'
-import { ModalDelete } from '../Organisms/Modal/Modal'
+import { LoadScreen } from './Molecules/LoadScreen/LoadScreen'
+import { ModalDelete } from './Organisms/Modal/Modal'
 
-import { InputFormNoteQuickAdd } from '../Molecules/Forms/InputFormNoteQuickAdd'
+import { InputFormNoteQuickAdd } from './Molecules/Forms/InputFormNoteQuickAdd'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEdit, faTrash, faMale, 
@@ -19,7 +19,7 @@ import { faEdit, faTrash, faMale,
   faCheckCircle, faHandHoldingUsd, faTimes } from '@fortawesome/free-solid-svg-icons'
 
 
-class Notes extends Component {
+class InputForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -273,7 +273,6 @@ class Notes extends Component {
     let order = [...this.state.order];
     let newordername = "-"+ordername
     let is_ordering_name = false
-
     // if ordername starts from "C"-character - clear that order!
     if (ordername.charAt(0) === "C"){
       let index = order.indexOf(ordername.slice(1, ordername.length))
@@ -284,17 +283,10 @@ class Notes extends Component {
     } else {
       // Add or remove item to it
       if (order.includes(ordername)){
-        console.log(ordername)
         let index = order.indexOf(ordername)
-        if (index !== -1) {          
+        if (index !== -1) {
           order.splice(index, 1);
-
-
-          // if (ordername==="owner") {
-          //   order.splice(index, 0, newordername, "-id");
-          // } else {
           order.splice(index, 0, newordername);
-          // }          
         }
       } else if (order.includes(newordername)) {
         let index = order.indexOf(newordername)
@@ -304,25 +296,11 @@ class Notes extends Component {
         }
       } else {
         order.push(ordername);
-
       }
     }
     if (order.length > 0) {
       is_ordering_name = true
     } 
-
-    // FIX BUG with "owner" negative ordering
-    if (order.includes("-owner")&&order.length===1) {
-      // adding "-id" field to multiply filter
-      // if has only "-owner" field
-      order.push("-id");
-    } else {
-      // remove "-id" in all other variants
-      let index = order.indexOf("-id")
-      if (index !== -1) {        
-        order.splice(index, 1);
-      }      
-    }
 
     // Set state
     this.setState({is_ordering_name: is_ordering_name, searchtext: "", order}, function () {
@@ -406,7 +384,7 @@ class Notes extends Component {
               <ModalFooter> 
                 <FormGroup row>                   
                 <Button className="rounded-0" color="info" type="submit"><FontAwesomeIcon icon={faSave} color="white"/></Button>              
-                {updateNoteId === null ? <Button className="rounded-0" outline onClick={this.resetForm}>Clear</Button> : null}
+                {updateNoteId === null ? <Button className="rounded-0" onClick={this.resetForm}>Reset</Button> : null}
                 <Button className="rounded-0" onClick={this.toggleModal}>Cancel</Button>
                 </FormGroup>
               </ModalFooter>
@@ -579,4 +557,4 @@ const mapDispatchToProps = dispatch => {
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(Notes);
+export default connect(mapStateToProps, mapDispatchToProps)(InputForm);

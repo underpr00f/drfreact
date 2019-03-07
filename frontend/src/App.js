@@ -51,7 +51,7 @@ class DrfReact extends Component {
       .then(function(response){
           return response.json()
       }).then(function(responseData){
-          console.log(responseData)
+          // console.log(responseData)
           // let currentPosts = thisComp.state.posts
           // let newPosts = currentPosts.concat(responseData.results)
           // console.log(currentPosts)

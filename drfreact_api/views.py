@@ -7,6 +7,7 @@ from .serializers import ItemSerializer, MessageSerializer, PaymentsSerializer
 from rest_framework import filters
 from rest_framework.decorators import detail_route, list_route
 
+
 class ItemViewSet(viewsets.ModelViewSet):
 	queryset = Item.objects.all()
 	serializer_class = ItemSerializer
@@ -57,10 +58,11 @@ class MessageViewSet(viewsets.ModelViewSet):
 	pagination_class    = MessagePageNumberPagination
 	filter_backends = (filters.SearchFilter, filters.OrderingFilter,)
 	search_fields = ('text',)
-	ordering_fields = ('text', 'status', 'is_payed', 'owner' )
+	ordering_fields = ('text', 'status', 'is_payed', 'owner', 'id' )
 
 	def get_queryset(self):
 		if self.request.user.is_staff or self.request.user.is_superuser:
+
 			return Message.objects.all().order_by('-id')
 		else:
 			return self.request.user.messages.all().order_by('-id')

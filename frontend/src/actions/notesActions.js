@@ -5,7 +5,7 @@ export const fetchNotes = (nextEndpoint) => {
         let headers = {"Content-Type": "application/json"};
         let {token} = getState().auth;
         let endpoint = '/api/investors/' 
-        // console.log(nextEndpoint)
+
         if (nextEndpoint !== undefined && nextEndpoint !== null) {
           endpoint = nextEndpoint
         }
