@@ -11,6 +11,7 @@ import { LoadScreen } from '../Molecules/LoadScreen/LoadScreen'
 import { ModalDelete } from '../Organisms/Modal/Modal'
 
 import { InputFormNoteQuickAdd } from '../Molecules/Forms/InputFormNoteQuickAdd'
+import { handleValidation } from '../../../utils/helpers'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEdit, faTrash, faMale, 
@@ -143,81 +144,7 @@ class Notes extends Component {
       text: text
     }));
   }
-  handleValidation = () => {
-      let fields = this.state;
-      let errors = {};
-      let formIsValid = true;
 
-      //Name
-      if(fields["text"].trim() === ""){
-         formIsValid = false;
-         errors["text"] = "Cannot be empty";
-      } else {
-        if(typeof fields["text"] !== "undefined"){
-           if(!fields["text"].match(/^[a-zA-Z]+$/)){
-              formIsValid = false;
-              errors["text"] = "Name must be only letters";
-           } else if (fields["text"].length > 7) {
-              formIsValid = false;
-              errors["text"] = "Your name is too long";
-           }        
-        }
-      }
-
-      //Phone
-      if(fields["phone"].trim() === ""){
-         formIsValid = false;
-         errors["phone"] = "Phone cannot be empty";
-      } else {
-        if(typeof fields["phone"] !== "undefined"){
-          if(!fields["phone"].match(/^[0-9\-\\+]{9,15}$/)){
-            formIsValid = false;
-            errors["phone"] = "Not phone number";
-          }      
-        }
-      }
-      // Email
-      if(fields["email"].trim() === ""){
-        formIsValid = false;
-        errors["email"] = "Cannot be empty";
-      } else {
-        if(typeof fields["email"] !== "undefined"){
-          let lastAtPos = fields["email"].lastIndexOf('@');
-          let lastDotPos = fields["email"].lastIndexOf('.');
-          if (!(lastAtPos < lastDotPos && lastAtPos > 0 && fields["email"].indexOf('@@') === -1 && lastDotPos > 2 && (fields["email"].length - lastDotPos) > 2)) {
-            formIsValid = false;
-            errors["email"] = "Email is not valid";
-          }
-        }
-      }
-      // Linkedin profile
-      if(fields["linkedin_profile"].trim() === ""){
-        formIsValid = false;
-        errors["linkedin_profile"] = "Cannot be empty";
-      } else {
-        if(typeof fields["linkedin_profile"] !== "undefined"){
-          let re=/^((https?|ftp|smtp):\/\/)+(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9-_#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/;
-          if (!re.test(fields["linkedin_profile"])) {
-            formIsValid = false;
-            errors["linkedin_profile"] = "Not Linkedin URL";
-          }
-        }
-      }
-      // Website
-      if(fields["website"].trim() === ""){
-      } else {
-        if(typeof fields["website"] !== "undefined"){
-          let re=/^((https?|ftp|smtp):\/\/)+(www.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)?$/;
-          if (!re.test(fields["website"])) {
-            formIsValid = false;
-            errors["website"] = "URL is not valid";
-          }
-        }
-      }
-      this.setState({errors: errors}); 
-
-      return formIsValid;
-  }
   handleChange = (e) => {
     e.preventDefault();
     let key = e.target.name
@@ -284,17 +211,10 @@ class Notes extends Component {
     } else {
       // Add or remove item to it
       if (order.includes(ordername)){
-        console.log(ordername)
         let index = order.indexOf(ordername)
         if (index !== -1) {          
           order.splice(index, 1);
-
-
-          // if (ordername==="owner") {
-          //   order.splice(index, 0, newordername, "-id");
-          // } else {
-          order.splice(index, 0, newordername);
-          // }          
+          order.splice(index, 0, newordername);         
         }
       } else if (order.includes(newordername)) {
         let index = order.indexOf(newordername)
@@ -342,7 +262,11 @@ class Notes extends Component {
   }
   submitNote = (e) => {
       e.preventDefault();
-      if(this.handleValidation()){
+      // check validation from helper file
+      const validation_errors = handleValidation(this.state)
+      // check validation_errors dictionary is empty or has any errors
+      if (Object.keys(validation_errors).length === 0) {
+        // Check what do you want add or edit?
         if (this.state.updateNoteId === null) {
             this.props.addNote(this.state.text, this.state.phone, this.state.status, 
               this.state.is_corporate, this.state.is_payed, this.state.email, 
@@ -363,10 +287,13 @@ class Notes extends Component {
                  console.log("error", error);
                });
         }
+      } else {
+        this.setState({errors: validation_errors}); 
       }
   }
   renderModal() {
-      const { text, phone, email, linkedin_profile,
+      const { modal, 
+        text, phone, email, linkedin_profile,
         website, correspondence, is_corporate,
         status, is_payed, dropdownOpen,
         updateNoteId,
@@ -375,7 +302,7 @@ class Notes extends Component {
       
       if (this.state.modal) {
         return (
-          <Modal isOpen={this.state.modal} toggle={this.toggleModal}>
+          <Modal isOpen={modal} toggle={this.toggleModal}>
             <Form onSubmit={this.submitNote}>            
 
               <ModalHeader toggle={this.toggleModal}>{updateNoteId === null ? "New Investor" : "Edit Investor"}</ModalHeader>
@@ -418,7 +345,7 @@ class Notes extends Component {
 
   renderNotes () {
     const { notes } = this.props
-    const { errors, modal, order, modaldelete, index, id, text } = this.state;
+    const { errors, modal, searchtext, order, modaldelete, index, id, text } = this.state;
     const { next } = this.props.notes[this.props.notes.length - 1];
 
     return (
@@ -443,14 +370,14 @@ class Notes extends Component {
                 id="searchtext"
                 type="text" 
                 name="searchtext"
-                value={this.state.searchtext || ''}
+                value={searchtext || ''}
                 placeholder="Search by Name..."
                 onChange={this.handleChange}
                 
                 />
                 {errors.searchtext ? <FormText color="danger">{errors.searchtext}</FormText>: ""}
               <Button className="rounded-0" onClick={this.searchNotes}><FontAwesomeIcon icon={faSearch} color="white"/></Button>
-              {this.state.searchtext !== "" ? <Button outline className="rounded-0" onClick={this.resetSearch}>Clear</Button> : ""}          
+              {searchtext !== "" ? <Button outline className="rounded-0" onClick={this.resetSearch}>Clear</Button> : ""}          
             </FormGroup>
           </div>
           <div className="centering-right"> 

@@ -41,7 +41,7 @@ class Login extends Component {
 
                     <fieldset className="form-group">
                         { renderError(error) }
-                        <button action="submit" className="btn btn-info">Login</button>
+                        <button action="submit" className="btn btn-info rounded-0">Login</button>
                     </fieldset>
 
                     <p>Not registered? <Link to="/signup">Signup Here!</Link></p>
