@@ -14,7 +14,7 @@ export default class App extends Component {
                 <div className="container">
                     <ToastContainer 
                       hideProgressBar={true} 
-                      position="bottom-center"
+                      position="bottom-right"
                       autoClose={3000}
                       removeCloseButton={true}
                     />

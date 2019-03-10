@@ -163,7 +163,11 @@ class PasswordResetSerializer(serializers.Serializer):
 
     def get_email_options(self):
         """Override this method to change default e-mail options"""
-        return {}
+        path_to_email = settings.TEMPLATES[0]["DIRS"][0]+'/registration/password_reset_email.html'
+        return {
+            'email_template_name': path_to_email,
+            # 'html_email_template_name': 'path/to/your/html_template.html'
+        }
 
     def validate_email(self, value):
         # Create PasswordResetForm with the serializer

@@ -8,6 +8,8 @@ export default function(state = {}, action) {
             return { ...state, authenticated: false, token: null};
         case AuthTypes.USER_PROFILE:
             return { ...state, user: action.payload};
+        // case AuthTypes.WITH_ERROR:
+        //     return { ...state, error: action.payload};
         default:
         	// will NOT execute because of the line preceding the switch.
     }

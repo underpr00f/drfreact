@@ -4,6 +4,8 @@ import { reduxForm, Field, propTypes } from "redux-form";
 import { required } from "redux-form-validators"
 import { renderField, renderError } from "../../utils/renderUtils";
 import { signupUser } from "../../actions/authActions";
+import { Link } from "react-router-dom";
+import { Button, } from 'reactstrap';
 
 class Signup extends Component {
 
@@ -13,7 +15,7 @@ class Signup extends Component {
 
 
     render() {
-        const { handleSubmit, error } = this.props;
+        const { handleSubmit, error, pristine, submitting } = this.props;
 
         return (
             <div className="row justify-content-center">
@@ -50,7 +52,10 @@ class Signup extends Component {
                     { renderError(error) }
 
                     <fieldset className="form-group">
-                        <button action="submit" className="btn btn-info">Sign Up</button>
+                        <div className="form-button">
+                            <Button action="submit" color="info" className="rounded-0 form-button__part" disabled={pristine || submitting}>Sign Up</Button>
+                            <Button className="rounded-0 form-button__part" color="info" outline><Link to="/login">Login</Link></Button>
+                        </div>
                     </fieldset>
                 </form>
             </div>
@@ -61,7 +66,19 @@ class Signup extends Component {
 // Sync field level validation for password match
 const validateForm = values => {
     const errors = {};
-    const { password1, password2 } = values;
+    const { email, username, password1, password2 } = values;
+
+    if (!username) {
+        errors.username = 'This field is required.'
+    } else if (username.length > 15) {
+        errors.username = 'Must be 15 characters or less'
+    }
+    if (!email) {
+        errors.email = 'This field is required.'
+    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)) {
+        errors.email = 'Invalid email address'
+    }
+    
     if (password1 !== password2) {
         errors.password2 = "Password does not match."
     }

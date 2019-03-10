@@ -4,7 +4,8 @@ import { reduxForm, Field, propTypes } from "redux-form";
 import { required } from "redux-form-validators"
 import { changePassword } from "../../actions/authActions";
 import { renderField, renderError } from "../../utils/renderUtils";
-
+import { Link } from "react-router-dom";
+import { Button, } from 'reactstrap';
 class PasswordChange extends Component {
 
     static propTypes = {
@@ -12,7 +13,7 @@ class PasswordChange extends Component {
     };
 
     render() {
-        const { handleSubmit, error } = this.props;
+        const { handleSubmit, error, pristine, submitting } = this.props;
 
         return (
             <div className="row justify-content-center">
@@ -43,7 +44,10 @@ class PasswordChange extends Component {
 
                     <fieldset className="form-group">
                         {renderError(error)}
-                        <button action="submit" className="btn btn-primary">Submit</button>
+                        <div className="form-button">
+                            <Button action="submit" color="info" className="rounded-0 form-button__part" disabled={pristine || submitting}>Submit</Button>
+                            <Button className="rounded-0 form-button__part" color="info" outline><Link to="/profile" >Cancel</Link></Button>
+                        </div>
                     </fieldset>
                 </form>
             </div>

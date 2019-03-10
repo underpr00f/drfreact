@@ -29,10 +29,9 @@ class PasswordReset extends Component {
                                type="text" validate={[required({message: "This field is required."})]}
                         />
                     </fieldset>
-
-                    <fieldset className="form-group">
-                        { renderError(error) }
-                        <button action="submit" className="btn btn-primary">Submit</button>
+                    <fieldset className="form-group text-center">
+                        {renderError(error)}
+                        <button action="submit" className="btn btn-info rounded-0">Submit</button>
                     </fieldset>
                 </form>
             </div>

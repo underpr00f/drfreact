@@ -21,10 +21,10 @@ export const renderTextAreaField = ({ input, label, type, meta: { touched, error
 );
 
 export const renderError = (errorMessages) => {
-    if ( errorMessages) {
+    if ( errorMessages ) {
         return (
             <div className="alert alert-danger">
-                {errorMessages}
+                Not valid...
             </div>
         )
     }

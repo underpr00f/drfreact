@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { reduxForm, Field, propTypes } from "redux-form";
 import { connect } from 'react-redux'
-// import { required } from "redux-form-validators"
 
 import { renderField, renderTextAreaField, renderError} from "../../utils/renderUtils";
 import { updateUserProfile } from "../../actions/authActions";
@@ -57,7 +56,10 @@ class Login extends Component {
 
                     <fieldset className="form-group">
                         { renderError(error) }
-                        <button action="submit" className="btn btn-info rounded-0">Save</button>
+                        <div className="form-button">
+                            <button action="submit" className="btn btn-info rounded-0 form-button__part">Save</button>
+                            <button type="button" className="btn btn-outline-info rounded-0 form-button__part">Cancel</button>
+                        </div>
                     </fieldset>
                 </form>
             </div>

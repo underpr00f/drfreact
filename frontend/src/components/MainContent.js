@@ -31,11 +31,11 @@ const MainContent = () => (
             <Route path="/login" component={props => <Login {...props} />} />
             <Route path="/logout" component={props => <Logout {...props} />}/>
             <Route path="/signup" component={props => <Signup {...props} />}/>
-            <Route path="/account/confirm-email/:key" component={props => <AccountActivation {...props} />}/>
+            <Route path="/activation/confirm-email/:key" component={props => <AccountActivation {...props} />}/>
             <Route path="/signup_done" component={props => <SignupDone {...props} />}/>
             <Route path="/reset_password" component={props => <PasswordReset {...props} />}/>
             <Route path="/reset_password_done" component={props => <PasswordResetDone {...props} />}/>
-            <Route path="/reset/:uid/:token/" component={props => <PasswordResetConfirm {...props} />}/>
+            <Route path="/pass/reset/:uid/:token/" component={props => <PasswordResetConfirm {...props} />}/>
             <Route path="/profile" component={RequireAuth(UserProfile)}/>
             <Route path="/profile_edit" component={RequireAuth(UserProfileEdit)}/>
             <Route path="/change_password" component={RequireAuth(PasswordChange)}/>

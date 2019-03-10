@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { getUserProfile } from "../../actions/authActions";
 import {withRouter} from "react-router-dom";
+import { Table } from 'reactstrap';
 
 class UserProfile extends Component {
 
@@ -21,19 +22,37 @@ class UserProfile extends Component {
         if (user) {
             return (
 
-                <div className="mx-2 mt-2 text-center">
-                    <h3>Your Profile</h3>
-                    <hr />
-                    <h4>Username: {user.username}</h4>
-                    <h4>First Name: {user.first_name}</h4>
-                    <h4>Last Name: {user.last_name}</h4>
-                    <h4>Email: {user.email}</h4>
-                    <h4>Website: {user.website}</h4>
-                    <hr />
-                    <h4>About Myself:</h4>
-                    <p>{user.about}</p>
-
-                </div>
+              <div className="mx-2 mt-2 text-center">
+                <Table striped>
+                  <thead><tr><th colSpan="2">Your Profile</th></tr></thead>
+                  <tbody>
+                    <tr>
+                      <th>Username:</th>
+                      <td>{user.username}</td>
+                    </tr>
+                    <tr>
+                      <th>First Name:</th>
+                      <td>{user.first_name}</td>
+                    </tr>                    
+                    <tr>
+                      <th>Last Name:</th>
+                      <td>{user.last_name}</td>
+                    </tr>
+                    <tr>
+                      <th>Email:</th>
+                      <td>{user.email}</td>
+                    </tr>
+                    <tr>
+                      <th>Website:</th>
+                      <td>{user.website}</td>
+                    </tr>                    
+                    <tr>
+                      <th>About:</th>
+                      <td>{user.about}</td>
+                    </tr>
+                  </tbody>
+                </Table>
+              </div>
             );
         }
         return null;
@@ -45,8 +64,14 @@ class UserProfile extends Component {
                 {this.renderUser()}
                 {" "}
                 <hr />
-                <Link className="btn btn-info mr-2 rounded-0" to="/profile_edit">Update Profile</Link>
-                <Link className="btn btn-info rounded-0" to="/change_password">Change Password</Link>
+                
+                <fieldset className="form-group">
+                    <div className="form-button">
+                        <Link to="/profile_edit" className="btn btn-info rounded-0 form-button__part">Update Profile</Link>
+                        <Link to="/change_password" className="btn btn-outline-info rounded-0 form-button__part">Change Password</Link>
+                    </div>
+                </fieldset>
+
             </div>
         );
     }

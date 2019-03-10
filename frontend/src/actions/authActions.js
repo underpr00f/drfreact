@@ -176,7 +176,7 @@ export function activateUserAccount(formValues, dispatch, props) {
 
 export function updateUserProfile(formValues, dispatch, props) {
     const token = getUserToken(store.getState());
-
+    console.log(formValues)
     return axios.patch(AuthUrls.USER_PROFILE, formValues, {
         headers: {
             authorization: 'Token ' + token

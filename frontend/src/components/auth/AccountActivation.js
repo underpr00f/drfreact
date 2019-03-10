@@ -21,9 +21,9 @@ class AccountActivation extends Component {
                     <h4 className="text-md-center">Please click the button below to activate your account</h4>
                     <hr/>
 
-                    <fieldset className="form-group">
+                    <fieldset className="form-group text-center">
                         {renderError(error)}
-                        <button action="submit" className="btn btn-primary">Activate</button>
+                        <button action="submit" className="btn btn-info rounded-0">Activate</button>
                     </fieldset>
                 </form>
             </div>

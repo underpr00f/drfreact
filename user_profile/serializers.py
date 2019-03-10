@@ -3,12 +3,10 @@ from rest_auth.serializers import UserDetailsSerializer
 from .models import UserProfile
 from django.contrib.auth import get_user_model
 
-#User = get_user_model()
 
 class UserSerializer(UserDetailsSerializer):
-    #print(self.context['request'])
-    website = serializers.URLField(source="userprofile.website", allow_blank=True, required=False)
-    about = serializers.CharField(source="userprofile.about", allow_blank=True, required=False)
+    website = serializers.URLField(source="userprofile.website", allow_blank=True, allow_null=True, required=False)
+    about = serializers.CharField(source="userprofile.about", allow_blank=True, allow_null=True, required=False)
 
     class Meta(UserDetailsSerializer.Meta):
         fields = UserDetailsSerializer.Meta.fields + ('website', 'about')
@@ -26,8 +24,12 @@ class UserSerializer(UserDetailsSerializer):
         if profile_data:
             if website:
                 profile.website = website
+            else:
+                profile.website = ""
             if about:
                 profile.about = about
+            else:
+                profile.about = ""
             profile.save()
         return instance
 # from rest_framework import serializers
