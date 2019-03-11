@@ -1,5 +1,10 @@
-const ROOT_URL = "http://localhost:8000/";
+let ROOT_URL = "http://localhost:8000/";
 
+console.log('public url: ', process.env.PUBLIC_URL)
+
+if (process.env.PUBLIC_URL) {
+	ROOT_URL = process.env.PUBLIC_URL
+}
 export const AuthUrls = {
     LOGIN: `${ROOT_URL}rest-auth/login/`,
     SIGNUP: `${ROOT_URL}rest-auth/registration/`,

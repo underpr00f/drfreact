@@ -19,6 +19,7 @@ class Login extends Component {
 
     render() {
         const { handleSubmit, error, pristine, submitting } = this.props;
+        console.log('public url: ', process.env.PUBLIC_URL)
         return (
             <div className="row justify-content-center">
 
