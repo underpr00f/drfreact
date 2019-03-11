@@ -1,10 +1,11 @@
 let ROOT_URL = "http://localhost:8000/";
 
-console.log('public url: ', process.env)
-
-if (process.env !== "development") {
-	ROOT_URL = ""
+// FOR PRODUCTION URLS
+const HOMEPAGE_URL = require('../../package.json').homepage;
+if (process.env === "production") {
+	ROOT_URL = HOMEPAGE_URL
 }
+
 export const AuthUrls = {
     LOGIN: `${ROOT_URL}rest-auth/login/`,
     SIGNUP: `${ROOT_URL}rest-auth/registration/`,
