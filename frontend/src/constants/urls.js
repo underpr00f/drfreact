@@ -2,7 +2,8 @@ let ROOT_URL = "http://localhost:8000/";
 
 // FOR PRODUCTION URLS
 const HOMEPAGE_URL = require('../../package.json').homepage;
-if (process.env === "production") {
+
+if (process.env.NODE_ENV === "production") {
 	ROOT_URL = HOMEPAGE_URL
 }
 
