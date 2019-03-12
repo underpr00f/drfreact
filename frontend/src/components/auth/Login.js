@@ -19,7 +19,7 @@ class Login extends Component {
 
     render() {
         const { handleSubmit, error, pristine, submitting } = this.props;
-        
+
         return (
             <div className="row justify-content-center">
 
@@ -51,7 +51,7 @@ class Login extends Component {
                         </div>
                     </fieldset>
 
-                    <Link to="/reset_password" className="text-center">forgot password?</Link>
+                    <Link to="/reset_password" className="text-center forgot-link">forgot password?</Link>
                 </form>
             </div>
         )
