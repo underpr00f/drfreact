@@ -1,8 +1,8 @@
 /*define styles here*/
 a {
-  color: #17a2b8;
+  color: #17a2b8!important;
   &:hover{
-    color: #8cc8ca;
+    color: #8cc8ca!important;
   }    
 }
 .btn a {
@@ -21,9 +21,9 @@ a {
 }
 
 .table th, .table td, .table thead th {
-    vertical-align: inherit;
-    flex-wrap: wrap;
-    word-break: break-all;
+    vertical-align: inherit!important;
+    flex-wrap: wrap!important;
+    word-break: break-all!important;
 }
 
 .centering {
@@ -130,41 +130,41 @@ a {
 }
 @media only screen and (max-width: 992px) {
   .container {
-    max-width: 100%;
+    max-width: 100%!important;
   }
 }
 @media only screen and (max-width: 767px) {
   .container {
-    max-width: 100%;
+    max-width: 100%!important;
   }
   .navbar-profile {
-    display: block;
-    position: fixed;
+    display: block!important;
+    position: fixed!important;
   }
   .table th, .table td {
-    padding: 0;
+    padding: 0!important;
   }
   .table-num__title, .table-num__text {
-    display: none;
+    display: none!important;
   }
   .btn-add {
-    display: none;
+    display: none!important;
   }
 
 }
 
 @media (max-width: 576px) {
   .container {
-    max-width: 100%;
+    max-width: 100%!important;
   }
   .table th, .table td {
-    font-size: 14px;
+    font-size: 14px!important;
   }
   .table-phone__title, .table-phone__text {
-    display: none;
+    display: none!important;
   }
   .btn-quick__text{
-    display: none;
+    display: none!important;
   }
 }
 

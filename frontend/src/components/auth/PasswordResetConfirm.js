@@ -34,9 +34,9 @@ class PasswordResetConfirm extends Component {
                         />
                     </fieldset>
 
-                    <fieldset className="form-group">
+                    <fieldset className="form-group text-center">
                         {renderError(error)}
-                        <button action="submit" className="btn btn-primary">Submit</button>
+                        <button action="submit" className="btn btn-info rounded-0">Submit</button>
                     </fieldset>
                 </form>
             </div>
