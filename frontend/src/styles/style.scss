@@ -161,9 +161,9 @@
     font-size: 14px!important;
   }
   .table .table-payments {
-    overflow: hidden!important;
-    text-overflow: ellipsis!important;
-    white-space: nowrap!important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     max-width: 55px;
   }
   .table-phone__title, .table-phone__text, 
