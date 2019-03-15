@@ -1,5 +1,5 @@
 /*define styles here*/
-.forgot-link{
+.info-link{
   color: #17a2b8;
   &:hover{
     color: #8cc8ca;
@@ -160,7 +160,14 @@
   .table th, .table td {
     font-size: 14px!important;
   }
-  .table-phone__title, .table-phone__text {
+  .table .table-payments {
+    overflow: hidden!important;
+    text-overflow: ellipsis!important;
+    white-space: nowrap!important;
+    max-width: 55px;
+  }
+  .table-phone__title, .table-phone__text, 
+  .table-investor__title, .table-investor__text {
     display: none!important;
   }
   .btn-quick__text{
@@ -168,3 +175,9 @@
   }
 }
 
+@media (max-width: 360px) {
+  .table th, .table td {
+    font-size: 12px!important;
+  }
+
+}

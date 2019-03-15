@@ -51,7 +51,7 @@ class Login extends Component {
                         </div>
                     </fieldset>
 
-                    <Link to="/reset_password" className="text-center forgot-link">forgot password?</Link>
+                    <Link to="/reset_password" className="text-center info-link">forgot password?</Link>
                 </form>
             </div>
         )

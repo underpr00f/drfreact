@@ -29,13 +29,13 @@ class Payments extends Component {
               <Table className="table text-center" striped>
                 <thead>
                   <tr>
-                    <th className="table-num__title">#</th>
-                    <th>Developer</th>
-                    <th>Total Leads</th>
-                    <th>Processed</th>
-                    <th>Converted</th>
-                    <th>Rejected</th>
-                    <th>Next Payment</th>
+                    <th className="table-num__title table-payments">#</th>
+                    <th className="table-payments">Developer</th>
+                    <th className="table-payments">Total Leads</th>
+                    <th className="table-payments">Processed</th>
+                    <th className="table-payments">Converted</th>
+                    <th className="table-payments">Rejected</th>
+                    <th className="table-payments">Next Payment</th>
                   </tr>
                 </thead>  
                 <tbody>

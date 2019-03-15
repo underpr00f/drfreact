@@ -394,7 +394,7 @@ class Notes extends Component {
           <thead>
             <tr>
               <th className="table-num__title">#</th>
-              <th><FontAwesomeIcon icon={faMale} color="black"/> / <FontAwesomeIcon icon={faUsers} color="black"/></th>
+              <th className="table-investor__title"><FontAwesomeIcon icon={faMale} color="black"/> / <FontAwesomeIcon icon={faUsers} color="black"/></th>
               <th>Name <Button color="link" onClick={() => this.onBtnClickOrderingName("text")}>
                 {order.includes("text") ? <FontAwesomeIcon icon={faLongArrowAltDown} color="black"/>
                 :order.includes("-text") ? <FontAwesomeIcon rotation={180} icon={faLongArrowAltDown} color="black"/>
@@ -439,9 +439,9 @@ class Notes extends Component {
                       return (                                    
                           <tr key={id}>
                               <th scope="row" className="table-num__text">{id+1}</th>
-                              <td>{note.is_corporate ? <FontAwesomeIcon icon={faUsers} color="black"/> : <FontAwesomeIcon icon={faMale} color="black"/>}</td>
+                              <td className="table-investor__text">{note.is_corporate ? <FontAwesomeIcon icon={faUsers} color="black"/> : <FontAwesomeIcon icon={faMale} color="black"/>}</td>
                               <td>
-                                <Link to={{pathname:`/investors/${note.id}`,
+                                <Link className="info-link" to={{pathname:`/investors/${note.id}`,
                                       state: {fromDashboard: false}
                                       }}>{note.text}</Link>
                               </td>
