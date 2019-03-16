@@ -54,7 +54,7 @@ class Signup extends Component {
                     <fieldset className="form-group">
                         <div className="form-button">
                             <Button action="submit" color="info" className="rounded-0 form-button__part" disabled={pristine || submitting}>Sign Up</Button>
-                            <Button className="rounded-0 form-button__part" color="info" outline><Link to="/login">Login</Link></Button>
+                            <Link to="/login" className="btn btn-outline-info rounded-0 form-button__part">Login</Link>
                         </div>
                     </fieldset>
                 </form>

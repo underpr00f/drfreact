@@ -7,14 +7,16 @@ from django.contrib.auth import get_user_model
 class UserSerializer(UserDetailsSerializer):
     website = serializers.URLField(source="userprofile.website", allow_blank=True, allow_null=True, required=False)
     about = serializers.CharField(source="userprofile.about", allow_blank=True, allow_null=True, required=False)
+    avatar = serializers.ImageField(source="userprofile.avatar", required=False)
 
     class Meta(UserDetailsSerializer.Meta):
-        fields = UserDetailsSerializer.Meta.fields + ('website', 'about')
+        fields = UserDetailsSerializer.Meta.fields + ('website', 'about', 'avatar')
 
     def update(self, instance, validated_data):
         profile_data = validated_data.pop('userprofile', {})
         website = profile_data.get('website')
         about = profile_data.get('about')
+        avatar = profile_data.get('avatar')
 
         instance = super(UserSerializer, self).update(instance, validated_data)
 
@@ -30,6 +32,10 @@ class UserSerializer(UserDetailsSerializer):
                 profile.about = about
             else:
                 profile.about = ""
+            if avatar:
+                profile.avatar = avatar
+            else:
+                profile.avatar = ""
             profile.save()
         return instance
 # from rest_framework import serializers

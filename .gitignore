@@ -5,6 +5,7 @@ htmlcov/
 staticfiles/
 static/images
 static/files
+media
 images
 frontend/node_modules/
 frontend/package-lock.json

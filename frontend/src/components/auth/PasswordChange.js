@@ -46,7 +46,7 @@ class PasswordChange extends Component {
                         {renderError(error)}
                         <div className="form-button">
                             <Button action="submit" color="info" className="rounded-0 form-button__part" disabled={pristine || submitting}>Submit</Button>
-                            <Button className="rounded-0 form-button__part" color="info" outline><Link to="/profile" >Cancel</Link></Button>
+                            <Link to="/profile" className="btn btn-outline-info rounded-0 form-button__part">Cancel</Link>
                         </div>
                     </fieldset>
                 </form>

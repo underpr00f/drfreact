@@ -27,6 +27,14 @@ class UserProfile extends Component {
                   <thead><tr><th colSpan="2">Your Profile</th></tr></thead>
                   <tbody>
                     <tr>
+                      <th>Avatar:</th>
+                      <td>
+                        <div className="avatar"
+                            style={{ backgroundImage: `url(${user.avatar})` }}>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
                       <th>Username:</th>
                       <td>{user.username}</td>
                     </tr>

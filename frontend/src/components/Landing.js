@@ -1,15 +1,12 @@
 import React, { Component } from 'react'
-import PostList from '../posts/PostList';
-import { Link } from 'react-router-dom'
+// import PostList from '../posts/PostList';
+// import { Link } from 'react-router-dom'
 
 class Landing extends Component {
   render () {
     return (
-
       	<div className='text-center'>	
-      		<Link className='some-link' to='/posts/dynamic/'>Dynamic Page</Link>
-        
-        	<PostList />                
+			<h2>Lead Platform based on DRF+React+Redux. Login or Signup to test</h2>             
 		</div>
     )
   }

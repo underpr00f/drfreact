@@ -66,7 +66,6 @@ export const updateDetailNote = (id, text, phone, status, is_corporate, is_payed
         formData.append('email', email);
         formData.append('linkedin_profile', linkedin_profile);
         formData.append('website', website);
-
         // Not required fields
         if (correspondence) {
             formData.append('correspondence', correspondence);
@@ -86,7 +85,7 @@ export const updateDetailNote = (id, text, phone, status, is_corporate, is_payed
         } else {
             formData.append('last_call', "");
         }
-
+        console.log(formData, documents)
         let noteId = id;
         return fetch(`/api/investors/${noteId}/`, {headers, method: "PUT", body: formData})
             .then(res => {

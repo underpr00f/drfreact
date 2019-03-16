@@ -1,9 +1,12 @@
 import React, { Component } from "react";
 import { reduxForm, Field, propTypes } from "redux-form";
 import { connect } from 'react-redux'
+import { Link } from "react-router-dom";
 
-import { renderField, renderTextAreaField, renderError} from "../../utils/renderUtils";
+import { renderField, renderTextAreaField,
+    renderError} from "../../utils/renderUtils";
 import { updateUserProfile } from "../../actions/authActions";
+import ImageDrop from './Atoms/ImageDrop/ImageDrop'
 
 class Login extends Component {
 
@@ -13,7 +16,7 @@ class Login extends Component {
 
     render() {
         const { handleSubmit, error } = this.props;
-
+        // console.log(this.props.initialValues.avatar)
         return (
             <div className="row justify-content-center">
 
@@ -53,14 +56,28 @@ class Login extends Component {
                                type="text"
                         />
                     </fieldset>
-
+                    <fieldset className="form-group">
+                        <ImageDrop
+                         name="avatar"
+                         label="Avatar:"
+                          classNameLabel="file-input-label"
+                          className="file-input"
+                          dropzone_options={{
+                            multiple: false,
+                            accept: 'image/*'
+                          }}
+                        >
+                          <span>Add more</span>
+                        </ImageDrop>
+                    </fieldset>
                     <fieldset className="form-group">
                         { renderError(error) }
                         <div className="form-button">
                             <button action="submit" className="btn btn-info rounded-0 form-button__part">Save</button>
-                            <button type="button" className="btn btn-outline-info rounded-0 form-button__part">Cancel</button>
+                            <Link to="/profile" className="btn btn-outline-info rounded-0 form-button__part">Cancel</Link>
                         </div>
                     </fieldset>
+
                 </form>
             </div>
         )
@@ -68,6 +85,7 @@ class Login extends Component {
 }
 
 function mapStateToProps(state) {
+    console.log(state)
     return {
         initialValues: state.auth.user
     }

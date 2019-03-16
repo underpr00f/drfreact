@@ -47,7 +47,7 @@ class Login extends Component {
                         { renderError(error) }
                         <div className="form-button">
                             <Button action="submit" color="info" className="rounded-0 form-button__part" disabled={pristine || submitting}>Login</Button>
-                            <Button className="rounded-0 form-button__part" color="info" outline><Link to="/signup">SignUp</Link></Button>
+                            <Link to="/signup" className="btn btn-outline-info rounded-0 form-button__part">SignUp</Link>
                         </div>
                     </fieldset>
 

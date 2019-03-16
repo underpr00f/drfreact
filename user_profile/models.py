@@ -13,6 +13,7 @@ class UserProfile(models.Model):
     # custom fields for user
     website = models.URLField(blank=True, null=True)
     about = models.CharField(max_length=255, blank=True, null=True)
+    avatar = models.ImageField(upload_to="static/images", blank=True, null=True)
 
 def create_user_profile(sender, instance, created, **kwargs):
     """Creates a UserProfile Object Whenever a User Object is Created"""
