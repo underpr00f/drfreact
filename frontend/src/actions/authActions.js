@@ -176,24 +176,24 @@ export function activateUserAccount(formValues, dispatch, props) {
 
 export function updateUserProfile(formValues, dispatch, props) {
     const token = getUserToken(store.getState());
-    console.log("formValues", formValues)
-    // let formData = new FormData();
-    let object = formValues
-    // for ( var key in formValues ) {
-    //     console.log(formValues[key])
-    //     formData.append(key, formValues[key]);
-    // }
 
-    const formData = new FormData();
+    let object = formValues
+
+    // Fix problem with update profile without upload avatar
+    if (typeof formValues.avatar === 'string' || formValues.avatar instanceof String) {
+        object.avatar = "";
+    }
+
+    const formData = new FormData();  
     Object.keys(object).forEach(key => formData.append(key, object[key]));
-    console.log(formValues)
+    
+    // adding "Content-Type": "multipart/form-data", for images
     return axios.patch(AuthUrls.USER_PROFILE, formData, {
-        headers: {
-            'content-type': 'multipart/form-data',
-            'Accept': 'application/json',
-            authorization: 'Token ' + token
-        }
-    })
+            headers: {
+                "Content-Type": "multipart/form-data",
+                authorization: 'Token ' + token
+            }
+        })
         .then(response => {
             toast.info('Your profile has been updated successfully')
             props.history.push("/profile");

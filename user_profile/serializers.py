@@ -17,7 +17,7 @@ class UserSerializer(UserDetailsSerializer):
         website = profile_data.get('website')
         about = profile_data.get('about')
         avatar = profile_data.get('avatar')
-
+        
         instance = super(UserSerializer, self).update(instance, validated_data)
 
         # get and update user profile
@@ -34,8 +34,8 @@ class UserSerializer(UserDetailsSerializer):
                 profile.about = ""
             if avatar:
                 profile.avatar = avatar
-            else:
-                profile.avatar = ""
+            # else:
+            #     profile.avatar = ""
             profile.save()
         return instance
 # from rest_framework import serializers
