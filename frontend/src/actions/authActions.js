@@ -32,7 +32,6 @@ export function loginUser(formValues, dispatch, props) {
             dispatch(getUserProfile())
         }).catch(error => {            
             const processedError = processServerError(error.response.data);
-            // toast.error(processedError["_error"][0][0])
             throw new SubmissionError(processedError);
         });
 }
@@ -178,10 +177,14 @@ export function updateUserProfile(formValues, dispatch, props) {
     const token = getUserToken(store.getState());
 
     let object = formValues
-
+    // if (formValues.about || formValues.about === "null") {
+    //     object.about = null;
+    // }
     // Fix problem with update profile without upload avatar
     const formData = new FormData(); 
-    if (typeof formValues.avatar === 'string' || formValues.avatar instanceof String) {
+    if (typeof formValues.avatar === 'string' || 
+        formValues.avatar instanceof String ||
+        formValues.avatar === null) {
         Object.keys(object).forEach(key => 
             (key !== "avatar") && formData.append(key, object[key])      
         );
@@ -190,7 +193,7 @@ export function updateUserProfile(formValues, dispatch, props) {
             formData.append(key, object[key])      
         );
     }
-
+    console.log(object)
     // adding "Content-Type": "multipart/form-data", for images
     return axios.patch(AuthUrls.USER_PROFILE, formData, {
             headers: {
