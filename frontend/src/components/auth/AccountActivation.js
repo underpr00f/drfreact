@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { reduxForm, propTypes } from "redux-form";
+import { reduxForm, propTypes, clearSubmitErrors } from "redux-form";
 import { activateUserAccount } from "../../actions/authActions";
 import { renderError } from "../../utils/renderUtils";
 
@@ -34,4 +34,7 @@ class AccountActivation extends Component {
 export default reduxForm({
     form: "user_account_activation",
     onSubmit: activateUserAccount,
+    onChange: (values, dispatch, props) => {
+        if (props.error) dispatch(clearSubmitErrors('user_account_activation'));
+    },
 })(AccountActivation);

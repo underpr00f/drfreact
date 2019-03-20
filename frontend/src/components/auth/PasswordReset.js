@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { reduxForm, Field, propTypes } from "redux-form";
+import { reduxForm, Field, propTypes, clearSubmitErrors } from "redux-form";
 import { required } from "redux-form-validators"
 
 import { renderField, renderError} from "../../utils/renderUtils";
@@ -41,5 +41,8 @@ class PasswordReset extends Component {
 
 export default reduxForm({
     form: "password_reset",
+    onChange: (values, dispatch, props) => {
+        if (props.error) dispatch(clearSubmitErrors('password_reset'));
+    },
     onSubmit: resetPassword
 })(PasswordReset);

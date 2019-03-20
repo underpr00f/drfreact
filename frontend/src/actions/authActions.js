@@ -30,9 +30,9 @@ export function loginUser(formValues, dispatch, props) {
             props.history.push("/investors");
             // to getUserProfile in Header
             dispatch(getUserProfile())
-        }).catch(error => {
+        }).catch(error => {            
             const processedError = processServerError(error.response.data);
-            toast.error("Error, you can't login. Try one more...")
+            // toast.error(processedError["_error"][0][0])
             throw new SubmissionError(processedError);
         });
 }
@@ -180,13 +180,17 @@ export function updateUserProfile(formValues, dispatch, props) {
     let object = formValues
 
     // Fix problem with update profile without upload avatar
+    const formData = new FormData(); 
     if (typeof formValues.avatar === 'string' || formValues.avatar instanceof String) {
-        object.avatar = "";
+        Object.keys(object).forEach(key => 
+            (key !== "avatar") && formData.append(key, object[key])      
+        );
+    } else {
+        Object.keys(object).forEach(key => 
+            formData.append(key, object[key])      
+        );
     }
 
-    const formData = new FormData();  
-    Object.keys(object).forEach(key => formData.append(key, object[key]));
-    
     // adding "Content-Type": "multipart/form-data", for images
     return axios.patch(AuthUrls.USER_PROFILE, formData, {
             headers: {
@@ -206,6 +210,7 @@ export function updateUserProfile(formValues, dispatch, props) {
 }
 // util functions
 function processServerError(error) {
+
     return  Object.keys(error).reduce(function(newDict, key) {
         if (key === "non_field_errors") {
             newDict["_error"].push(error[key]);
@@ -215,7 +220,6 @@ function processServerError(error) {
         } else {
             newDict[key] = error[key];
         }
-
         return newDict
     }, {"_error": []});
 }

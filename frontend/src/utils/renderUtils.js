@@ -1,4 +1,5 @@
 import React from "react";
+// import { toast } from 'react-toastify';
 
 export const renderField = ({ input, label, type, meta: { touched, error } }) => (
     <div>
@@ -29,11 +30,13 @@ export const renderImageField = ({ input, label, type, meta: { touched, error } 
     </div>
 );
 export const renderError = (errorMessages) => {
-    if ( errorMessages ) {
+    if ( errorMessages && JSON.stringify(errorMessages)!=="[]" ) {
+        console.log(errorMessages)
+        // toast.error(errorMessages[0][0])
         return (
             <div className="alert alert-danger">
-                Not valid...
+                {errorMessages}
             </div>
         )
-    }
+    } 
 };

@@ -51,7 +51,7 @@ class ImageDrop extends Component {
                 </div>
             )}
         </Dropzone>
-        {error && touched ? error : ''}
+        {error && touched ? <div className="alert alert-danger p-1"><small>{error}</small></div> : ''}
       </div>
     );
   }

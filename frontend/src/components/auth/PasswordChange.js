@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 // import PropTypes from "prop-types";
-import { reduxForm, Field, propTypes } from "redux-form";
+import { reduxForm, Field, propTypes, clearSubmitErrors } from "redux-form";
 import { required } from "redux-form-validators"
 import { changePassword } from "../../actions/authActions";
 import { renderField, renderError } from "../../utils/renderUtils";
@@ -68,5 +68,8 @@ const validateForm = values => {
 export default reduxForm({
     form: "change_password",
     onSubmit: changePassword,
+    onChange: (values, dispatch, props) => {
+        if (props.error) dispatch(clearSubmitErrors('change_password'));
+    },
     validate: validateForm
 })(PasswordChange);

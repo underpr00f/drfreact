@@ -14,12 +14,17 @@
     text-decoration: none;
   }    
 }
+a[type=button] {
+  
+}
 .navbar-profile {
   display: inline-flex;
   position: absolute;
   right: 2%;
 }
-
+.form-control {
+  border-radius: 0;
+}
 .table th, .table td, .table thead th {
     vertical-align: inherit!important;
     flex-wrap: wrap!important;

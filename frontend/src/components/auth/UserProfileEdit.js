@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { reduxForm, Field, propTypes } from "redux-form";
+import { reduxForm, Field, propTypes, clearSubmitErrors } from "redux-form";
 import { connect } from 'react-redux'
 import { Link } from "react-router-dom";
 
@@ -16,7 +16,7 @@ class Login extends Component {
 
     render() {
         const { handleSubmit, error } = this.props;
-        // console.log(this.props.initialValues.avatar)
+
         return (
             <div className="row justify-content-center">
 
@@ -71,7 +71,7 @@ class Login extends Component {
                         </ImageDrop>
                     </fieldset>
                     <fieldset className="form-group">
-                        { renderError(error) }
+                        {renderError(error)}
                         <div className="form-button">
                             <button action="submit" className="btn btn-info rounded-0 form-button__part">Save</button>
                             <Link to="/profile" className="btn btn-outline-info rounded-0 form-button__part">Cancel</Link>
@@ -93,5 +93,8 @@ function mapStateToProps(state) {
 
 export default connect(mapStateToProps)(reduxForm({
     form: "update_user_profile",
+    onChange: (values, dispatch, props) => {
+        if (props.error) dispatch(clearSubmitErrors('update_user_profile'));
+    },
     onSubmit: updateUserProfile
 })(Login));

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import T from "prop-types";
+// import T from "prop-types";
 
-import { reduxForm, Field } from "redux-form";
+import { reduxForm, Field, clearSubmitErrors, propTypes } from "redux-form";
 import { Link } from "react-router-dom";
 import { required } from "redux-form-validators"
 
@@ -11,11 +11,13 @@ import { loginUser } from "../../actions/authActions";
 import { Button, } from 'reactstrap';
 
 class Login extends Component {
-
     static propTypes = {
-        form: T.string.isRequired,
-        onSubmit: T.func.isRequired,
-    }
+        ...propTypes
+    };
+    // static propTypes = {
+    //     form: T.string.isRequired,
+    //     onSubmit: T.func.isRequired,
+    // }
 
     render() {
         const { handleSubmit, error, pristine, submitting } = this.props;
@@ -46,8 +48,8 @@ class Login extends Component {
                     <fieldset className="form-group">
                         { renderError(error) }
                         <div className="form-button">
+                            <Link role="button" to="/signup" className="btn btn-outline-info rounded-0 form-button__part">SignUp</Link>
                             <Button action="submit" color="info" className="rounded-0 form-button__part" disabled={pristine || submitting}>Login</Button>
-                            <Link to="/signup" className="btn btn-outline-info rounded-0 form-button__part">SignUp</Link>
                         </div>
                     </fieldset>
 
@@ -73,5 +75,8 @@ const validateLoginForm = values => {
 export default reduxForm({
     form: "login",
     onSubmit: loginUser,
+    onChange: (values, dispatch, props) => {
+        if (props.error) dispatch(clearSubmitErrors('login'));
+    },
     validate: validateLoginForm
 })(Login);

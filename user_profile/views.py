@@ -14,6 +14,12 @@ class UserViewSet(viewsets.ModelViewSet):
     #authentication_classes = (authentication.TokenAuthentication, authentication.SessionAuthentication)
     queryset = User.objects.all().order_by('-date_joined')
     serializer_class = UserSerializer
+    
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({"detail": _("Your profile update successfully.")})
 
     
 

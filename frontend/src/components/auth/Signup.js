@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 // import PropTypes from "prop-types";
-import { reduxForm, Field, propTypes } from "redux-form";
+import { reduxForm, Field, propTypes, clearSubmitErrors } from "redux-form";
 import { required } from "redux-form-validators"
 import { renderField, renderError } from "../../utils/renderUtils";
 import { signupUser } from "../../actions/authActions";
@@ -53,8 +53,8 @@ class Signup extends Component {
 
                     <fieldset className="form-group">
                         <div className="form-button">
+                            <Link role="button" to="/login" className="btn btn-outline-info rounded-0 form-button__part">Login</Link>
                             <Button action="submit" color="info" className="rounded-0 form-button__part" disabled={pristine || submitting}>Sign Up</Button>
-                            <Link to="/login" className="btn btn-outline-info rounded-0 form-button__part">Login</Link>
                         </div>
                     </fieldset>
                 </form>
@@ -88,5 +88,8 @@ const validateForm = values => {
 export default reduxForm({
     form: "signup",
     validate: validateForm,
+    onChange: (values, dispatch, props) => {
+        if (props.error) dispatch(clearSubmitErrors('signup'));
+    },
     onSubmit: signupUser
 })(Signup);
