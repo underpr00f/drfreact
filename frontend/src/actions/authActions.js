@@ -193,7 +193,7 @@ export function updateUserProfile(formValues, dispatch, props) {
             formData.append(key, object[key])      
         );
     }
-    console.log(object)
+
     // adding "Content-Type": "multipart/form-data", for images
     return axios.patch(AuthUrls.USER_PROFILE, formData, {
             headers: {
