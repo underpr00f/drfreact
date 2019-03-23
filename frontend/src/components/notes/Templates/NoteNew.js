@@ -7,7 +7,7 @@ import { Form, Button } from 'reactstrap';
 
 import { InputFormNoteAdd } from '../Molecules/Forms/InputFormNoteAdd'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUndoAlt, faSave, } from '@fortawesome/free-solid-svg-icons'
+import { faSave, } from '@fortawesome/free-solid-svg-icons'
 
 import { handleValidation } from '../../../utils/helpers'
 
@@ -115,10 +115,11 @@ class NoteNew extends Component {
 
                   errors={errors} 
                 /> 
-                <Button size="lg" className="rounded-0" color="info" type="submit"><FontAwesomeIcon icon={faSave} color="white"/></Button>
-                <Button size="lg" className="rounded-0" outline onClick={this.resetForm}>Clear</Button>
-                <Link to="/investors" onClick={this.refreshPage} ><Button className="rounded-0" size="lg"><FontAwesomeIcon icon={faUndoAlt} color="white"/> Cancel</Button></Link>
-
+                <div>
+                  <Button className="rounded-0" color="info" type="submit"><FontAwesomeIcon icon={faSave} color="white"/></Button>
+                  <Button className="rounded-0" outline onClick={this.resetForm}>Clear</Button>
+                  <Link to="/investors" onClick={this.refreshPage} ><Button className="rounded-0">Cancel</Button></Link>
+                </div>
             </Form>
           </div>               
         )

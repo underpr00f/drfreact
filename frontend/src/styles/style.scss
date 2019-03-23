@@ -18,9 +18,7 @@
     text-decoration: none;
   }    
 }
-a[type=button] {
-  
-}
+/*NAVBAR*/
 .navbar-profile {
   display: inline-flex;
   position: absolute;
@@ -31,14 +29,22 @@ a[type=button] {
   height: 25px;
   display: inline-block;
   vertical-align: top;
-
 }
 .user-username {
   margin-left: 10px;
 }
+/*FORMS*/
 .form-control {
   border-radius: 0;
 }
+.form-group input, .form-group div, .form-group button {
+  border-radius: 0;
+}
+/*MODAL CLOSE*/
+.close span {
+  color: #fff;
+}
+
 .table th, .table td, .table thead th {
     vertical-align: inherit!important;
     flex-wrap: wrap!important;
@@ -152,13 +158,11 @@ a[type=button] {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  /*margin: 10px 0;*/
 }
 .avatar {
     background-repeat: no-repeat;
     background-size: contain;
     background-position: 50% 50%;
-
     width: 150px;
     height: 150px;
     background-position: center center;
