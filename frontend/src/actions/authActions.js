@@ -177,9 +177,7 @@ export function updateUserProfile(formValues, dispatch, props) {
     const token = getUserToken(store.getState());
 
     let object = formValues
-    // if (formValues.about || formValues.about === "null") {
-    //     object.about = null;
-    // }
+
     // Fix problem with update profile without upload avatar
     const formData = new FormData(); 
     if (typeof formValues.avatar === 'string' || 

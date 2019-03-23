@@ -11,8 +11,8 @@ User = get_user_model()
 class UserProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     # custom fields for user
-    website = models.URLField(blank=True, null=True)
-    about = models.CharField(max_length=255, blank=True, null=True)
+    website = models.URLField(blank=True, default="")
+    about = models.CharField(max_length=255, blank=True, default="")
     avatar = models.ImageField(upload_to="static/images", blank=True, null=True)
 
 def create_user_profile(sender, instance, created, **kwargs):
