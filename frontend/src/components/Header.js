@@ -13,7 +13,7 @@ import {
     } from 'reactstrap';
 
 import { getUserProfile } from "../actions/authActions";
-import { renderUser } from "../utils/noteUtils";
+import { renderUser } from "../utils/renderUtils";
 
 class Header extends Component {
     constructor(props) {
@@ -54,7 +54,7 @@ class Header extends Component {
                                 <NavLink href="/profile">{renderUser(user)}</NavLink>
                             </NavItem>
                             <NavItem key="logout">
-                                <NavLink href="/logout">Logout</NavLink>
+                                <NavLink href="/logout" className="nav-logout">Logout</NavLink>
                             </NavItem>
                         </div>
                     </Nav>

@@ -1,6 +1,17 @@
 import React from "react";
 import { toast } from 'react-toastify';
 
+export const renderUser = (user) => {
+  if (user) {
+      return (
+        <div>
+            {user.avatar ? <img src={`${user.avatar}`} className="user-avatar" alt="Avatar" /> : ""}            
+            <span className="user-username">{user.username}</span>
+        </div>
+      );
+  }
+};
+
 export const renderField = ({ input, label, type, meta: { touched, error } }) => (
     <div>
         <label>{label}</label>

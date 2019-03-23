@@ -28,17 +28,32 @@ class ImageDrop extends Component {
     className: '',
     cbFunction: () => {},
   };
-
+  state = { attached: false };
+  handleDrop = (files) => {
+	console.log("DROPPED!", files)
+	this.setState({attached: true})
+	// this.props.onSelectDrop(files);
+  }
   render() {
     const { className, input: { onChange }, meta: { error, touched }, label, classNameLabel, name, cbFunction } = this.props;
     console.log(this.props.input.value)
-	let drop_class = "dropzone-field dropzone-field__default avatar"
+	let drop_class = "dropimage-field dropimage-field__default avatar"
+	let drop_text = ""
+
+	if (this.props.input.value && this.state.attached) {
+		drop_class = "dropimage-field dropimage-field__success";
+		drop_text = "Press Save to Add";
+	} else {
+		drop_class = "dropimage-field dropimage-field__default avatar";
+		// drop_text = "Add Document"
+	} 
     return (
       <div className={`${className}` + (error && touched ? ' has-error ' : '')}>
         {label && <p className={classNameLabel || ''}>{label}</p>}
         <Dropzone
           onDrop={(f) => {
             cbFunction(f);
+            this.handleDrop(f);
             return onChange(f[0]);
           }}
           name={name}
@@ -46,8 +61,9 @@ class ImageDrop extends Component {
         >
             {({getRootProps, getInputProps}) => (
                 <div {...getRootProps()} className={`${drop_class}`} 
-                  style={{ backgroundImage: `url(${this.props.input.value})` }}>
+                  style={{ backgroundImage: `url(${this.props.input.value})`}}>
                     <input {...getInputProps()} />
+                    <span className="dropimage-field__text">{`${drop_text}`}</span>
                 </div>
             )}
         </Dropzone>

@@ -26,6 +26,16 @@ a[type=button] {
   position: absolute;
   right: 2%;
 }
+.user-avatar {
+  width: 25px;
+  height: 25px;
+  display: inline-block;
+  vertical-align: top;
+
+}
+.user-username {
+  margin-left: 10px;
+}
 .form-control {
   border-radius: 0;
 }
@@ -145,23 +155,13 @@ a[type=button] {
   /*margin: 10px 0;*/
 }
 .avatar {
-    /* This image is 687 wide by 1024 tall, similar to your aspect ratio */
-    background-image: url('http://i.stack.imgur.com/Dj7eP.jpg');
-    /*background-repeat: no-repeat;*/
-    /* make a square container */
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: 50% 50%;
+
     width: 150px;
     height: 150px;
-
-    /* fill the container, preserving aspect ratio, and cropping to fit */
-    background-size: cover;
-    /*background-size: contain;*/
-
-    /* center the image vertically and horizontally */
     background-position: center center;
-
-    /* round the edges to a circle with border radius 1/2 container size */
-    border-radius: 50%;
-
     /* centering image */
     margin: auto;
 }
@@ -187,6 +187,9 @@ a[type=button] {
   .btn-add {
     display: none!important;
   }
+  .nav-logout {
+    text-align: right;
+  }
 
 }
 
@@ -209,6 +212,12 @@ a[type=button] {
   }
   .btn-quick__text{
     display: none!important;
+  }
+  .user-username {
+    margin-right: 10px;
+  }
+  .nav-logout {
+    margin-right: 10px;
   }
 }
 
