@@ -23,7 +23,7 @@ class UserProfile extends Component {
             return (
 
               <div className="mx-2 mt-2 text-center">
-                <Table striped>
+                <Table striped className="table-userprofile">
                   <thead><tr><th colSpan="2">Your Profile</th></tr></thead>
                   <tbody>
                     <tr>

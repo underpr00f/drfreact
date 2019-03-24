@@ -45,12 +45,15 @@
   color: #fff;
 }
 
+/* TABLES */
 .table th, .table td, .table thead th {
     vertical-align: inherit!important;
     flex-wrap: wrap!important;
     word-break: break-all!important;
 }
-
+.table-userprofile td {
+  width: 50%;
+}
 .centering {
   display: flex;
 }
@@ -188,6 +191,12 @@
   .table-num__title, .table-num__text {
     display: none!important;
   }
+  .table-investors tbody {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 55px;
+  }
   .btn-add {
     display: none!important;
   }
@@ -225,7 +234,7 @@
   }
 }
 
-@media (max-width: 360px) {
+@media (max-width: 365px) {
   .table th, .table td {
     font-size: 12px!important;
   }

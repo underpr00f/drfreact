@@ -390,7 +390,7 @@ class Notes extends Component {
             {order.length > 0 ? <Button color="info" onClick={this.resetSort}>Clear Sort</Button> : <Button outline color="info" disabled>Clear Sort</Button>}
           </div>
         </div>
-        <Table className="table text-center" striped>
+        <Table className="table text-center table-investors" striped>
           <thead>
             <tr>
               <th className="table-num__title">#</th>
