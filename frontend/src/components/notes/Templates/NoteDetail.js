@@ -7,7 +7,7 @@ import { Form, Container, Row,
 
 import moment from "moment";
 
-import { LoadScreen } from '../Molecules/LoadScreen/LoadScreen'
+import { LoadScreen } from '../../general/Organisms/LoadScreen/LoadScreen'
 import { InputFormNoteDetail } from '../Molecules/Forms/InputFormNoteDetail'
 import { DetailPreviewTable } from '../Molecules/Tables/DetailPreviewTable'
 import { handleValidation } from '../../../utils/helpers'
@@ -207,7 +207,7 @@ class NoteDetail extends Component {
         } else {
             return (
               <div>
-                <h1>404 error. Message Not Found</h1>
+                <h1>404 error. Investor Not Found</h1>
               </div>
             );
         }

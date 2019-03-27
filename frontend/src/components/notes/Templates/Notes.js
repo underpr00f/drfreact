@@ -7,7 +7,7 @@ import { Form, FormText,
   FormGroup, Button,
   Table, CustomInput,
   Modal, ModalHeader, ModalBody, ModalFooter, } from 'reactstrap';
-import { LoadScreen } from '../Molecules/LoadScreen/LoadScreen'
+import { LoadScreen } from '../../general/Organisms/LoadScreen/LoadScreen'
 import { ModalDelete } from '../Organisms/Modal/Modal'
 
 import { InputFormNoteQuickAdd } from '../Molecules/Forms/InputFormNoteQuickAdd'
@@ -445,7 +445,10 @@ class Notes extends Component {
                                       state: {fromDashboard: false}
                                       }}>{note.text}</Link>
                               </td>
-                              <td>{note.owner_username}</td>
+                              <td>
+                                <Link className="info-link" to={{pathname:`/profile/${note.owner}`,
+                                      state: {fromDashboard: false}
+                                      }}>{note.owner_username}</Link></td>
                               <td className="table-phone__text">{note.phone}</td>
                               <td>{note.status}</td>
                               <td>{note.is_payed ? <FontAwesomeIcon icon={faCheckCircle} color="black"/> : <FontAwesomeIcon icon={faHandHoldingUsd} color="black"/>}</td>

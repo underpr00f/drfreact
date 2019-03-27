@@ -65,7 +65,7 @@ class PostList extends Component {
 	}
 	getItems() {
 		// setTimeout(() => this.setState({ isLoading: false }), 2500); // simulates an async action, and hides the spinner
-		fetch('http://underproof2017.pythonanywhere.com/api/item/')
+		fetch('http://127.0.0.1:8000/api/item/')
 		  .then(results => results.json())
 		  .then(results => this.setState({'items':results, isLoading: false}));
 	}

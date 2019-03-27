@@ -7,7 +7,8 @@ import Logout from "./auth/Logout";
 import Signup from "./auth/Signup";
 import SignupDone from "./auth/SignupDone";
 import AccountActivation from "./auth/AccountActivation";
-import UserProfile from "./auth/UserProfile";
+import UserProfile from "./auth/Templates/UserProfile";
+import UserProfileDetail from "./auth/Templates/UserProfileDetail";
 import UserProfileEdit from "./auth/UserProfileEdit";
 import PasswordChange from "./auth/PasswordChange";
 import PasswordReset from "./auth/PasswordReset";
@@ -36,7 +37,8 @@ const MainContent = () => (
             <Route path="/reset_password" component={props => <PasswordReset {...props} />}/>
             <Route path="/reset_password_done" component={props => <PasswordResetDone {...props} />}/>
             <Route path="/pass/reset/:uid/:token/" component={props => <PasswordResetConfirm {...props} />}/>
-            <Route path="/profile" component={RequireAuth(UserProfile)}/>
+            <Route exact path="/profile" component={RequireAuth(UserProfile)}/>
+            <Route path='/profile/:id' component={RequireAuth(UserProfileDetail)}/>
             <Route path="/profile_edit" component={RequireAuth(UserProfileEdit)}/>
             <Route path="/change_password" component={RequireAuth(PasswordChange)}/>
             <Route path='/react/posts/create' component={RequireAuth(PostCreate)}/>

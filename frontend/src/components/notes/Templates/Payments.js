@@ -1,8 +1,10 @@
 import React, {Component} from 'react'
-import * as lead from "../../../actions/paymentsActions";
 import {connect} from 'react-redux';
-import { LoadScreen } from '../Molecules/LoadScreen/LoadScreen'
+import { Link } from 'react-router-dom'
 import { Table } from 'reactstrap';
+
+import * as lead from "../../../actions/paymentsActions";
+import { LoadScreen } from '../../general/Organisms/LoadScreen/LoadScreen'
 
 class Payments extends Component {
     constructor(props) {
@@ -42,7 +44,11 @@ class Payments extends Component {
                   {lead.leads.length > 0 ? lead.leads.map((item,id) => (
                     <tr key={id}>
                         <th scope="row" className="table-num__text">{id+1}</th>
-                        <td>{item.owner}</td>
+                        <td>
+                          <Link className="info-link" to={{pathname:`/profile/${item.id}`,
+                              state: {fromDashboard: false}
+                              }}>{item.owner}</Link>
+                        </td>
                         <td>{item.total}</td>
                         <td>{item.processed}</td>
                         <td>{item.converted}</td>

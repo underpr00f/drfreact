@@ -30,9 +30,7 @@ class ImageDrop extends Component {
   };
   state = { attached: false };
   handleDrop = (files) => {
-	console.log("DROPPED!", files)
 	this.setState({attached: true})
-	// this.props.onSelectDrop(files);
   }
   render() {
     const { className, input: { onChange }, meta: { error, touched }, label, classNameLabel, name, cbFunction } = this.props;

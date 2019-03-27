@@ -112,6 +112,7 @@ class PaymentsViewSet(viewsets.ModelViewSet):
 					output_data['prices'] = prices
 					output_data['payed'] = count_payed
 					output_data['owner'] = user.username
+					output_data['id'] = user.id
 					output_data['total'] = total		
 					output_data['processed'] = queryset.filter(owner=user, status='Processed').count()
 					output_data['converted'] = queryset.filter(owner=user, status='Converted').count()
@@ -129,6 +130,7 @@ class PaymentsViewSet(viewsets.ModelViewSet):
 				candidate_count = queryset.filter(status='Candidate').count()					
 				
 				# output price without payed prices
+				output_data['id'] = request.user.id
 				output_data['prices'] = prices
 				output_data['payed'] = count_payed			
 				output_data['owner'] = request.user.username
