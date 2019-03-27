@@ -142,7 +142,12 @@
 .svg-inline--fa.fa-w-18, .svg-inline--fa.fa-w-14 {
   width: 1em;
 }
-
+.btn-search__icon {
+  display: none;
+}
+.btn-search__txt {
+  display: inline-block;
+}
 .form-button {
   display: flex;
   width: 100%;
@@ -238,5 +243,10 @@
   .table th, .table td {
     font-size: 12px!important;
   }
-
+  .btn-search__icon {
+    display: inline-block;
+  }
+  .btn-search__txt {
+    display: none;
+  }
 }

@@ -11,13 +11,15 @@ import { LoadScreen } from '../../general/Organisms/LoadScreen/LoadScreen'
 import { ModalDelete } from '../Organisms/Modal/Modal'
 
 import { InputFormNoteQuickAdd } from '../Molecules/Forms/InputFormNoteQuickAdd'
+import { OrderingHeaderTable } from '../Molecules/Tables/OrderingHeaderTable'
+
 import { handleValidation } from '../../../utils/helpers'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEdit, faTrash, faMale, 
   faUsers, faSave, faPlusSquare, 
-  faSearch, faExchangeAlt, faLongArrowAltDown,
-  faCheckCircle, faHandHoldingUsd, faTimes } from '@fortawesome/free-solid-svg-icons'
+  faSearch, faCheckCircle, faHandHoldingUsd,
+  faTimes,  } from '@fortawesome/free-solid-svg-icons'
 
 
 class Notes extends Component {
@@ -77,11 +79,7 @@ class Notes extends Component {
   resetSearch = () => {
     this.setState({ searchtext: "" });
   }
-  resetSort = () => {
-    this.setState({order: []}, function () {
-        this.handleOrderNotes();
-    });
-  }  
+ 
   selectForEdit = (index, id) => {
     let note = this.props.notes[index].noteitems[id];
     this.setState({text: note.text, phone: note.phone, 
@@ -195,65 +193,13 @@ class Notes extends Component {
       is_payed: !this.state.is_payed,
     });
   }
-  onBtnClickOrderingName = (ordername) => {
-    // Create a new array based on current state:
-    let order = [...this.state.order];
-    let newordername = "-"+ordername
-    let is_ordering_name = false
 
-    // if ordername starts from "C"-character - clear that order!
-    if (ordername.charAt(0) === "C"){
-      let index = order.indexOf(ordername.slice(1, ordername.length))
-      // Clear ordername (remove from array)
-      if (index !== -1) {
-        order.splice(index, 1);
-      }
-    } else {
-      // Add or remove item to it
-      if (order.includes(ordername)){
-        let index = order.indexOf(ordername)
-        if (index !== -1) {          
-          order.splice(index, 1);
-          order.splice(index, 0, newordername);         
-        }
-      } else if (order.includes(newordername)) {
-        let index = order.indexOf(newordername)
-        if (index !== -1) {
-          order.splice(index, 1);
-          order.splice(index, 0, ordername);
-        }
-      } else {
-        order.push(ordername);
-
-      }
-    }
-    if (order.length > 0) {
-      is_ordering_name = true
-    } 
-
-    // FIX BUG with "owner" negative ordering
-    if (order.includes("-owner")&&order.length===1) {
-      // adding "-id" field to multiply filter
-      // if has only "-owner" field
-      order.push("-id");
-    } else {
-      // remove "-id" in all other variants
-      let index = order.indexOf("-id")
-      if (index !== -1) {        
-        order.splice(index, 1);
-      }      
-    }
-
-    // Set state
-    this.setState({is_ordering_name: is_ordering_name, searchtext: "", order}, function () {
-        this.handleOrderNotes();
-    });
-  }
-  handleOrderNotes = () => {
+  onOrderNotes = (dataFromCallback) => {
     // Array to string with ','
-    let mapped = this.state.order.map((item)=>(item)).join(",");
-
-    if (this.state.order.length) {      
+    
+    if (dataFromCallback && dataFromCallback.order.length) {
+      let mapped = dataFromCallback.order.map((item)=>(item)).join(",");
+      this.setState({...dataFromCallback});      
       this.props.orderNotes(mapped)              
     } else {
       this.setState({order: []});
@@ -345,7 +291,7 @@ class Notes extends Component {
 
   renderNotes () {
     const { notes } = this.props
-    const { errors, modal, searchtext, order, modaldelete, index, id, text } = this.state;
+    const { errors, modal, searchtext, modaldelete, index, id, text } = this.state;
     const { next } = this.props.notes[this.props.notes.length - 1];
 
     return (
@@ -377,7 +323,12 @@ class Notes extends Component {
                 />
                 {errors.searchtext ? <FormText color="danger">{errors.searchtext}</FormText>: ""}
               <Button className="rounded-0" onClick={this.searchNotes}><FontAwesomeIcon icon={faSearch} color="white"/></Button>
-              {searchtext !== "" ? <Button outline className="rounded-0" onClick={this.resetSearch}>Clear</Button> : ""}          
+              {searchtext !== "" ? 
+                <Button outline className="rounded-0" onClick={this.resetSearch}>
+                  <FontAwesomeIcon icon={faTimes} color="default" className="btn-search__icon"/>
+                  <span className="btn-search__txt">Clear</span>
+                </Button> 
+              : ""}          
             </FormGroup>
           </div>
           <div className="centering-right"> 
@@ -387,51 +338,13 @@ class Notes extends Component {
           <div className="centering-left"></div>
           <h3 className="centering-center">Leads</h3>
           <div className="centering-right centering-right__tablepreffix">
-            {order.length > 0 ? <Button color="info" onClick={this.resetSort}>Clear Sort</Button> : <Button outline color="info" disabled>Clear Sort</Button>}
           </div>
         </div>
         <Table className="table text-center table-investors" striped>
-          <thead>
-            <tr>
-              <th className="table-num__title">#</th>
-              <th className="table-investor__title"><FontAwesomeIcon icon={faMale} color="black"/> / <FontAwesomeIcon icon={faUsers} color="black"/></th>
-              <th>Name <Button color="link" onClick={() => this.onBtnClickOrderingName("text")}>
-                {order.includes("text") ? <FontAwesomeIcon icon={faLongArrowAltDown} color="black"/>
-                :order.includes("-text") ? <FontAwesomeIcon rotation={180} icon={faLongArrowAltDown} color="black"/>
-                :<FontAwesomeIcon rotation={90} icon={faExchangeAlt} color="grey"/>}</Button>
-                {order.includes("text") ? <Button color="link" className="btn-sort__clear" onClick={() => this.onBtnClickOrderingName("Ctext")}><FontAwesomeIcon icon={faTimes} color="black" /></Button>
-                :order.includes("-text") ? <Button color="link" className="btn-sort__clear" onClick={() => this.onBtnClickOrderingName("C-text")}><FontAwesomeIcon icon={faTimes} color="black" /></Button>
-                :""}
-              </th>
-              <th>Dev <Button color="link" onClick={() => this.onBtnClickOrderingName("owner")}>
-                {order.includes("owner") ? <FontAwesomeIcon icon={faLongArrowAltDown} color="black"/>
-                :order.includes("-owner") ? <FontAwesomeIcon rotation={180} icon={faLongArrowAltDown} color="black"/>
-                :<FontAwesomeIcon rotation={90} icon={faExchangeAlt} color="grey"/>}</Button>
-                {order.includes("owner") ? <Button color="link" className="btn-sort__clear" onClick={() => this.onBtnClickOrderingName("Cowner")}><FontAwesomeIcon icon={faTimes} color="black" /></Button>
-                :order.includes("-owner") ? <Button color="link" className="btn-sort__clear" onClick={() => this.onBtnClickOrderingName("C-owner")}><FontAwesomeIcon icon={faTimes} color="black" /></Button>
-                :""}
-              </th>
-              <th className="table-phone__title">Phone</th>
-              <th>Status <Button color="link" onClick={() => this.onBtnClickOrderingName("status")}>
-                {order.includes("status") ? <FontAwesomeIcon icon={faLongArrowAltDown} color="black"/>
-                :order.includes("-status") ? <FontAwesomeIcon rotation={180} icon={faLongArrowAltDown} color="black"/>
-                :<FontAwesomeIcon rotation={90} icon={faExchangeAlt} color="grey"/>}</Button>
-                {order.includes("status") ? <Button color="link" className="btn-sort__clear" onClick={() => this.onBtnClickOrderingName("Cstatus")}><FontAwesomeIcon icon={faTimes} color="black" /></Button>
-                :order.includes("-status") ? <Button color="link" className="btn-sort__clear" onClick={() => this.onBtnClickOrderingName("C-status")}><FontAwesomeIcon icon={faTimes} color="black" /></Button>
-                :""}
-              </th>
-              <th>Payment <Button color="link" onClick={() => this.onBtnClickOrderingName("is_payed")}>
-                {order.includes("is_payed") ? <FontAwesomeIcon icon={faLongArrowAltDown} color="black"/>
-                :order.includes("-is_payed") ? <FontAwesomeIcon rotation={180} icon={faLongArrowAltDown} color="black"/>
-                :<FontAwesomeIcon rotation={90} icon={faExchangeAlt} color="grey"/>}</Button>
-                {order.includes("is_payed") ? <Button color="link" className="btn-sort__clear" onClick={() => this.onBtnClickOrderingName("Cis_payed")}><FontAwesomeIcon icon={faTimes} color="black" /></Button>
-                :order.includes("-is_payed") ? <Button color="link" className="btn-sort__clear" onClick={() => this.onBtnClickOrderingName("C-is_payed")}><FontAwesomeIcon icon={faTimes} color="black" /></Button>
-                :""}
-              </th>
-              <th>Manage</th>
-            </tr>
-          </thead>  
-               
+          <OrderingHeaderTable
+            onOrderNotes={this.onOrderNotes} 
+          />
+
           {notes !== undefined ? notes.map((post, index)=>{
             return ( 
                 <tbody key={index}>
