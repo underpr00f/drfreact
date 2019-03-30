@@ -326,7 +326,6 @@ class Notes extends Component {
               {searchtext !== "" ? 
                 <Button outline className="rounded-0" onClick={this.resetSearch}>
                   <FontAwesomeIcon icon={faTimes} color="default" className="btn-search__icon"/>
-                  <span className="btn-search__txt">Clear</span>
                 </Button> 
               : ""}          
             </FormGroup>
@@ -355,19 +354,19 @@ class Notes extends Component {
                               <td className="table-investor__text">{note.is_corporate ? <FontAwesomeIcon icon={faUsers} color="black"/> : <FontAwesomeIcon icon={faMale} color="black"/>}</td>
                               <td>
                                 <Link className="info-link" to={{pathname:`/investors/${note.id}`,
-                                      state: {fromDashboard: false}
+                                      state: {fromDashboard: false, prevLink: window.location.pathname}
                                       }}>{note.text}</Link>
                               </td>
                               <td>
                                 <Link className="info-link" to={{pathname:`/profile/${note.owner}`,
-                                      state: {fromDashboard: false}
+                                      state: {fromDashboard: false, prevLink: window.location.pathname}
                                       }}>{note.owner_username}</Link></td>
                               <td className="table-phone__text">{note.phone}</td>
                               <td>{note.status}</td>
                               <td>{note.is_payed ? <FontAwesomeIcon icon={faCheckCircle} color="black"/> : <FontAwesomeIcon icon={faHandHoldingUsd} color="black"/>}</td>
                               <td>
-                                <Button className="rounded-0" color="info" title="edit investor" onClick={() => this.selectForEdit(index, id)}><FontAwesomeIcon icon={faEdit} color="white"/></Button>
-                                <Button className="rounded-0" onClick={() => this.toggleModalDelete(index, id)} title="delete investor"><FontAwesomeIcon icon={faTrash} color="white"/></Button>
+                                <Button className="rounded-0" color="info" title="edit" onClick={() => this.selectForEdit(index, id)}><FontAwesomeIcon icon={faEdit} color="white"/></Button>
+                                <Button className="rounded-0" onClick={() => this.toggleModalDelete(index, id)} title="delete"><FontAwesomeIcon icon={faTrash} color="white"/></Button>
                               </td>
                           </tr>                                        
                         )

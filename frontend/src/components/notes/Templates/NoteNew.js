@@ -1,14 +1,14 @@
 import React, {Component} from 'react'
 
-import { Link, Redirect } from 'react-router-dom'
+import { Redirect } from 'react-router-dom'
 import * as detail from "../../../actions/noteDetailActions";
 import {connect} from 'react-redux';
-import { Form, Button } from 'reactstrap';
+
+import Form from 'reactstrap/lib/Form';
 
 import { InputFormNoteAdd } from '../Molecules/Forms/InputFormNoteAdd'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSave, } from '@fortawesome/free-solid-svg-icons'
 
+import { ReturnButton, SaveButton, ClearButton } from '../../general/Atoms/Buttons/Buttons'
 import { handleValidation } from '../../../utils/helpers'
 
 class NoteNew extends Component {
@@ -62,10 +62,7 @@ class NoteNew extends Component {
         is_corporate: !this.state.is_corporate,
       });
     }
-    // Force update page to /investors
-    refreshPage = () => {
-      window.location.href = '/investors';
-    }
+
     submitNote = (e) => {
       e.preventDefault();
       // check validation from helper file
@@ -116,9 +113,11 @@ class NoteNew extends Component {
                   errors={errors} 
                 /> 
                 <div>
-                  <Button className="rounded-0" color="info" type="submit"><FontAwesomeIcon icon={faSave} color="white"/></Button>
-                  <Button className="rounded-0" outline onClick={this.resetForm}>Clear</Button>
-                  <Link to="/investors" onClick={this.refreshPage} ><Button className="rounded-0">Cancel</Button></Link>
+                  <SaveButton />
+                  <ClearButton
+                    onClear={this.resetForm} 
+                  />
+                  <ReturnButton />
                 </div>
             </Form>
           </div>               

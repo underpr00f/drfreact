@@ -1,20 +1,16 @@
 import React, {Component} from 'react'
-import { Link } from "react-router-dom";
+
 import * as detail from "../../../actions/noteDetailActions";
 import {connect} from 'react-redux';
 import { Form, Container, Row,
-  Button, } from 'reactstrap';
-
+     } from 'reactstrap';
 import moment from "moment";
 
 import { LoadScreen } from '../../general/Organisms/LoadScreen/LoadScreen'
+import { ReturnButton, SaveButton } from '../../general/Atoms/Buttons/Buttons'
 import { InputFormNoteDetail } from '../Molecules/Forms/InputFormNoteDetail'
 import { DetailPreviewTable } from '../Molecules/Tables/DetailPreviewTable'
 import { handleValidation } from '../../../utils/helpers'
-
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUndoAlt, faSave,
-       } from '@fortawesome/free-solid-svg-icons'
 
 class NoteDetail extends Component {
 
@@ -99,7 +95,7 @@ class NoteDetail extends Component {
     }
 
     getData = (documents) => {
-      console.log("getData!")
+      // console.log("getData!")
       this.setState({
         documents: documents[0],
         attached: true,
@@ -129,10 +125,7 @@ class NoteDetail extends Component {
         last_call: "",
       });
     }
-    // Force update page to /investors
-    refreshPage = () => {
-      window.location.href = '/investors';
-    }
+
     submitNote = (e) => {
       e.preventDefault();
       // check validation from helper file
@@ -192,9 +185,8 @@ class NoteDetail extends Component {
 
                         errors={errors} 
                       />                
-
-                    <Button color="info" className="rounded-0" size="lg" type="submit"><FontAwesomeIcon icon={faSave} color="white"/></Button>
-                    <Link to="/investors" onClick={this.refreshPage} ><Button className="rounded-0" size="lg"><FontAwesomeIcon icon={faUndoAlt} color="white"/> Cancel</Button></Link>
+                    <SaveButton />
+                    <ReturnButton />
                   </Form>
 
                   <DetailPreviewTable 

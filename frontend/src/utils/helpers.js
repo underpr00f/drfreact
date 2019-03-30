@@ -9,7 +9,7 @@ export const handleValidation = (fields) => {
     if(typeof fields["text"] !== "undefined"){
        if(!fields["text"].match(/^[a-zA-Z]+$/)){
           errors["text"] = "Name must be only letters";
-       } else if (fields["text"].length > 7) {
+       } else if (fields["text"].length > 15) {
           errors["text"] = "Your name is too long";
        }        
     }

@@ -85,7 +85,6 @@ export const updateDetailNote = (id, text, phone, status, is_corporate, is_payed
         } else {
             formData.append('last_call', "");
         }
-        console.log(formData, documents)
         let noteId = id;
         return fetch(`/api/investors/${noteId}/`, {headers, method: "PUT", body: formData})
             .then(res => {

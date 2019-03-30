@@ -8,12 +8,10 @@ import {
   NavbarToggler,
   NavbarBrand,
   Nav,
-  NavItem,
-  NavLink,
     } from 'reactstrap';
 
+import { NavigationLink, NavigationUserLink } from './general/Atoms/Links/Links'
 import { getUserProfile } from "../actions/authActions";
-import { renderUser } from "../utils/renderUtils";
 
 class Header extends Component {
     constructor(props) {
@@ -43,33 +41,33 @@ class Header extends Component {
             return (
                 
                     <Nav navbar>
-                        <NavItem key="investors">
-                            <NavLink href={"/investors"}>Investors</NavLink>
-                        </NavItem>
-                        <NavItem key="payments">
-                            <NavLink href={"/payments"}>Payments</NavLink>
-                        </NavItem>
+                        <NavigationLink
+                          urltext="Investors"
+                        />
+                        <NavigationLink
+                          urltext="Payments"
+                        />
                         <div className="navbar-profile">
-                            <NavItem key="profile">
-                                <NavLink href="/profile">{renderUser(user)}</NavLink>
-                            </NavItem>
-                            <NavItem key="logout">
-                                <NavLink href="/logout" className="nav-logout">Logout</NavLink>
-                            </NavItem>
+                            <NavigationUserLink
+                                urltext="profile"
+                                user={user}
+                            />
+                            <NavigationLink
+                                urltext="Logout"
+                                customclass="nav-logout"
+                            />
                         </div>
-                    </Nav>
-                
+                    </Nav>                
             );
-
         } else {
             return (
                     <Nav className="ml-auto" navbar>
-                        <NavItem key="login">
-                            <NavLink href="/login">Login</NavLink>
-                        </NavItem>
-                        <NavItem key="signup">
-                            <NavLink href="/signup">Sign Up</NavLink>
-                        </NavItem>
+                        <NavigationLink
+                          urltext="Login"
+                        />
+                       <NavigationLink
+                          urltext="SignUp"
+                        />
                     </Nav>
             );
         }
