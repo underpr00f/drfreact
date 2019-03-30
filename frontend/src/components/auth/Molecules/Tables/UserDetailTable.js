@@ -50,4 +50,6 @@ export const UserDetailTable = (userdetail) => {
     )
   } 
   return null
+
+
 };
