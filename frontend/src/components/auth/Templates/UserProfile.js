@@ -14,7 +14,9 @@ class UserProfile extends Component {
         user: PropTypes.object,
         loading: PropTypes.bool
     };
-
+    static contextTypes = {
+        router: PropTypes.object
+    }
     componentWillMount() {
         this.props.getUserProfile();
     }

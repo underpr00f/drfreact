@@ -11,27 +11,12 @@ export class ReturnButton extends Component {
   static contextTypes = {
     router: PropTypes.object
   }
-  // Force update page if previous link was /investors or /payments for correctly fetch
-  returnPage = () => {
-    const { history } = this.context.router
 
-    let locState = history.location.state
-    if (locState) {
-      if (locState.prevLink && 
-        (locState.prevLink === "/investors" || locState.prevLink === "/payments")) {
-          window.location.href = locState.prevLink;
-      } else {
-        history.push(locState.prevLink);
-      }      
-    } else {
-      window.location.href = '/investors';
-    }
-  }
   render() {
     return (               
         <Button className="rounded-0" size="lg" 
-          onClick={this.returnPage}><FontAwesomeIcon icon={faUndoAlt} color="white"/>
-          {" "} Cancel
+          onClick={this.context.router.history.goBack}><FontAwesomeIcon icon={faUndoAlt} color="white"/>
+          {" "} Back
         </Button>   
         )    
   }

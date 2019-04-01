@@ -23,7 +23,7 @@ class Payments extends Component {
       }
     }
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
+    componentDidUpdate(prevProps) {
       if (this.props.lead !== prevProps.lead) {
         if (this.props.lead) {
           const leads = paymentsUtil(this.props.lead.leads)
@@ -55,7 +55,7 @@ class Payments extends Component {
                         <th scope="row" className="table-num__text">{id+1}</th>
                         <td>
                           <Link className="info-link" to={{pathname:`/profile/${item.id}`,
-                              state: {fromDashboard: false}
+                              state: {fromDashboard: false, prevLink: window.location.pathname}
                               }}>{item.owner}</Link>
                         </td>
                         <td>{item.total}</td>

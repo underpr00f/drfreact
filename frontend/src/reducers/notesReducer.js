@@ -21,7 +21,6 @@ export default function notes(state=initialState, action) {
                     },
                 ];
         case 'SEARCH_NOTES':
-            noteList = action.notes
         
             return [                    
 
@@ -31,7 +30,6 @@ export default function notes(state=initialState, action) {
                 ];
 
         case 'ORDER_NOTES':
-            noteList = action.notes
        
             return [                    
 

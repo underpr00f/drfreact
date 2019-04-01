@@ -10,17 +10,6 @@ export class OrderingHeaderTable extends Component {
 
   state = { order: [], is_ordering_name: false, searchtext: "" }
 
-  handleOrderNotes = () => {
-    // Array to string with ','
-    let mapped = this.state.order.map((item)=>(item)).join(",");
-
-    if (this.state.order.length) {      
-      this.props.orderNotes(mapped)              
-    } else {
-      this.setState({order: []});
-      this.props.orderNotes("")   
-    }    
-  }
   onBtnClickOrderingName = (ordername) => {
     // Create a new array based on current state:
     let order = [...this.state.order];

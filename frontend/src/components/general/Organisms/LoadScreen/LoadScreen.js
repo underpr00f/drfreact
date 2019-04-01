@@ -11,3 +11,13 @@ export const LoadScreen = () => (
     </div>
   </div>
 )
+
+export const LoadUser = () => (
+  <div className="loaduser">
+    <div className="load-3">
+		<div className="line"></div>
+		<div className="line"></div>
+		<div className="line"></div>
+    </div>
+  </div>
+)

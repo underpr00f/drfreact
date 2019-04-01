@@ -61,7 +61,14 @@ class Notes extends Component {
 
   // // END FETCH DATA AFTER PROPS
   componentDidMount () {
-    this.props.fetchNotes()
+    // Check if was ordering
+    if (!(Array.isArray(this.props.notes[0].noteitems) && this.props.notes[0].noteitems.length)) {
+      // array exists and is not empty
+      this.props.fetchNotes()
+    } else {
+      this.props.orderNotes("")
+    }
+
   }
 
   resetForm = () => {
@@ -77,6 +84,14 @@ class Notes extends Component {
       modal: true, correspondence: "", });
   }
   resetSearch = () => {
+    if (this.state.searching) {
+        this.props.searchNotes("") 
+        this.setState({
+          is_ordering_name: false,
+          order: [],
+          searching: false
+        });             
+    }    
     this.setState({ searchtext: "" });
   }
  
@@ -96,29 +111,36 @@ class Notes extends Component {
       modaldelete: false,
     })     
   }
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      loading: nextProps.notes[0].loading,
-    }) 
-    // если длина массива меньше чем предыдущая длина (один элемент удален)
-    // то пересчитываем эндпоинт для фетча (вычитаем из последнего символа next
-    // число "1" чтобы получить текущий фетч), если в нексте на конце "1", то обрезаем
-    // до знака "?"
-    let nextForDelete = "";
-    if(nextProps.notes[0].deleted && nextProps.notes[0].next) {
-      nextForDelete = nextProps.notes[0].next
-      console.log(nextForDelete)
-      let lastChar = parseInt(nextForDelete.slice(-1), 10)
-      if ((lastChar-1) >= 2) {
-        nextForDelete = nextForDelete.slice(0, -1)+(lastChar-1);
-        console.log(nextForDelete)
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.notes !== prevProps.notes) {
+      this.setState({
+        loading: this.props.notes[0].loading,
+      }) 
+      // если длина массива меньше чем предыдущая длина (один элемент удален)
+      // то пересчитываем эндпоинт для фетча (вычитаем из последнего символа next
+      // число "1" чтобы получить текущий фетч), если в нексте на конце "1", то обрезаем
+      // до знака "?"
+      let nextForDelete = "";
+      if(this.props.notes[0].deleted && this.props.notes[0].next) {
+        nextForDelete = this.props.notes[0].next
+        // console.log(nextForDelete)
+        let lastChar = parseInt(nextForDelete.slice(-1), 10)
+        if ((lastChar-1) >= 2) {
+          nextForDelete = nextForDelete.slice(0, -1)+(lastChar-1);
+          // console.log(nextForDelete)
+        }
+        
+        //add flag nextafterdelete to correctly fetch
+        this.setState({nextafterdelete: nextForDelete,
+          deleted: false})
       }
-      
-      //add flag nextafterdelete to correctly fetch
-      this.setState({nextafterdelete: nextForDelete,
-        deleted: false})
+      // if (this.props.lead) {
+      //   const leads = paymentsUtil(this.props.lead.leads)
+      //   this.setState({leads: leads}); 
+      // }
+
     }
-  }  
+  }   
     
   toggle = () => {
     this.setState(prevState => ({
@@ -179,8 +201,9 @@ class Notes extends Component {
           this.setState({
             is_ordering_name: false,
             order: [],
+            searching: true,
           });             
-      }     
+      }  
   }
 
   onCheckboxIsCorpBtnClick = () => {
@@ -324,10 +347,10 @@ class Notes extends Component {
                 {errors.searchtext ? <FormText color="danger">{errors.searchtext}</FormText>: ""}
               <Button className="rounded-0" onClick={this.searchNotes}><FontAwesomeIcon icon={faSearch} color="white"/></Button>
               {searchtext !== "" ? 
-                <Button outline className="rounded-0" onClick={this.resetSearch}>
-                  <FontAwesomeIcon icon={faTimes} color="default" className="btn-search__icon"/>
+                <Button outline className="rounded-0 btn-sort__clear" onClick={this.resetSearch}>
+                  <FontAwesomeIcon rotation={90} icon={faTimes}/>
                 </Button> 
-              : ""}          
+              : null}          
             </FormGroup>
           </div>
           <div className="centering-right"> 

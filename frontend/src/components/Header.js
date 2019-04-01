@@ -43,14 +43,17 @@ class Header extends Component {
                     <Nav navbar>
                         <NavigationLink
                           urltext="Investors"
+                          customclass="nav-links__link"
                         />
                         <NavigationLink
                           urltext="Payments"
+                          customclass="nav-links__link"
                         />
                         <div className="navbar-profile">
                             <NavigationUserLink
                                 urltext="profile"
                                 user={user}
+                                customclass="nav-user"
                             />
                             <NavigationLink
                                 urltext="Logout"
@@ -64,9 +67,11 @@ class Header extends Component {
                     <Nav className="ml-auto" navbar>
                         <NavigationLink
                           urltext="Login"
+                          customclass="nav-links__link"
                         />
                        <NavigationLink
                           urltext="SignUp"
+                          customclass="nav-links__link"
                         />
                     </Nav>
             );

@@ -34,7 +34,7 @@ class ImageDrop extends Component {
   }
   render() {
     const { className, input: { onChange }, meta: { error, touched }, label, classNameLabel, name, cbFunction } = this.props;
-    console.log(this.props.input.value)
+
 	let drop_class = "dropimage-field dropimage-field__default avatar"
 	let drop_text = ""
 
