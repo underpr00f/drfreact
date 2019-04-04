@@ -14,7 +14,7 @@ import PasswordChange from "./auth/PasswordChange";
 import PasswordReset from "./auth/PasswordReset";
 import PasswordResetDone from "./auth/PasswordResetDone";
 import PasswordResetConfirm from "./auth/PasswordResetConfirm";
-import NoMatch from "./NoMatch";
+import {ErrorPage} from "./general/Organisms/ErrorPage/ErrorPage";
 
 import ReactifyComp from '../routingComps/ReactifyComp'
 import PostDetail from '../reactify/PostDetail';
@@ -49,7 +49,7 @@ const MainContent = () => (
             <Route path='/investors/:id' component={RequireAuth(NoteDetail)}/>
             <Route exact path='/payments' component={RequireAuth(Payments)} />
 
-            <Route component={props => <NoMatch {...props} />}/>
+            <Route component={props => <ErrorPage {...props} />}/>
         </Switch>
     </div>
 );

@@ -2,6 +2,8 @@ import React from 'react'
 import { Table } from 'reactstrap';
 
 import { ReturnButton } from '../../../general/Atoms/Buttons/Buttons'
+import { HomeButton } from '../../../general/Atoms/Links/Links'
+
 export const UserDetailTable = (userdetail) => {
   if (userdetail) {
     return (
@@ -12,6 +14,7 @@ export const UserDetailTable = (userdetail) => {
               <th>Profile {userdetail.username}</th>
               <td>
                 <ReturnButton />
+                <HomeButton />
               </td>
             </tr>
           </thead>

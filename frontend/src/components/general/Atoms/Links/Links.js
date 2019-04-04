@@ -4,6 +4,9 @@ import NavItem from 'reactstrap/lib/NavItem';
 import { LoadUser } from '../../Organisms/LoadScreen/LoadScreen'
 import { renderUser } from "../../../../utils/renderUtils";
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHome } from '@fortawesome/free-solid-svg-icons';
+
 export class NavigationLink extends Component {
 
   render() {
@@ -42,3 +45,14 @@ export class NavigationUserLink extends Component {
         )    
   }
 }
+
+export const HomeButton = () => (
+	<Link className="btn btn-outline-info rounded-0"
+		role="button" 
+		to={{
+		  	pathname: `/investors`,
+			state: {fromDashboard: false}
+		  }}>
+		  	<FontAwesomeIcon icon={faHome} color="info"/>
+	</Link>
+);

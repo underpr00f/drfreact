@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 export const renderUser = (user) => {
   if (user) {
       return (
-        <div>
+        <div className="user">
             {user.avatar ? <img src={`${user.avatar}`} className="user-avatar" alt="Avatar" /> : ""}            
             <span className="user-username">{user.username}</span>
         </div>

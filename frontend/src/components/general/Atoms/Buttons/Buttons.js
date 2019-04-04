@@ -14,7 +14,7 @@ export class ReturnButton extends Component {
 
   render() {
     return (               
-        <Button className="rounded-0" size="lg" 
+        <Button className="rounded-0"  
           onClick={this.context.router.history.goBack}><FontAwesomeIcon icon={faUndoAlt} color="white"/>
           {" "} Back
         </Button>   
@@ -22,15 +22,14 @@ export class ReturnButton extends Component {
   }
 }
 
-
-export const SaveButton = props => (
-    <Button color="info" className="rounded-0" size="lg" type="submit">
+export const SaveButton = () => (
+    <Button color="info" className="rounded-0" type="submit">
       <FontAwesomeIcon icon={faSave} color="white"/>
     </Button>
 );
 
 export const ClearButton = props => (
-    <Button outline className="rounded-0" size="lg" type="button"
+    <Button outline className="rounded-0" type="button"
       onClick={props.onClear}
     >
       Clear

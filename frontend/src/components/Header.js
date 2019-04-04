@@ -39,8 +39,8 @@ class Header extends Component {
         if (this.props.authenticated) {
             const { user } = this.props
             return (
-                
-                    <Nav navbar>
+                <>
+                    <Nav navbar className="navbar-links">
                         <NavigationLink
                           urltext="Investors"
                           customclass="nav-links__link"
@@ -49,18 +49,19 @@ class Header extends Component {
                           urltext="Payments"
                           customclass="nav-links__link"
                         />
-                        <div className="navbar-profile">
-                            <NavigationUserLink
-                                urltext="profile"
-                                user={user}
-                                customclass="nav-user"
-                            />
-                            <NavigationLink
-                                urltext="Logout"
-                                customclass="nav-logout"
-                            />
-                        </div>
-                    </Nav>                
+                    </Nav>
+                    <Nav navbar className="navbar-profile">
+                        <NavigationUserLink
+                            urltext="profile"
+                            user={user}
+                            customclass="nav-user"
+                        />
+                        <NavigationLink
+                            urltext="Logout"
+                            customclass="nav-logout"
+                        />
+                    </Nav>  
+                </>              
             );
         } else {
             return (

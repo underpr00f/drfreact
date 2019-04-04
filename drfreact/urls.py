@@ -19,6 +19,7 @@ router.register(r'investors', MessageViewSet, base_name='investors')
 router.register(r'posts', PostsViewSet, base_name='posts')
 router.register(r'user', UserViewSet, base_name='user')
 router.register(r'payments', PaymentsViewSet, base_name='payments')
+#router.register(r'profile', UserViewSet, base_name='profile')
 
 urlpatterns = [	
 	url(r'^api/', include(router.urls)),

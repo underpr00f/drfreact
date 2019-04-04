@@ -1,4 +1,7 @@
 /*define styles here*/
+/*body, input {
+  background: #E3F2FD;
+}*/
 .info-link{
   color: #17a2b8;
   &:hover{
@@ -19,10 +22,16 @@
   }    
 }
 /*NAVBAR*/
+.navbar-links {
+  width: 100%;
+  justify-content: flex-start;
+}
 .navbar-profile {
-  display: inline-flex;
+  /*  display: inline-flex;
   position: absolute;
-  right: 2%;
+  right: 2%;*/
+  width: 100%;
+  justify-content: flex-end;
 }
 
 .user-avatar {
@@ -73,7 +82,10 @@
 .react-datepicker__input-container input {
 	width: 100%;
 }
-
+/* TABLES */
+.table-detail th {
+  min-width: 147px;
+}
 .table-correspondence__data {
 	flex-wrap: wrap;
   word-break: break-all;
@@ -187,9 +199,20 @@
   .container {
     max-width: 100%!important;
   }
+  .navbar-collapse {
+    display: flex;
+  }
+  .nav-link {
+    display: inline-flex;
+  }
+  .user {
+    display: flex;
+  }
   .navbar-profile {
-    display: block!important;
-    position: fixed!important;
+    width: auto;
+  }
+  .nav-logout {
+    float: right;
   }
   .table th, .table td {
     padding: 0!important;
@@ -206,9 +229,7 @@
   .btn-add {
     display: none!important;
   }
-  .nav-logout {
-    text-align: right;
-  }
+
 
 }
 
@@ -235,9 +256,9 @@
   .user-username {
     margin-right: 10px;
   }
-  .nav-logout {
+  /*  .nav-logout {
     margin-right: 10px;
-  }
+  }*/
 }
 
 @media (max-width: 365px) {

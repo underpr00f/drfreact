@@ -2,7 +2,12 @@ export default function userDetailReducer(state = {loading: true}, action) {
     switch(action.type) {
 
         case 'FETCH_USER_DETAIL':
-            return { ...state, ...action.userdetail, loading: false};
+            return { ...state, 
+                ...action.userdetail, 
+                hasError: false,
+                errors: {},
+                loading: false,
+            };
         // case 'UPDATE_DETAIL_NOTE':
         //     return { ...state, ...action.detail, loading: false, updated: true};
         // case 'ADD_DETAIL_NOTE':

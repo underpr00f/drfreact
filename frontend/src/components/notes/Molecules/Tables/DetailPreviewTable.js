@@ -13,7 +13,7 @@ export class DetailPreviewTable extends Component {
     } = this.props;
 
     return (
-            <div className="col col-12 col-xs-12 col-sm-12 col-md-8 col-lg-8">
+            <div className="col col-12 col-xs-12 col-sm-12 col-md-8 col-lg-8 table-detail">
               <h3>Detailed Preview</h3>
                 <Table striped>
                   <tbody>

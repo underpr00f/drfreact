@@ -6,6 +6,7 @@ import { Form, Container, Row,
      } from 'reactstrap';
 import moment from "moment";
 
+import { ErrorPage } from '../../general/Organisms/ErrorPage/ErrorPage'
 import { LoadScreen } from '../../general/Organisms/LoadScreen/LoadScreen'
 import { ReturnButton, SaveButton } from '../../general/Atoms/Buttons/Buttons'
 import { InputFormNoteDetail } from '../Molecules/Forms/InputFormNoteDetail'
@@ -47,8 +48,7 @@ class NoteDetail extends Component {
             id: id,
         })
         this.props.fetchDetailNote(id)        
-      }
-      
+      }      
     }
 
     componentWillReceiveProps(nextProps) {
@@ -69,6 +69,7 @@ class NoteDetail extends Component {
           documents: detailed.documents,
           hasError: detailed.hasError,
           loading: detailed.loading,
+          errors: detailed.errors
         }) 
       }        
     }    
@@ -198,9 +199,9 @@ class NoteDetail extends Component {
 
         } else {
             return (
-              <div>
-                <h1>404 error. Investor Not Found</h1>
-              </div>
+              <ErrorPage 
+                  errors={errors && errors.page}
+                /> 
             );
         }
     }
