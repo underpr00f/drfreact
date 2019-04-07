@@ -1,4 +1,4 @@
-let ROOT_URL = "http://localhost:8000/";
+export let ROOT_URL = "http://localhost:8000/";
 
 // FOR PRODUCTION URLS
 const HOMEPAGE_URL = require('../../package.json').homepage;

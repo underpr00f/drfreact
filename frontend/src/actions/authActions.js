@@ -90,6 +90,8 @@ export function getUserProfile() {
                 // Show an error to the user
                 console.log(error);
                 // TODO: send notification and redirect
+                const processedError = processServerError(error.response.data);
+                throw new SubmissionError(processedError);
             });
         }
     };

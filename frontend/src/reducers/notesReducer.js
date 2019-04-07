@@ -16,6 +16,7 @@ export default function notes(state=initialState, action) {
                     {...state[state.length-1],
                     noteitems: noteList,
                     loading: false,
+                    fetching: false,
                     // deleted: false
                     // ...action.notes
                     },

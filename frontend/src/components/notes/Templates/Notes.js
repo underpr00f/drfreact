@@ -7,19 +7,18 @@ import { Form, FormText,
   FormGroup, Button,
   Table, CustomInput,
   Modal, ModalHeader, ModalBody, ModalFooter, } from 'reactstrap';
-import { LoadScreen } from '../../general/Organisms/LoadScreen/LoadScreen'
+import { LoadScreen, LoadObject } from '../../general/Organisms/LoadScreen/LoadScreen'
 import { ModalDelete } from '../Organisms/Modal/Modal'
 
 import { InputFormNoteQuickAdd } from '../Molecules/Forms/InputFormNoteQuickAdd'
 import { OrderingHeaderTable } from '../Molecules/Tables/OrderingHeaderTable'
+import { OrderingBodyTable } from '../Molecules/Tables/OrderingBodyTable'
 
 import { handleValidation } from '../../../utils/helpers'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEdit, faTrash, faMale, 
-  faUsers, faSave, faPlusSquare, 
-  faSearch, faCheckCircle, faHandHoldingUsd,
-  faTimes,  } from '@fortawesome/free-solid-svg-icons'
+import { faPlusSquare, 
+  faSearch, faSave, faTimes,  } from '@fortawesome/free-solid-svg-icons'
 
 
 class Notes extends Component {
@@ -44,6 +43,7 @@ class Notes extends Component {
       modaldelete: false,
       is_staff: false,
       loading: true,
+      fetching: true,
       nextafterdelete: "",
       deleted: false,
       order: [],
@@ -115,6 +115,7 @@ class Notes extends Component {
     if (this.props.notes !== prevProps.notes) {
       this.setState({
         loading: this.props.notes[0].loading,
+        fetching: this.props.notes[0].fetching,
       }) 
       // если длина массива меньше чем предыдущая длина (один элемент удален)
       // то пересчитываем эндпоинт для фетча (вычитаем из последнего символа next
@@ -182,6 +183,9 @@ class Notes extends Component {
   }
   loadMorePosts = () => {
     const {next} = this.props.notes[this.props.notes.length - 1]
+    this.setState({
+      fetching: true,
+    });
     // Check if investor is after delete to correct fetch 
     if (this.state.nextafterdelete) {
       this.props.fetchNotes(this.state.nextafterdelete)
@@ -189,7 +193,9 @@ class Notes extends Component {
       this.setState({nextafterdelete: ""})
     } else {
       if (next !== null || next !== undefined) {
-        this.props.fetchNotes(next)              
+        // checking with timeout function
+        // setTimeout( () => {this.props.fetchNotes(next)}, 5000 )
+        this.props.fetchNotes(next)             
       }
     }
      
@@ -314,21 +320,23 @@ class Notes extends Component {
 
   renderNotes () {
     const { notes } = this.props
-    const { errors, modal, searchtext, modaldelete, index, id, text } = this.state;
+    const { errors, modal, searchtext, modaldelete, index, id, text, fetching } = this.state;
     const { next } = this.props.notes[this.props.notes.length - 1];
 
     return (
       <div>
         <div className="centering mt-2"> 
           <div className="centering-left"> 
-            <Link to={"/investors/add"}><Button className="rounded-0 btn-add" color="info"><FontAwesomeIcon icon={faPlusSquare} color="white"/> Add New</Button></Link>
+            <Link to={"/investors/add"}><Button className="rounded-0 btn-add" color="info">Add New</Button></Link>
           </div>
           <div className="centering-center">
           {modal ? this.renderModal() : null}
           {modaldelete ? 
             <ModalDelete 
-              modaldelete={modaldelete} index={index} 
-              id={id} text={text}
+              modaldelete={modaldelete} 
+              index={index} 
+              id={id} 
+              text={text}
               toggle={this.toggleModalDelete}
               onSelectForDelete={this.selectForDelete}
             /> 
@@ -366,40 +374,22 @@ class Notes extends Component {
           <OrderingHeaderTable
             onOrderNotes={this.onOrderNotes} 
           />
-
           {notes !== undefined ? notes.map((post, index)=>{
-            return ( 
-                <tbody key={index}>
-                    {post.noteitems !== undefined && post.noteitems.length > 0 ? post.noteitems.map((note, id) => {
-                      return (                                    
-                          <tr key={id}>
-                              <th scope="row" className="table-num__text">{id+1}</th>
-                              <td className="table-investor__text">{note.is_corporate ? <FontAwesomeIcon icon={faUsers} color="black"/> : <FontAwesomeIcon icon={faMale} color="black"/>}</td>
-                              <td>
-                                <Link className="info-link" to={{pathname:`/investors/${note.id}`,
-                                      state: {fromDashboard: false, prevLink: window.location.pathname}
-                                      }}>{note.text}</Link>
-                              </td>
-                              <td>
-                                <Link className="info-link" to={{pathname:`/profile/${note.owner}`,
-                                      state: {fromDashboard: false, prevLink: window.location.pathname}
-                                      }}>{note.owner_username}</Link></td>
-                              <td className="table-phone__text">{note.phone}</td>
-                              <td>{note.status}</td>
-                              <td>{note.is_payed ? <FontAwesomeIcon icon={faCheckCircle} color="black"/> : <FontAwesomeIcon icon={faHandHoldingUsd} color="black"/>}</td>
-                              <td>
-                                <Button className="rounded-0" color="info" title="edit" onClick={() => this.selectForEdit(index, id)}><FontAwesomeIcon icon={faEdit} color="white"/></Button>
-                                <Button className="rounded-0" onClick={() => this.toggleModalDelete(index, id)} title="delete"><FontAwesomeIcon icon={faTrash} color="white"/></Button>
-                              </td>
-                          </tr>                                        
-                        )
-                      }
-                    ) : null}
-                </tbody>
+            return (
+              <OrderingBodyTable
+                  post={post}
+                  key={`${index}`}
+                  index={index}
+
+                  onSelectForEdit={this.selectForEdit}
+                  onToggleModalDelete={this.toggleModalDelete}
+                />
               )
-            }) : null}
+          })
+        :null}   
         </Table>
-        {next !== null ? <Button onClick={this.loadMorePosts}>Load more</Button> : ''}
+        {next !== null && !fetching ? <Button onClick={this.loadMorePosts}>Load more</Button> : ''}
+        {fetching && <LoadObject objectclass="loadnotes" />}
       </div>
     )
   }

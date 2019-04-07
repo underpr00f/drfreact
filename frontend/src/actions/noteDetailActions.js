@@ -32,16 +32,12 @@ export const fetchDetailNote = (id) => {
                 } 
                 else if (res.status === 404) {
                     toast.error("Investor is not found...")
-                    dispatch({type: "MESSAGE_NOT_FOUND"});
-
+                    dispatch({type: "INVESTOR_NOT_FOUND", detail: res.data});
+                    throw res.data;
                 }
             })
             .catch(error => {                
-                //error.redirect('/404');
-                //Handle error
                 console.log("error", error);
-                // return dispatch({type: "MESSAGE_NOT_FOUND", detail: error});
-                // dispatch({type: "MESSAGE_NOT_FOUND", detail: error});
             });
     }
 }
@@ -108,6 +104,9 @@ export const updateDetailNote = (id, text, phone, status, is_corporate, is_payed
                     throw res.data;
                 }
             })
+            .catch(error => {                
+                console.log("error", error);
+            });
     }
 }
 
@@ -141,5 +140,8 @@ export const addDetailNote = (text, phone, status, is_corporate, email, linkedin
                     throw res.data;
                 }
             })
+           .catch(error => {                
+                console.log("error", error);
+            });
     }
 }

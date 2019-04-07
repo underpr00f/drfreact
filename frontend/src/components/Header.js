@@ -6,11 +6,10 @@ import {
   Collapse,
   Navbar,
   NavbarToggler,
-  NavbarBrand,
   Nav,
     } from 'reactstrap';
 
-import { NavigationLink, NavigationUserLink } from './general/Atoms/Links/Links'
+import { NavigationLink, NavigationUserLink, BrandButton } from './general/Atoms/Links/Links'
 import { getUserProfile } from "../actions/authActions";
 
 class Header extends Component {
@@ -82,7 +81,7 @@ class Header extends Component {
     render() {
         return (
             <Navbar color="info" dark expand="md">
-                <NavbarBrand href="/">Lead Platform</NavbarBrand>
+                <BrandButton />
                 <NavbarToggler onClick={this.toggleNavbar} />
                   <Collapse isOpen={!this.state.collapsed} navbar>                    
                         {this.renderLinks()}

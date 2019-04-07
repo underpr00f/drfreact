@@ -7,7 +7,7 @@ import { faSpaceShuttle } from '@fortawesome/free-solid-svg-icons'
 export const ErrorPage = ({errors}) => (
     <div className="error-page">
       <div className="wrapper-error"> 
-        <h1>Error!</h1>     
+        <h1>Error</h1>     
         {errors ?  
             <p>{errors}</p> 
           : 

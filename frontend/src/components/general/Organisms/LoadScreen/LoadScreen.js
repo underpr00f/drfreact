@@ -12,12 +12,12 @@ export const LoadScreen = () => (
   </div>
 )
 
-export const LoadUser = () => (
-  <div className="loaduser">
+export const LoadObject = (props) => (
+  <div className={`${props.objectclass}`}>
     <div className="load-3">
-		<div className="line"></div>
-		<div className="line"></div>
-		<div className="line"></div>
+    <div className="line"></div>
+    <div className="line"></div>
+    <div className="line"></div>
     </div>
   </div>
 )

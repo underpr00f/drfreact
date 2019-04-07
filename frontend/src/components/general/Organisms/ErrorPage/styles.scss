@@ -40,38 +40,6 @@
     letter-spacing: 1.5px;
     text-align: center;
   }
-  a {
-    display: inline-block;
-    padding: .8em 1em;
-    margin-right: 1em;
-    margin-bottom: 1em;
-    border: 3px solid #B9DDFB;
-    color: #359dbb;
-    font-weight: 500;
-    text-transform: uppercase;
-    text-decoration: none;
-    letter-spacing: .2em;
-    position: relative;
-    overflow: hidden;
-    transition: .3s;
-    &:hover {
-      color: #E3F2FD;
-      &:before {
-        top: 0;
-      }
-    }
-    &:before {
-      content: '';
-      background: #359dbb;
-      height: 100%;
-      width: 100%;
-      position: absolute;
-      top: -100%;
-      left: 0;
-      transition: .3s;
-      z-index: -1;
-    }
-  }
 }
 
 // BLACKHOLE

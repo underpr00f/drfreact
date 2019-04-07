@@ -33,7 +33,8 @@ export const fetchUserDetail = (id) => {
                 else if (res.status === 404) {
                     toast.error("User is not found...")
                     dispatch({type: "USER_NOT_FOUND"});
-
+                } else {
+                    throw res.data
                 }
             })
             .catch(error => {                

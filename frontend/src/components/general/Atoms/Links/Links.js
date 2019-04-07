@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from "react-router-dom";
 import NavItem from 'reactstrap/lib/NavItem';
-import { LoadUser } from '../../Organisms/LoadScreen/LoadScreen'
+import { LoadObject } from '../../Organisms/LoadScreen/LoadScreen'
 import { renderUser } from "../../../../utils/renderUtils";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -39,7 +39,7 @@ export class NavigationUserLink extends Component {
 			    	  pathname: `/${url}`,
       				  state: {fromDashboard: false}
       			  }}>
-      			  	{user ? renderUser(user) : <LoadUser />}
+      			  	{user ? renderUser(user) : <LoadObject objectclass="loaduser"/>}
     			</Link>
     		</NavItem>
         )    
@@ -47,7 +47,7 @@ export class NavigationUserLink extends Component {
 }
 
 export const HomeButton = () => (
-	<Link className="btn btn-outline-info rounded-0"
+	<Link className="btn btn-outline-info rounded-0 button-icon"
 		role="button" 
 		to={{
 		  	pathname: `/investors`,
@@ -55,4 +55,15 @@ export const HomeButton = () => (
 		  }}>
 		  	<FontAwesomeIcon icon={faHome} color="info"/>
 	</Link>
+);
+
+export const BrandButton = () => (
+    <Link className="navbar-brand"
+      to={{
+          pathname: `/`,
+          state: {fromDashboard: false}
+      }}>
+        Lead Platform
+    </Link>
+
 );

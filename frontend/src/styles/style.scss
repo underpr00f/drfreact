@@ -1,7 +1,13 @@
 /*define styles here*/
-/*body, input {
-  background: #E3F2FD;
-}*/
+body {
+  background-color: #f2f2f2;
+  /*background-image: url("../pattern.png");*/
+  /*background-repeat: repeat;*/
+}
+input, textarea, .card {
+  background: transparent;
+}
+
 .info-link{
   color: #17a2b8;
   &:hover{
@@ -12,24 +18,13 @@
 #searchtext{
   border-radius: 0!important;
 }
-.btn a {
-  color: inherit;
-  text-decoration: none;
-  width: 100%;
-  &:hover{
-    color: inherit;
-    text-decoration: none;
-  }    
-}
+
 /*NAVBAR*/
 .navbar-links {
   width: 100%;
   justify-content: flex-start;
 }
 .navbar-profile {
-  /*  display: inline-flex;
-  position: absolute;
-  right: 2%;*/
   width: 100%;
   justify-content: flex-end;
 }
@@ -49,6 +44,9 @@
 }
 .form-group input, .form-group div, .form-group button {
   border-radius: 0;
+}
+.form-group input, .form-group textarea {
+  background-color: transparent;
 }
 /*MODAL CLOSE*/
 .close span {
@@ -123,6 +121,15 @@
   font-size: 30px;
 }
 /* BUTTONS */
+.btn a {
+  color: inherit;
+  text-decoration: none;
+  width: 100%;
+  &:hover{
+    color: inherit;
+    text-decoration: none;
+  }    
+}
 .btn-action {
   border: none;
   display: block;
@@ -188,6 +195,36 @@
     width: 49%;
   }
 }
+.button-icon {
+  display: inline-block;
+  /*padding: .8em 1em;*/
+  border: 1px solid #B9DDFB;
+  color: #359dbb;
+  font-weight: 500;
+  text-transform: uppercase;
+  text-decoration: none;
+  letter-spacing: .2em;
+  position: relative;
+  overflow: hidden;
+  transition: .3s;
+  &:hover {
+    color: #E3F2FD;
+    &:before {
+      top: 0;
+    }
+  }
+  &:before {
+    content: '';
+    background: #359dbb;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: -100%;
+    left: 0;
+    transition: .3s;
+    z-index: -1;
+  }
+}
 
 .Toastify__toast--info {
   background: #359dbb!important;
@@ -215,6 +252,10 @@
   .table-investor__ordering--payment {
     max-width: 55px!important;
   }
+  .table-investor__title, .table-investor__text {
+    padding: 0!important;
+    min-width: 50px;
+  }
 }
 @media only screen and (max-width: 767px) {
   .container {
@@ -238,7 +279,9 @@
   .table th, .table td {
     padding: 0!important;
   }
-  .table-num__title, .table-num__text {
+
+  .table-num__title, .table-num__text,
+  .table-investor__title, .table-investor__text {
     display: none!important;
   }
   .table-investors tbody {
@@ -267,8 +310,7 @@
     white-space: nowrap;
     max-width: 55px;
   }
-  .table-phone__title, .table-phone__text, 
-  .table-investor__title, .table-investor__text {
+  .table-phone__title, .table-phone__text {
     display: none!important;
   }
   .table-investor__ordering {
