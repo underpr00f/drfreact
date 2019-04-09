@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import Dropzone from 'react-dropzone'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFileUpload } from '@fortawesome/free-solid-svg-icons'
-import './style.scss'
+import './styles.scss'
 
 const imageMaxSize = 10000000; //bytes
 

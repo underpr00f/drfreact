@@ -4,11 +4,13 @@ import React, { Component } from "react";
 import { reduxForm, Field, clearSubmitErrors, propTypes } from "redux-form";
 import { Link } from "react-router-dom";
 import { required } from "redux-form-validators"
+import { Button, } from 'reactstrap';
 
 import { renderField, renderError} from "../../utils/renderUtils";
 import { loginUser } from "../../actions/authActions";
+import { BackgroundContainer } from '../general/Atoms/BackgroundContainer/BackgroundContainer'
 
-import { Button, } from 'reactstrap';
+
 
 class Login extends Component {
     static propTypes = {
@@ -23,6 +25,8 @@ class Login extends Component {
         const { handleSubmit, error, pristine, submitting } = this.props;
 
         return (
+            <>
+            <BackgroundContainer header="" />
             <div className="row justify-content-center">
 
                 <form
@@ -48,14 +52,15 @@ class Login extends Component {
                     <fieldset className="form-group">
                         { renderError(error) }
                         <div className="form-button">
-                            <Link role="button" to="/signup" className="btn btn-outline-info rounded-0 form-button__part">SignUp</Link>
-                            <Button action="submit" color="info" className="rounded-0 form-button__part" disabled={pristine || submitting}>Login</Button>
+                            <Link role="button" to="/signup" className="btn btn-outline-secondary rounded-0 form-button__part">SignUp</Link>
+                            <Button action="submit" color="secondary" className="rounded-0 form-button__part" disabled={pristine || submitting}>Login</Button>
                         </div>
                     </fieldset>
 
                     <Link to="/reset_password" className="text-center info-link">forgot password?</Link>
                 </form>
             </div>
+            </>
         )
     }
 }

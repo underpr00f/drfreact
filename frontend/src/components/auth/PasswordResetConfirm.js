@@ -3,6 +3,7 @@ import { reduxForm, Field, propTypes, clearSubmitErrors } from "redux-form";
 import { required } from "redux-form-validators"
 import { confirmPasswordChange } from "../../actions/authActions";
 import { renderField, renderError } from "../../utils/renderUtils";
+import { BackgroundContainer } from '../general/Atoms/BackgroundContainer/BackgroundContainer';
 
 class PasswordResetConfirm extends Component {
 
@@ -14,6 +15,8 @@ class PasswordResetConfirm extends Component {
         const { handleSubmit, error } = this.props;
 
         return (
+            <>
+            <BackgroundContainer header="" />
             <div className="row justify-content-center">
                 <form
                     className="col col-sm-4 card mt-5 p-2"
@@ -40,6 +43,7 @@ class PasswordResetConfirm extends Component {
                     </fieldset>
                 </form>
             </div>
+            </>
         );
     }
 }

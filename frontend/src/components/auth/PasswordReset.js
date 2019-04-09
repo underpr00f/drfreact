@@ -4,6 +4,7 @@ import { required } from "redux-form-validators"
 
 import { renderField, renderError} from "../../utils/renderUtils";
 import { resetPassword } from "../../actions/authActions";
+import { BackgroundContainer } from '../general/Atoms/BackgroundContainer/BackgroundContainer'
 
 class PasswordReset extends Component {
 
@@ -15,6 +16,8 @@ class PasswordReset extends Component {
         const { handleSubmit, error } = this.props;
 
         return (
+            <>
+            <BackgroundContainer header="" />
             <div className="row justify-content-center">
 
                 <form
@@ -31,10 +34,11 @@ class PasswordReset extends Component {
                     </fieldset>
                     <fieldset className="form-group text-center">
                         {renderError(error)}
-                        <button action="submit" className="btn btn-info rounded-0">Submit</button>
+                        <button action="submit" className="btn btn-secondary rounded-0">Submit</button>
                     </fieldset>
                 </form>
             </div>
+            </>
         )
     }
 }

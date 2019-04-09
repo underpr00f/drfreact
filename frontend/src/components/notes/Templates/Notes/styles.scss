@@ -1,0 +1,13 @@
+@media (max-width: 767px) {
+	.btn-add {
+		display: none;
+	}
+	.notes-header {
+		.row {
+			margin: 0;
+		}
+		.centering-right {
+			display: none;
+		}
+	}
+}

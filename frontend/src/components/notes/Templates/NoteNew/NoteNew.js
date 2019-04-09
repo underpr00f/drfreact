@@ -1,15 +1,13 @@
 import React, {Component} from 'react'
-
 import { Redirect } from 'react-router-dom'
-import * as detail from "../../../actions/noteDetailActions";
 import {connect} from 'react-redux';
 
 import Form from 'reactstrap/lib/Form';
 
-import { InputFormNoteAdd } from '../Molecules/Forms/InputFormNoteAdd'
-
-import { ReturnButton, SaveButton, ClearButton } from '../../general/Atoms/Buttons/Buttons'
-import { handleValidation } from '../../../utils/helpers'
+import * as detail from "../../../../actions/noteDetailActions";
+import { InputFormNoteAdd } from '../../Molecules/Forms/InputFormNoteAdd'
+import { ReturnButton, SaveButton, ClearButton } from '../../../general/Atoms/Buttons/Buttons'
+import { handleValidation } from '../../../../utils/helpers'
 
 class NoteNew extends Component {
     constructor(props){

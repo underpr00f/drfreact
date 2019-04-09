@@ -2,10 +2,10 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux';
 import { Link } from 'react-router-dom'
 import { Table } from 'reactstrap';
-// import memoize from "memoize-one";
-import * as lead from "../../../actions/paymentsActions";
-import { LoadScreen } from '../../general/Organisms/LoadScreen/LoadScreen'
-import { paymentsUtil } from '../../../utils/paymentsUtils'
+
+import * as lead from "../../../../actions/paymentsActions";
+import { LoadScreen } from '../../../general/Organisms/LoadScreen/LoadScreen'
+import { paymentsUtil } from '../../../../utils/paymentsUtils'
 
 class Payments extends Component {
     constructor(props) {

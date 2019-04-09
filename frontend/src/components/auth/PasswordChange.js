@@ -1,11 +1,13 @@
 import React, { Component } from "react";
-// import PropTypes from "prop-types";
-import { reduxForm, Field, propTypes, clearSubmitErrors } from "redux-form";
-import { required } from "redux-form-validators"
-import { changePassword } from "../../actions/authActions";
-import { renderField, renderError } from "../../utils/renderUtils";
 import { Link } from "react-router-dom";
 import { Button, } from 'reactstrap';
+import { reduxForm, Field, propTypes, clearSubmitErrors } from "redux-form";
+import { required } from "redux-form-validators"
+
+import { changePassword } from "../../actions/authActions";
+import { renderField, renderError } from "../../utils/renderUtils";
+import { BackgroundContainer } from '../general/Atoms/BackgroundContainer/BackgroundContainer'
+
 class PasswordChange extends Component {
 
     static propTypes = {
@@ -16,6 +18,8 @@ class PasswordChange extends Component {
         const { handleSubmit, error, pristine, submitting } = this.props;
 
         return (
+            <>
+            <BackgroundContainer header="" />
             <div className="row justify-content-center">
                 <form
                     className="col col-sm-4 card mt-5 p-2"
@@ -45,12 +49,13 @@ class PasswordChange extends Component {
                     <fieldset className="form-group">
                         {renderError(error)}
                         <div className="form-button">
-                            <Button action="submit" color="info" className="rounded-0 form-button__part" disabled={pristine || submitting}>Submit</Button>
-                            <Link to="/profile" className="btn btn-outline-info rounded-0 form-button__part">Cancel</Link>
+                            <Link to="/profile" className="btn btn-outline-secondary rounded-0 form-button__part">Cancel</Link>
+                            <Button action="submit" color="secondary" className="rounded-0 form-button__part" disabled={pristine || submitting}>Submit</Button>
                         </div>
                     </fieldset>
                 </form>
             </div>
+            </>
         );
     }
 }

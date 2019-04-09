@@ -1,12 +1,10 @@
 import React, { Component } from "react";
+import { BackgroundContainer } from '../general/Atoms/BackgroundContainer/BackgroundContainer'
 
 export default class SignupDone extends Component {
     render() {
         return (
-            <h3 className="mx-5">
-                Thanks for your registration, please follow the link sent to your provided email to activate
-                your account.
-            </h3>
+            <BackgroundContainer header="Thanks for your registration, please follow the link sent to your provided email to activate your account." />
         )
     }
 }

@@ -1,25 +1,23 @@
 import React, { Component } from 'react'
 
-import * as notes from "../../../actions/notesActions";
 import {connect} from 'react-redux';
 import { Link } from 'react-router-dom'
 import { Form, FormText,  
   FormGroup, Button,
   Table, CustomInput,
   Modal, ModalHeader, ModalBody, ModalFooter, } from 'reactstrap';
-import { LoadScreen, LoadObject } from '../../general/Organisms/LoadScreen/LoadScreen'
-import { ModalDelete } from '../Organisms/Modal/Modal'
-
-import { InputFormNoteQuickAdd } from '../Molecules/Forms/InputFormNoteQuickAdd'
-import { OrderingHeaderTable } from '../Molecules/Tables/OrderingHeaderTable'
-import { OrderingBodyTable } from '../Molecules/Tables/OrderingBodyTable'
-
-import { handleValidation } from '../../../utils/helpers'
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlusSquare, 
   faSearch, faSave, faTimes,  } from '@fortawesome/free-solid-svg-icons'
 
+import * as notes from "../../../../actions/notesActions";
+import { LoadScreen, LoadObject } from '../../../general/Organisms/LoadScreen/LoadScreen'
+import { ModalDelete } from '../../Organisms/Modal/Modal'
+import { InputFormNoteQuickAdd } from '../../Molecules/Forms/InputFormNoteQuickAdd'
+import { OrderingHeaderTable } from '../../Molecules/Tables/OrderingHeaderTable'
+import { OrderingBodyTable } from '../../Molecules/Tables/OrderingBodyTable'
+import { handleValidation } from '../../../../utils/helpers'
+import './styles.scss'
 
 class Notes extends Component {
   constructor(props) {
@@ -325,7 +323,7 @@ class Notes extends Component {
 
     return (
       <div>
-        <div className="centering mt-2"> 
+        <div className="centering notes-header mt-2"> 
           <div className="centering-left"> 
             <Button className="rounded-0" color="info" onClick={this.addNew}><FontAwesomeIcon icon={faPlusSquare} color="white"/><span className="btn-quick__text"> Quick Add</span></Button>
           </div>

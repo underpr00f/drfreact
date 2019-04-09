@@ -1,7 +1,7 @@
 import React from "react";
 import { Switch, Route } from "react-router-dom";
 import RequireAuth from "./auth/RequireAuth";
-import Landing from "./Landing";
+import { Landing } from "./Landing";
 import Login from "./auth/Login";
 import Logout from "./auth/Logout";
 import Signup from "./auth/Signup";
@@ -19,10 +19,10 @@ import {ErrorPage} from "./general/Organisms/ErrorPage/ErrorPage";
 import ReactifyComp from '../routingComps/ReactifyComp'
 import PostDetail from '../reactify/PostDetail';
 import PostCreate from '../reactify/PostCreate'
-import Notes from './notes/Templates/Notes'
-import NoteDetail from './notes/Templates/NoteDetail'
-import NoteNew from './notes/Templates/NoteNew'
-import Payments from './notes/Templates/Payments'
+import Notes from './notes/Templates/Notes/Notes'
+import NoteDetail from './notes/Templates/NoteDetail/NoteDetail'
+import NoteNew from './notes/Templates/NoteNew/NoteNew'
+import Payments from './notes/Templates/Payments/Payments'
 
 const MainContent = () => (
     <div className="container">

@@ -6,6 +6,7 @@ import { renderField, renderError } from "../../utils/renderUtils";
 import { signupUser } from "../../actions/authActions";
 import { Link } from "react-router-dom";
 import { Button, } from 'reactstrap';
+import { BackgroundContainer } from '../general/Atoms/BackgroundContainer/BackgroundContainer'
 
 class Signup extends Component {
 
@@ -18,6 +19,8 @@ class Signup extends Component {
         const { handleSubmit, error, pristine, submitting } = this.props;
 
         return (
+            <>
+            <BackgroundContainer header="" />
             <div className="row justify-content-center">
                 <form
                     className="col col-sm-4 card mt-5 p-2"
@@ -53,12 +56,13 @@ class Signup extends Component {
 
                     <fieldset className="form-group">
                         <div className="form-button">
-                            <Link role="button" to="/login" className="btn btn-outline-info rounded-0 form-button__part">Login</Link>
-                            <Button action="submit" color="info" className="rounded-0 form-button__part" disabled={pristine || submitting}>Sign Up</Button>
+                            <Link role="button" to="/login" className="btn btn-outline-secondary rounded-0 form-button__part">Login</Link>
+                            <Button action="submit" color="secondary" className="rounded-0 form-button__part" disabled={pristine || submitting}>Sign Up</Button>
                         </div>
                     </fieldset>
                 </form>
             </div>
+            </>
         );
     }
 }

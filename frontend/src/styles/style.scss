@@ -4,23 +4,12 @@ body {
   /*background-image: url("../pattern.png");*/
   /*background-repeat: repeat;*/
 }
-input, textarea, .card {
+.card {
+  background: #f2f2f2;
+  border-radius: 0;
+}
+input, textarea {
   background: transparent;
-}
-
-.main-wrapper__text {
-  font-weight: bold;
-  color: #FFF;
-  text-shadow: 0 .125em .125em rgba(0, 0, 0, .5);
-  margin-top: 1em;
-}
-
-.main-wrapper__image {
-  position:fixed;
-  top:0px;
-  left:0px;
-  height:100%;
-  z-index:-1;
 }
 
 .info-link{
@@ -267,6 +256,7 @@ input, textarea, .card {
     /* centering image */
     margin: auto;
 }
+
 @media only screen and (max-width: 992px) {
   .container {
     max-width: 100%!important;
@@ -312,11 +302,6 @@ input, textarea, .card {
     white-space: nowrap;
     max-width: 55px;
   }
-  .btn-add {
-    display: none!important;
-  }
-
-
 }
 
 @media (max-width: 576px) {

@@ -1,17 +1,17 @@
 import React, {Component} from 'react'
 
-import * as detail from "../../../actions/noteDetailActions";
+import * as detail from "../../../../actions/noteDetailActions";
 import {connect} from 'react-redux';
 import { Form, Container, Row, FormGroup, Button,
     Modal, ModalHeader, ModalBody, ModalFooter, } from 'reactstrap';
 import moment from "moment";
 
-import { ErrorPage } from '../../general/Organisms/ErrorPage/ErrorPage'
-import { LoadScreen } from '../../general/Organisms/LoadScreen/LoadScreen'
-import { SaveButton } from '../../general/Atoms/Buttons/Buttons'
-import { InputFormNoteDetail } from '../Molecules/Forms/InputFormNoteDetail'
-import { DetailPreviewTable } from '../Molecules/Tables/DetailPreviewTable'
-import { handleValidation } from '../../../utils/helpers'
+import { ErrorPage } from '../../../general/Organisms/ErrorPage/ErrorPage'
+import { LoadScreen } from '../../../general/Organisms/LoadScreen/LoadScreen'
+import { SaveButton } from '../../../general/Atoms/Buttons/Buttons'
+import { InputFormNoteDetail } from '../../Molecules/Forms/InputFormNoteDetail'
+import { DetailPreviewTable } from '../../Molecules/Tables/DetailPreviewTable'
+import { handleValidation } from '../../../../utils/helpers'
 
 import './styles.scss'
 
