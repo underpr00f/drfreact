@@ -26,12 +26,9 @@ class UserProfile extends Component {
 
         if (user) {
             return (
-
-              <div className="mx-2 mt-2 text-center">
                 <UserDetailTable 
                     {...user}
                   />  
-              </div>
             );
         }
         return null;

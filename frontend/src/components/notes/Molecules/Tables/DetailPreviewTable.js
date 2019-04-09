@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Table } from 'reactstrap';
 
+import { ReturnButton, EditButton } from '../../../general/Atoms/Buttons/Buttons'
 import moment from "moment";
 
 export class DetailPreviewTable extends Component {
@@ -13,25 +14,27 @@ export class DetailPreviewTable extends Component {
     } = this.props;
 
     return (
-            <div className="col col-12 col-xs-12 col-sm-12 col-md-8 col-lg-8 table-detail">
-              <h3>Detailed Preview</h3>
+            <div className="mt-2 table-detail"> 
+                <Table className="userprofile-header">
+                  <tbody>
+                    <tr>
+                      <th>
+                        <h2>Investor <b>{text}</b></h2>
+                      </th>
+                      <td>
+                        <ReturnButton />
+                        <EditButton
+                          onEdit={this.props.onEdit} 
+                        />
+                      </td>
+                    </tr>
+                  </tbody>
+                </Table>             
                 <Table striped>
                   <tbody>
                     <tr>
-                      <th>Investor</th>
-                      <td>{is_corporate ? "Corporate" : "Individual" }</td>
-                    </tr>
-                    <tr>
-                      <th>Name</th>
-                      <td>{text}</td>
-                    </tr>
-                    <tr>
                       <th>Phone</th>
                       <td>{phone}</td>
-                    </tr>
-                    <tr>
-                      <th>Status</th>
-                      <td>{status}</td>
                     </tr>
                     <tr>
                       <th>Email</th>
@@ -48,6 +51,14 @@ export class DetailPreviewTable extends Component {
                     <tr>
                       <th>Correspondence</th>
                       <td className="table-correspondence__data">{correspondence}</td>
+                    </tr>
+                    <tr>
+                      <th>Investor</th>
+                      <td>{is_corporate ? "Corporate" : "Individual" }</td>
+                    </tr>
+                    <tr>
+                      <th>Status</th>
+                      <td>{status}</td>
                     </tr>
                     <tr>
                       <th>Payment</th>

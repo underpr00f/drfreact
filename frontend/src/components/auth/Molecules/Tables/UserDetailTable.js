@@ -3,38 +3,43 @@ import { Table } from 'reactstrap';
 
 import { ReturnButton } from '../../../general/Atoms/Buttons/Buttons'
 import { HomeButton } from '../../../general/Atoms/Links/Links'
+import './styles.scss'
 
 export const UserDetailTable = (userdetail) => {
   if (userdetail) {
     return (
-      <div className="mx-2 mt-2 text-center">
-        <Table striped className="table-userprofile">
-          <thead>
+      <div className="mx-2 mt-2">
+        <Table className="userprofile-header">
+          <tbody>
             <tr>
-              <th>Profile {userdetail.username}</th>
+              <th>
+                <h2>{userdetail.first_name}{" "}{userdetail.last_name}</h2>
+              </th>
               <td>
                 <ReturnButton />
                 <HomeButton />
               </td>
             </tr>
-          </thead>
-          <tbody>
+          </tbody>
+        </Table>
+        <Table className="table-userprofile">
+          <thead>
             <tr>
-              <th>Avatar:</th>
-              <td>
+              <td colSpan="2">
                 <div className="avatar"
                     style={{ backgroundImage: `url(${userdetail.avatar})` }}>
                 </div>
               </td>
             </tr>
+          </thead>
+          <tbody>
             <tr>
-              <th>First Name:</th>
-              <td>{userdetail.first_name}</td>
-            </tr>                    
-            <tr>
-              <th>Last Name:</th>
-              <td>{userdetail.last_name}</td>
+              <th>Profile:</th>
+              <td>
+                {userdetail.username}
+              </td>
             </tr>
+
             <tr>
               <th>Email:</th>
               <td>{userdetail.email}</td>

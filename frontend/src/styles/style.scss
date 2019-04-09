@@ -8,12 +8,28 @@ input, textarea, .card {
   background: transparent;
 }
 
+.main-wrapper__text {
+  font-weight: bold;
+  color: #FFF;
+  text-shadow: 0 .125em .125em rgba(0, 0, 0, .5);
+  margin-top: 1em;
+}
+
+.main-wrapper__image {
+  position:fixed;
+  top:0px;
+  left:0px;
+  height:100%;
+  z-index:-1;
+}
+
 .info-link{
   color: #17a2b8;
   &:hover{
     color: #8cc8ca;
   }    
 }
+
 /* input */
 #searchtext{
   border-radius: 0!important;
@@ -59,16 +75,19 @@ input, textarea, .card {
     flex-wrap: wrap!important;
     word-break: break-all!important;
 }
-.table-userprofile td {
-  width: 50%;
-}
+
 .centering {
   display: flex;
 }
 .centering-left, .centering-right {
   flex: 1;
 }
-
+.centering-left {
+  text-align: left;
+}
+.centering-right {
+  text-align: right;
+}
 .centering-right__tablepreffix {
   display: flex;
   flex-direction: column;
@@ -81,6 +100,9 @@ input, textarea, .card {
 	width: 100%;
 }
 /* TABLES */
+.table-detail {
+  width: 100%;
+}
 .table-detail th {
   min-width: 154px;
 }

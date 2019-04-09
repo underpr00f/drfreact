@@ -1,20 +1,14 @@
 import React, { Component } from 'react'
 
-
-
 class Landing extends Component {
   
   render () {
-  	
     return (
-      	<div className='text-center'>	
-			<h2>Lead Platform based on DRF+React+Redux. Login or Signup to test</h2>
-			           
+		<div className="main-wrapper text-center">
+		  <h2 className="main-wrapper__text">Lead Platform based on DRF+React+Redux</h2>
+		  <img className="main-wrapper__image" src='/static/bundles/building.jpeg' alt="logo" />  
 		</div>
     )
   }
 }
 export default Landing
-// import { ROOT_URL } from '../constants/urls';
-// console.log(ROOT_URL)
-// <img src={ROOT_URL + 'build.png'} alt="logo" />  

@@ -25,7 +25,7 @@ import NoteNew from './notes/Templates/NoteNew'
 import Payments from './notes/Templates/Payments'
 
 const MainContent = () => (
-    <div>
+    <div className="container">
         <Switch>
             <Route exact path="/" component={props => <Landing {...props} />} />
             <Route path="/reload" component={null} key="reload" />

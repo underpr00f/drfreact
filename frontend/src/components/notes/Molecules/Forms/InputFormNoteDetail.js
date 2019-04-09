@@ -18,7 +18,7 @@ export class InputFormNoteDetail extends Component {
       errors, } = this.props;
       
     return (
-      <div>
+      <div>        
         <Inputs.InputName 
           onInputChange={this.props.onInputChange} 
           text={text} 
@@ -48,19 +48,17 @@ export class InputFormNoteDetail extends Component {
           onInputChange={this.props.onInputChange} 
           correspondence={correspondence} 
           errors={errors} 
-        />      
-        
-        <CheckboxIsCorp 
-          handleCheckboxIsCorpBtnClick={this.props.handleCheckboxIsCorpBtnClick} 
-          is_corporate={is_corporate} 
-        />
+        />        
         <CheckboxIsPayed 
           handleCheckboxIsPayBtnClick={this.props.handleCheckboxIsPayBtnClick} 
           status={status} 
           is_staff={is_staff} 
           is_payed={is_payed}
-        />      
-      
+        />                
+        <CheckboxIsCorp 
+          handleCheckboxIsCorpBtnClick={this.props.handleCheckboxIsCorpBtnClick} 
+          is_corporate={is_corporate} 
+        />          
         <CustomDropdown 
           onChangeValue={this.props.onChangeValue} 
           onToggle={this.props.onToggle} 

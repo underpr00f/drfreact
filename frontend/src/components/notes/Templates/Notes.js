@@ -327,7 +327,7 @@ class Notes extends Component {
       <div>
         <div className="centering mt-2"> 
           <div className="centering-left"> 
-            <Link to={"/investors/add"}><Button className="rounded-0 btn-add" color="info">Add New</Button></Link>
+            <Button className="rounded-0" color="info" onClick={this.addNew}><FontAwesomeIcon icon={faPlusSquare} color="white"/><span className="btn-quick__text"> Quick Add</span></Button>
           </div>
           <div className="centering-center">
           {modal ? this.renderModal() : null}
@@ -342,7 +342,6 @@ class Notes extends Component {
             /> 
           : null}
             <FormGroup row>
-              <Button className="rounded-0" color="info" onClick={this.addNew}><FontAwesomeIcon icon={faPlusSquare} color="white"/><span className="btn-quick__text"> Quick Add</span></Button>
               <CustomInput inline
                 id="searchtext"
                 type="text" 
@@ -362,6 +361,7 @@ class Notes extends Component {
             </FormGroup>
           </div>
           <div className="centering-right"> 
+            <Link to={"/investors/add"}><Button className="rounded-0 btn-add" color="info">Add New</Button></Link>
           </div>
         </div>          
         <div className="centering"> 

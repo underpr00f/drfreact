@@ -6,21 +6,20 @@ import Header from "./Header";
 import MainContent from "./MainContent";
 
 export default class App extends Component {
-
     render() {
         return (
-            <div>                
-                <Header />
-                <div className="container">
-                    <ToastContainer 
-                      hideProgressBar={true} 
-                      position="bottom-right"
-                      autoClose={3000}
-                      removeCloseButton={true}
-                    />
-                	<MainContent />
-                </div>
-            </div>
+            <>                
+              <Header />
+              <div className="container">
+                  <ToastContainer 
+                    hideProgressBar={true} 
+                    position="bottom-right"
+                    autoClose={3000}
+                    removeCloseButton={true}
+                  />
+              </div>
+              <MainContent />              
+            </>
         );
     }
 }
