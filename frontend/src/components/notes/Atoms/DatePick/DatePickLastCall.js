@@ -4,6 +4,7 @@ import { Button,
 import DatePicker from "react-datepicker";
 import moment from "moment";
 import "react-datepicker/dist/react-datepicker.css";
+import './styles.scss'
 
 // Checkbox is corporate
 export class DatePickLastCall extends Component {

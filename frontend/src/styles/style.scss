@@ -19,11 +19,6 @@ input, textarea {
   }    
 }
 
-/* input */
-#searchtext{
-  border-radius: 0!important;
-}
-
 /*NAVBAR*/
 .navbar-links {
   width: 100%;
@@ -64,73 +59,12 @@ input, textarea {
     flex-wrap: wrap!important;
     word-break: break-all!important;
 }
-
-.centering {
-  display: flex;
-}
-.centering-left, .centering-right {
-  flex: 1;
-}
-.centering-left {
-  text-align: left;
-}
-.centering-right {
-  text-align: right;
-}
-.centering-right__tablepreffix {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-}
-
-/*datepicker*/
-.react-datepicker-wrapper, .react-datepicker__input-container, 
-.react-datepicker__input-container input {
-	width: 100%;
-}
-/* TABLES */
-.table-detail {
-  width: 100%;
-}
-.table-detail th {
-  min-width: 154px;
-}
-.table-correspondence__data {
-	flex-wrap: wrap;
-  word-break: break-all;
-}
+/* URL in tables*/
 .table-correspondence__url {
   flex-wrap: wrap;
   word-break: break-all;
 }
-.table-investor__ordering {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  span {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    max-width: 75px;
-  }
-  &--control {
-    display: flex;
 
-    button {
-      padding: 10px;
-    }
-  }
-
-}
-.dropzone-field {
-  display: flex;
-	border: 1px dashed #000;
-	background: #359dbb;
-  height: 60px;
-  align-items: center;
-  justify-content: center;
-  font-size: 30px;
-}
 /* BUTTONS */
 .btn a {
   color: inherit;
@@ -141,45 +75,6 @@ input, textarea {
     text-decoration: none;
   }    
 }
-.btn-action {
-  border: none;
-  display: block;
-  text-align: center;
-  cursor: pointer;
-  text-transform: uppercase;
-  outline: none;
-  overflow: hidden;
-  position: relative;
-  color: #fff;
-  font-weight: 700;
-  font-size: 15px;
-  background-color: #8cc8ca;
-  padding: 17px 60px;
-  margin: 0 auto;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.20);
-}
-.btn-action span {
-  position: relative; 
-  z-index: 1;
-}
-.btn-action:after {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0;
-  height: 490%;
-  width: 140%;
-  background: #359dbb;
-  -webkit-transition: all .5s ease-in-out;
-  transition: all .5s ease-in-out;
-  -webkit-transform: translateX(-98%) translateY(-25%) rotate(45deg);
-  transform: translateX(-98%) translateY(-25%) rotate(45deg);
-}
-.btn-action:hover:after {
-  -webkit-transform: translateX(-9%) translateY(-25%) rotate(45deg);
-  transform: translateX(-9%) translateY(-25%) rotate(45deg);
-}
-
 .btn-sort__clear svg{
   -webkit-transition: -webkit-transform .5s ease-in-out;
           transition: transform .5s ease-in-out;
@@ -190,12 +85,6 @@ input, textarea {
 }
 .svg-inline--fa.fa-w-18, .svg-inline--fa.fa-w-14 {
   width: 1em;
-}
-.btn-search__icon {
-  display: none;
-}
-.btn-search__txt {
-  display: inline-block;
 }
 .form-button {
   display: flex;
@@ -241,11 +130,6 @@ input, textarea {
   background: #359dbb!important;
 }
 
-.flex-container {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-}
 .avatar {
     background-repeat: no-repeat;
     background-size: contain;
@@ -260,13 +144,6 @@ input, textarea {
 @media only screen and (max-width: 992px) {
   .container {
     max-width: 100%!important;
-  }
-  .table-investor__ordering--payment {
-    max-width: 55px!important;
-  }
-  .table-investor__title, .table-investor__text {
-    padding: 0!important;
-    min-width: 50px;
   }
 }
 @media only screen and (max-width: 767px) {
@@ -291,16 +168,8 @@ input, textarea {
   .table th, .table td {
     padding: 0!important;
   }
-
-  .table-num__title, .table-num__text,
-  .table-investor__title, .table-investor__text {
+  .table-num__title, .table-num__text {
     display: none!important;
-  }
-  .table-investors tbody {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    max-width: 55px;
   }
 }
 
@@ -311,50 +180,13 @@ input, textarea {
   .table th, .table td {
     font-size: 14px!important;
   }
-  .table .table-payments {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    max-width: 55px;
-  }
-  .table-phone__title, .table-phone__text {
-    display: none!important;
-  }
-  .table-investor__ordering {
-    display: flex;
-    flex-direction: column;
-    
-    &--control {
-      display: flex;
-      width: 100%;
-      margin: 0;
-
-      button {
-        width: 100%;
-        padding: 0;
-      }
-    }
-
-  }
-  .btn-quick__text{
-    display: none!important;
-  }
   .user-username {
     margin-right: 0px;
   }
-  /*  .nav-logout {
-    margin-right: 10px;
-  }*/
 }
 
 @media (max-width: 365px) {
   .table th, .table td {
     font-size: 12px!important;
-  }
-  .btn-search__icon {
-    display: inline-block;
-  }
-  .btn-search__txt {
-    display: none;
   }
 }

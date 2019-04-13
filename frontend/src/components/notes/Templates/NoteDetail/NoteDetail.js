@@ -10,7 +10,7 @@ import { ErrorPage } from '../../../general/Organisms/ErrorPage/ErrorPage'
 import { LoadScreen } from '../../../general/Organisms/LoadScreen/LoadScreen'
 import { SaveButton } from '../../../general/Atoms/Buttons/Buttons'
 import { InputFormNoteDetail } from '../../Molecules/Forms/InputFormNoteDetail'
-import { DetailPreviewTable } from '../../Molecules/Tables/DetailPreviewTable'
+import { DetailPreviewTable } from '../../Molecules/Tables/DetailPreviewTable/DetailPreviewTable'
 import { handleValidation } from '../../../../utils/helpers'
 
 import './styles.scss'

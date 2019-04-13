@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMale, 
   faUsers, faExchangeAlt, faLongArrowAltDown,
   faTimes } from '@fortawesome/free-solid-svg-icons'
-
+import './styles.scss'
 
 export class OrderingHeaderTable extends Component {
 

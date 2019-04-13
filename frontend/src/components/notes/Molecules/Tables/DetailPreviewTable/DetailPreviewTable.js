@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import { Table } from 'reactstrap';
 
-import { ReturnButton, EditButton } from '../../../general/Atoms/Buttons/Buttons'
+import { ReturnButton, EditButton } from '../../../../general/Atoms/Buttons/Buttons'
 import moment from "moment";
+import './styles.scss'
 
 export class DetailPreviewTable extends Component {
   render() {

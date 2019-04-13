@@ -14,8 +14,8 @@ import * as notes from "../../../../actions/notesActions";
 import { LoadScreen, LoadObject } from '../../../general/Organisms/LoadScreen/LoadScreen'
 import { ModalDelete } from '../../Organisms/Modal/Modal'
 import { InputFormNoteQuickAdd } from '../../Molecules/Forms/InputFormNoteQuickAdd'
-import { OrderingHeaderTable } from '../../Molecules/Tables/OrderingHeaderTable'
-import { OrderingBodyTable } from '../../Molecules/Tables/OrderingBodyTable'
+import { OrderingHeaderTable } from '../../Molecules/Tables/OrderingHeaderTable/OrderingHeaderTable'
+import { OrderingBodyTable } from '../../Molecules/Tables/OrderingBodyTable/OrderingBodyTable'
 import { handleValidation } from '../../../../utils/helpers'
 import './styles.scss'
 

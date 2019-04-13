@@ -1,0 +1,17 @@
+@media only screen and (max-width: 992px) {
+  .table-investor__text {
+    padding: 0!important;
+    min-width: 50px;
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .table-investor__text {
+    display: none!important;
+  }
+}
+@media (max-width: 576px) {
+  .table-phone__text {
+    display: none!important;
+  }
+}

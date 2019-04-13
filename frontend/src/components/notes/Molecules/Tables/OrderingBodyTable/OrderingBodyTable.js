@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMale, faUsers, faEdit, 
   faCheckCircle, faHandHoldingUsd, faTrash } from '@fortawesome/free-solid-svg-icons'
-
+import './styles.scss'
 
 export class OrderingBodyTable extends Component {
 

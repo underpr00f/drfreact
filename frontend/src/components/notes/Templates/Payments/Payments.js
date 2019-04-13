@@ -6,6 +6,7 @@ import { Table } from 'reactstrap';
 import * as lead from "../../../../actions/paymentsActions";
 import { LoadScreen } from '../../../general/Organisms/LoadScreen/LoadScreen'
 import { paymentsUtil } from '../../../../utils/paymentsUtils'
+import './styles.scss'
 
 class Payments extends Component {
     constructor(props) {
