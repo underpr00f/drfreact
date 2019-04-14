@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import { reduxForm, Field, propTypes, clearSubmitErrors } from "redux-form";
-import { required } from "redux-form-validators"
 
 import { renderField, renderError} from "../../utils/renderUtils";
 import { resetPassword } from "../../actions/authActions";
 import { BackgroundContainer } from '../general/Atoms/BackgroundContainer/BackgroundContainer'
 
+import { email, required } from '../../utils/formValidators'
 class PasswordReset extends Component {
 
     static propTypes = {
@@ -13,7 +13,7 @@ class PasswordReset extends Component {
     };
 
     render() {
-        const { handleSubmit, error } = this.props;
+        const { handleSubmit, error, pristine, invalid, submitting } = this.props;
 
         return (
             <>
@@ -29,12 +29,12 @@ class PasswordReset extends Component {
 
                     <fieldset className="form-group">
                         <Field name="email" label="Please enter your email" component={renderField}
-                               type="text" validate={[required({message: "This field is required."})]}
+                               type="text" validate={[email, required]}
                         />
                     </fieldset>
                     <fieldset className="form-group text-center">
                         {renderError(error)}
-                        <button action="submit" className="btn btn-secondary rounded-0">Submit</button>
+                        <button action="submit" className="btn btn-secondary rounded-0" disabled={invalid || pristine || submitting}>Submit</button>
                     </fieldset>
                 </form>
             </div>
@@ -48,5 +48,5 @@ export default reduxForm({
     onChange: (values, dispatch, props) => {
         if (props.error) dispatch(clearSubmitErrors('password_reset'));
     },
-    onSubmit: resetPassword
+    onSubmit: resetPassword,
 })(PasswordReset);

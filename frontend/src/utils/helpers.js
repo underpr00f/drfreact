@@ -61,3 +61,14 @@ export const handleValidation = (fields) => {
 
   return errors;
 }
+
+// export const validateEmailForm = (values) => {
+//   const errors = {};
+//   const { email } = values;
+//   if (!email) {
+//       errors.email = 'This field is required.'
+//   } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)) {
+//       errors.email = 'Invalid email address'
+//   }  
+//   return errors;
+// }

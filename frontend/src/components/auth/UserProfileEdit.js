@@ -7,6 +7,7 @@ import { renderField, renderTextAreaField,
     renderError} from "../../utils/renderUtils";
 import { updateUserProfile } from "../../actions/authActions";
 import ImageDrop from './Atoms/ImageDrop/ImageDrop'
+import { maxLength15, minLength5, required, letters, isurl } from '../../utils/formValidators'
 
 class Login extends Component {
 
@@ -15,7 +16,7 @@ class Login extends Component {
     };
 
     render() {
-        const { handleSubmit, error } = this.props;
+        const { handleSubmit, error, invalid, pristine, submitting } = this.props;
 
         return (
             <div className="row justify-content-center">
@@ -29,25 +30,25 @@ class Login extends Component {
 
                     <fieldset className="form-group">
                         <Field name="username" label="Username" component={renderField}
-                               type="text"
+                               type="text" validate={[maxLength15, minLength5, required]}
                         />
                     </fieldset>
 
                     <fieldset className="form-group">
                         <Field name="first_name" label="First Name" component={renderField}
-                               type="text"
+                               type="text" validate={[maxLength15, letters]}
                         />
                     </fieldset>
 
                     <fieldset className="form-group">
                         <Field name="last_name" label="Last Name" component={renderField}
-                               type="text"
+                               type="text" validate={[maxLength15, letters]}
                         />
                     </fieldset>
 
                     <fieldset className="form-group">
                         <Field name="website" label="Website" component={renderField}
-                               type="text"
+                               type="text" validate={[isurl]}
                         />
                     </fieldset>
 
@@ -73,8 +74,8 @@ class Login extends Component {
                     <fieldset className="form-group">
                         {renderError(error)}
                         <div className="form-button">
-                            <button action="submit" className="btn btn-info rounded-0 form-button__part">Save</button>
                             <Link to="/profile" className="btn btn-outline-info rounded-0 form-button__part">Cancel</Link>
+                            <button action="submit" className="btn btn-info rounded-0 form-button__part" disabled={invalid || pristine || submitting}>Save</button>
                         </div>
                     </fieldset>
 

@@ -2,11 +2,11 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { Button, } from 'reactstrap';
 import { reduxForm, Field, propTypes, clearSubmitErrors } from "redux-form";
-import { required } from "redux-form-validators"
 
 import { changePassword } from "../../actions/authActions";
 import { renderField, renderError } from "../../utils/renderUtils";
 import { BackgroundContainer } from '../general/Atoms/BackgroundContainer/BackgroundContainer'
+import { required } from '../../utils/formValidators'
 
 class PasswordChange extends Component {
 
@@ -15,7 +15,7 @@ class PasswordChange extends Component {
     };
 
     render() {
-        const { handleSubmit, error, pristine, submitting } = this.props;
+        const { handleSubmit, error, pristine, invalid, submitting } = this.props;
 
         return (
             <>
@@ -30,19 +30,19 @@ class PasswordChange extends Component {
 
                     <fieldset className="form-group">
                         <Field name="old_password" label="Old Password" component={renderField}
-                               type="password" validate={[required({message: "This field is required."})]}
+                               type="password" validate={[required]}
                         />
                     </fieldset>
 
                     <fieldset className="form-group">
                         <Field name="new_password1" label="New Password" component={renderField}
-                               type="password" validate={[required({message: "This field is required."})]}
+                               type="password" validate={[required]}
                         />
                     </fieldset>
 
                     <fieldset className="form-group">
                         <Field name="new_password2" label="Confirm New Password" component={renderField}
-                               type="password" validate={[required({message: "This field is required."})]}
+                               type="password" validate={[required]}
                         />
                     </fieldset>
 
@@ -50,7 +50,7 @@ class PasswordChange extends Component {
                         {renderError(error)}
                         <div className="form-button">
                             <Link to="/profile" className="btn btn-outline-secondary rounded-0 form-button__part">Cancel</Link>
-                            <Button action="submit" color="secondary" className="rounded-0 form-button__part" disabled={pristine || submitting}>Submit</Button>
+                            <Button action="submit" color="secondary" className="rounded-0 form-button__part" disabled={invalid || pristine || submitting}>Submit</Button>
                         </div>
                     </fieldset>
                 </form>

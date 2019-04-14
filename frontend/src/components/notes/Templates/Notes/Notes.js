@@ -386,8 +386,12 @@ class Notes extends Component {
           })
         :null}   
         </Table>
-        {next !== null && !fetching ? <Button onClick={this.loadMorePosts}>Load more</Button> : ''}
-        {fetching && <LoadObject objectclass="loadnotes" />}
+        <div className="text-center">
+          {next !== null && !fetching ? 
+            <Button className="rounded-0" onClick={this.loadMorePosts}>Load more</Button> 
+          : ''}
+          {fetching && <LoadObject objectclass="loadnotes" />}
+        </div>
       </div>
     )
   }

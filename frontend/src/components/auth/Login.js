@@ -1,28 +1,31 @@
 import React, { Component } from "react";
-// import T from "prop-types";
 
 import { reduxForm, Field, clearSubmitErrors, propTypes } from "redux-form";
 import { Link } from "react-router-dom";
-import { required } from "redux-form-validators"
 import { Button, } from 'reactstrap';
 
 import { renderField, renderError} from "../../utils/renderUtils";
 import { loginUser } from "../../actions/authActions";
 import { BackgroundContainer } from '../general/Atoms/BackgroundContainer/BackgroundContainer'
-
+import { email, required } from '../../utils/formValidators'
 
 
 class Login extends Component {
     static propTypes = {
         ...propTypes
     };
-    // static propTypes = {
-    //     form: T.string.isRequired,
-    //     onSubmit: T.func.isRequired,
-    // }
+    state = { type: "password"}
 
+    showHide = (e) => {
+        e.preventDefault();
+
+        this.setState({
+          type: this.state.type === 'password' ? 'input' : 'password'
+        })  
+    }
     render() {
-        const { handleSubmit, error, pristine, submitting } = this.props;
+        const { handleSubmit, error, invalid, pristine, submitting } = this.props;
+        const { type } = this.state;
 
         return (
             <>
@@ -38,14 +41,14 @@ class Login extends Component {
 
                     <fieldset className="form-group">
                         <Field name="email" label="Email" component={renderField}
-                               type="text" validate={[required({message: "This field is required."})]}
+                               type="text" validate={[email, required]}
                         />
                     </fieldset>
 
 
                     <fieldset className="form-group">
                         <Field name="password" label="Password" component={renderField}
-                               type="password"  validate={[required({message: "This field is required."})]}
+                               type={type} validate={[required]}
                         />
                     </fieldset>
 
@@ -53,7 +56,7 @@ class Login extends Component {
                         { renderError(error) }
                         <div className="form-button">
                             <Link role="button" to="/signup" className="btn btn-outline-secondary rounded-0 form-button__part">SignUp</Link>
-                            <Button action="submit" color="secondary" className="rounded-0 form-button__part" disabled={pristine || submitting}>Login</Button>
+                            <Button action="submit" color="secondary" className="rounded-0 form-button__part" disabled={invalid || pristine || submitting}>Login</Button>
                         </div>
                     </fieldset>
 
@@ -64,24 +67,14 @@ class Login extends Component {
         )
     }
 }
-// Sync field level validation for password match
-const validateLoginForm = values => {
-    const errors = {};
-    const { email } = values;
-
-    if (!email) {
-        errors.email = 'This field is required.'
-    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)) {
-        errors.email = 'Invalid email address'
-    }
-    
-    return errors;
-};
+// {passfield ? 
+//   <span className="password__show" onClick={this.props.showHide}>{type === 'password' ? 'Show' : 'Hide'}</span>
+// : null    
+// }
 export default reduxForm({
     form: "login",
     onSubmit: loginUser,
     onChange: (values, dispatch, props) => {
         if (props.error) dispatch(clearSubmitErrors('login'));
     },
-    validate: validateLoginForm
 })(Login);

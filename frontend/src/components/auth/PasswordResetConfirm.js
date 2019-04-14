@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import { reduxForm, Field, propTypes, clearSubmitErrors } from "redux-form";
-import { required } from "redux-form-validators"
+
 import { confirmPasswordChange } from "../../actions/authActions";
 import { renderField, renderError } from "../../utils/renderUtils";
 import { BackgroundContainer } from '../general/Atoms/BackgroundContainer/BackgroundContainer';
+import { required } from '../../utils/formValidators'
 
 class PasswordResetConfirm extends Component {
 
@@ -12,7 +13,7 @@ class PasswordResetConfirm extends Component {
     };
 
     render() {
-        const { handleSubmit, error } = this.props;
+        const { handleSubmit, error, invalid, pristine, submitting } = this.props;
 
         return (
             <>
@@ -27,19 +28,19 @@ class PasswordResetConfirm extends Component {
 
                     <fieldset className="form-group">
                         <Field name="new_password1" label="New Password" component={renderField}
-                               type="password" validate={[required({message: "This field is required."})]}
+                               type="password" validate={[required]}
                         />
                     </fieldset>
 
                     <fieldset className="form-group">
                         <Field name="new_password2" label="Confirm New Password" component={renderField}
-                               type="password" validate={[required({message: "This field is required."})]}
+                               type="password" validate={[required]}
                         />
                     </fieldset>
 
                     <fieldset className="form-group text-center">
                         {renderError(error)}
-                        <button action="submit" className="btn btn-info rounded-0">Submit</button>
+                        <button action="submit" className="btn btn-info rounded-0" disabled={invalid || pristine || submitting}>Submit</button>
                     </fieldset>
                 </form>
             </div>
