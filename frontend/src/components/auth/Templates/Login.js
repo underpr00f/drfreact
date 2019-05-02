@@ -4,11 +4,11 @@ import { reduxForm, Field, clearSubmitErrors, propTypes } from "redux-form";
 import { Link } from "react-router-dom";
 import { Button, } from 'reactstrap';
 
-import { renderField, renderError} from "../../utils/renderUtils";
-import { loginUser } from "../../actions/authActions";
-import { BackgroundContainer } from '../general/Atoms/BackgroundContainer/BackgroundContainer'
-import { email, required } from '../../utils/formValidators'
-
+import { renderField, renderError} from "../../../utils/renderUtils";
+import { loginUser } from "../../../actions/authActions";
+import { BackgroundContainer } from '../../general/Atoms/BackgroundContainer/BackgroundContainer'
+import { email, required } from '../../../utils/formValidators'
+import { ShowPass } from '../Atoms/Buttons/Buttons'
 
 class Login extends Component {
     static propTypes = {
@@ -47,6 +47,10 @@ class Login extends Component {
 
 
                     <fieldset className="form-group">
+                        <ShowPass 
+                            showHide={this.showHide}
+                            choice={type}
+                        />
                         <Field name="password" label="Password" component={renderField}
                                type={type} validate={[required]}
                         />
@@ -67,10 +71,7 @@ class Login extends Component {
         )
     }
 }
-// {passfield ? 
-//   <span className="password__show" onClick={this.props.showHide}>{type === 'password' ? 'Show' : 'Hide'}</span>
-// : null    
-// }
+
 export default reduxForm({
     form: "login",
     onSubmit: loginUser,

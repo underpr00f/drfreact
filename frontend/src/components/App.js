@@ -18,7 +18,9 @@ export default class App extends Component {
                     removeCloseButton={true}
                   />
               </div>
-              <MainContent />              
+              <div className="container">
+                <MainContent />
+              </div>              
             </>
         );
     }
