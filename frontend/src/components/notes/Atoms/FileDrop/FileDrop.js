@@ -12,12 +12,8 @@ class FileDrop extends Component {
 		// console.log(acceptedFiles, rejectedFiles)
 		this.props.onSelectDrop(acceptedFiles);
 	}
-	render () {
-		
-		const { documents, detail } = this.props;
-		let drop_class
-		let drop_text
-
+	dropProperties = (documents, detail) => {
+		let drop_class, drop_text
 		if (documents) {
 			if (detail) {
 				if (documents === detail) {
@@ -35,6 +31,12 @@ class FileDrop extends Component {
 			drop_class = "dropzone-field dropzone-field__default";
 			drop_text = "  Add Document"
 		} 
+		return {drop_class: drop_class, drop_text: drop_text}
+	}
+	render () {
+		
+		const { documents, detail } = this.props;
+		const drop_properties = this.dropProperties(documents, detail)
 
 		return (
 		  <div>Documents:
@@ -45,11 +47,11 @@ class FileDrop extends Component {
 	            maxSize={imageMaxSize}
 	            >
 	                {({getRootProps, getInputProps}) => (
-	                    <div {...getRootProps()} className={`${drop_class}`}>
+	                    <div {...getRootProps()} className={`${drop_properties.drop_class}`}>
 	                        <input {...getInputProps()} />
 	                       	<div>
 	                       		<FontAwesomeIcon icon={faFileUpload} color="white"/>
-	                       			<span className="dropzone-field__text">{`${drop_text}`}</span>
+	                       			<span className="dropzone-field__text">{`${drop_properties.drop_text}`}</span>
 							</div>
 	                    </div>
 	                )}

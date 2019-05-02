@@ -16,9 +16,6 @@ import PasswordResetDone from "./auth/PasswordResetDone";
 import PasswordResetConfirm from "./auth/PasswordResetConfirm";
 import {ErrorPage} from "./general/Organisms/ErrorPage/ErrorPage";
 
-import ReactifyComp from '../routingComps/ReactifyComp'
-import PostDetail from '../reactify/PostDetail';
-import PostCreate from '../reactify/PostCreate'
 import Notes from './notes/Templates/Notes/Notes'
 import NoteDetail from './notes/Templates/NoteDetail/NoteDetail'
 import NoteNew from './notes/Templates/NoteNew/NoteNew'
@@ -41,9 +38,6 @@ const MainContent = () => (
         <Route path='/profile/:id' component={RequireAuth(UserProfileDetail)}/>
         <Route path="/profile_edit" component={RequireAuth(UserProfileEdit)}/>
         <Route path="/change_password" component={RequireAuth(PasswordChange)}/>
-        <Route path='/react/posts/create' component={RequireAuth(PostCreate)}/>
-        <Route path='/react/posts/:slug' component={RequireAuth(PostDetail)}/>
-        <Route path='/react/posts' component={RequireAuth(ReactifyComp)} />
         <Route exact path='/investors' component={RequireAuth(Notes)} />
         <Route path='/investors/add' component={RequireAuth(NoteNew)}/>
         <Route path='/investors/:id' component={RequireAuth(NoteDetail)}/>

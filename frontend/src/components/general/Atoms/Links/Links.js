@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { Link } from "react-router-dom";
 import NavItem from 'reactstrap/lib/NavItem';
 import { LoadObject } from '../../Organisms/LoadScreen/LoadScreen'
@@ -7,10 +7,10 @@ import { renderUser } from "../../../../utils/renderUtils";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome } from '@fortawesome/free-solid-svg-icons';
 
-export class NavigationLink extends Component {
+export const NavigationLink = ({ 
+	urltext, customclass
+  }) => {
 
-  render() {
-  	const { urltext, customclass } = this.props;
   	const url = urltext.toLowerCase()
     return (               
     		<NavItem key={`/${url}`}>
@@ -23,13 +23,12 @@ export class NavigationLink extends Component {
     			</Link>
     		</NavItem>
         )    
-  }
 }
 
-export class NavigationUserLink extends Component {
+export const NavigationUserLink = ({ 
+	urltext, customclass, user
+  }) => {
 
-  render() {
-  	const { urltext, customclass, user } = this.props;
   	const url = urltext.toLowerCase()
 
     return (               
@@ -43,7 +42,6 @@ export class NavigationUserLink extends Component {
     			</Link>
     		</NavItem>
         )    
-  }
 }
 
 export const HomeButton = () => (

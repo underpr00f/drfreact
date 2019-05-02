@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import {   
   FormGroup, Button, Modal, 
   ModalHeader, ModalBody, 
@@ -7,10 +7,9 @@ import './styles.scss'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
 
-export class ModalDelete extends Component {
-  render() {
-    const { modaldelete, text, index, id, toggle} = this.props;
-
+export const ModalDelete = ({ 
+      onSelectForDelete,
+      modaldelete, text, index, id, toggle   }) => {
     return (
       <div>
         <Modal isOpen={modaldelete} toggle={toggle}>
@@ -18,13 +17,11 @@ export class ModalDelete extends Component {
             <ModalBody>Delete <b>{text}</b> Investor?</ModalBody>
             <ModalFooter> 
               <FormGroup row>                   
-              <Button className="rounded-0" color="info" onClick={() => this.props.onSelectForDelete(index, id)}><FontAwesomeIcon icon={faTrash} color="white"/></Button>              
+              <Button className="rounded-0" color="info" onClick={() => onSelectForDelete(index, id)}><FontAwesomeIcon icon={faTrash} color="white"/></Button>              
               <Button className="rounded-0" onClick={toggle}>Cancel</Button>
               </FormGroup>
             </ModalFooter>
         </Modal> 
       </div>
     )
-    
-  }
 }

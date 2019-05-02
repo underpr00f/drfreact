@@ -25,17 +25,17 @@ export const SaveButton = () => (
     </Button>
 );
 
-export const ClearButton = props => (
+export const ClearButton = ({onClear}) => (
     <Button outline className="rounded-0" type="button"
-      onClick={props.onClear}
+      onClick={onClear}
     >
       Clear
     </Button>
 );
 
-export const EditButton = props => (
+export const EditButton = ({onEdit}) => (
     <Button color="info" outline className="rounded-0 button-icon" type="button"
-      onClick={props.onEdit}
+      onClick={onEdit}
     >
       <FontAwesomeIcon icon={faEdit} color="secondary"/>
     </Button>

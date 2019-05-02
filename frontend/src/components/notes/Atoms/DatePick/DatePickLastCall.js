@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { Button, 
   FormGroup, Label, } from 'reactstrap';
 import DatePicker from "react-datepicker";
@@ -7,38 +7,33 @@ import "react-datepicker/dist/react-datepicker.css";
 import './styles.scss'
 
 // Checkbox is corporate
-export class DatePickLastCall extends Component {
-  constructor(props){
-    super(props);
+export const DatePickLastCall = ({ 
+  handleChangeDate, handleAddCallClick,
+  handleResetCallClick,
+  last_call
+  }) => {
 
-    this.state = {
-      add_call: false,
-      last_call: "",      
-    }
-  }
-  handleChangeDate = (date) => {
+
+  const onChangeDate = (date) => {
     if (date) {
-      this.props.handleChangeDate(moment(date, moment.defaultFormat).toDate());
+      handleChangeDate(moment(date, moment.defaultFormat).toDate());
     } else {
-      this.props.handleChangeDate(null);
+      handleChangeDate(null);
     }
     
   }
 
-  render() {
-    // const { last_call } = this.state;
-    const { last_call } = this.props;
     const is_valid_date = moment(last_call).isValid()
 
     return ( 
       <div>
         <FormGroup>
-          <Label>Last Call {is_valid_date ? <Button className="btn" onClick={this.props.handleResetCallClick}>Reset</Button>: ""}</Label>
+          <Label>Last Call {is_valid_date ? <Button className="btn" onClick={handleResetCallClick}>Reset</Button>: ""}</Label>
           {is_valid_date ?
           <div>
             <DatePicker     
-              selected={is_valid_date ? moment(last_call, moment.defaultFormat).toDate() : moment(this.state.last_call, moment.defaultFormat).toDate()}
-              onChange={this.handleChangeDate}
+              selected={is_valid_date && moment(last_call, moment.defaultFormat).toDate()}
+              onChange={onChangeDate}
               showTimeSelect
               timeFormat="HH:mm"
               timeIntervals={15}
@@ -47,10 +42,9 @@ export class DatePickLastCall extends Component {
             />
           </div>
           :                     
-            <Button className="btn btn-block" onClick={this.props.handleAddCallClick}>Add Last Call</Button>
+            <Button className="btn btn-block" onClick={handleAddCallClick}>Add Last Call</Button>
           }
         </FormGroup>
       </div>
     )    
-  }
 }

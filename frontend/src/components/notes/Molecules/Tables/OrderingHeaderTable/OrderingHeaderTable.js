@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Button } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMale, 
@@ -6,13 +6,18 @@ import { faMale,
   faTimes } from '@fortawesome/free-solid-svg-icons'
 import './styles.scss'
 
-export class OrderingHeaderTable extends Component {
+export const OrderingHeaderTable = ({ 
+    onOrderNotes, searchingProp
+  }) => {
+  const [stateOrder, setStateOrder] = useState([]);
+  const [isOrderingName, setIsOrderingName] = useState(false);
+  const [searching, setSearching] = useState(searchingProp);
+  
 
-  state = { order: [], is_ordering_name: false, searchtext: "" }
 
-  onBtnClickOrderingName = (ordername) => {
+  const onBtnClickOrderingName = (ordername) => {
     // Create a new array based on current state:
-    let order = [...this.state.order];
+    let order = [...stateOrder];
     let newordername = "-"+ordername
     let is_ordering_name = false
 
@@ -60,16 +65,21 @@ export class OrderingHeaderTable extends Component {
     }
 
     // Set state
-    this.setState({is_ordering_name: is_ordering_name, searchtext: "", order}, function () {
-        // console.log(this.state)
-        this.props.onOrderNotes(this.state);
-    });
+    setStateOrder(order);
+    setIsOrderingName(is_ordering_name);
+    setSearching(false)
   }
-
-  render() {
-
-    const {order} = this.state;
-
+  useEffect(() => {
+    setSearching(searchingProp)
+    setStateOrder([]);
+    setIsOrderingName(false);  
+  }, [searchingProp]);
+  
+  useEffect(() => {
+    if (!searching) {
+      onOrderNotes({order: stateOrder, is_ordering_name: isOrderingName, searchtext: ""})
+    }
+  }, [stateOrder, isOrderingName, searching]);
     return (
           <thead>
             <tr>
@@ -79,12 +89,13 @@ export class OrderingHeaderTable extends Component {
                 <div className="table-investor__ordering">
                   <span>Name </span>
                   <div className="table-investor__ordering--control">
-                    <Button color="link" onClick={() => this.onBtnClickOrderingName("text")}>
-                    {order.includes("text") ? <FontAwesomeIcon icon={faLongArrowAltDown} color="black"/>
-                    :order.includes("-text") ? <FontAwesomeIcon rotation={180} icon={faLongArrowAltDown} color="black"/>
-                    :<FontAwesomeIcon rotation={90} icon={faExchangeAlt} color="grey"/>}</Button>
-                    {order.includes("text") ? <Button color="link" className="btn-sort__clear" onClick={() => this.onBtnClickOrderingName("Ctext")}><FontAwesomeIcon icon={faTimes} color="black" /></Button>
-                    :order.includes("-text") ? <Button color="link" className="btn-sort__clear" onClick={() => this.onBtnClickOrderingName("C-text")}><FontAwesomeIcon icon={faTimes} color="black" /></Button>
+                    <Button color="link" onClick={() => onBtnClickOrderingName("text")}>
+                      {stateOrder.includes("text") && !searching ? <FontAwesomeIcon icon={faLongArrowAltDown} color="black"/>
+                      :stateOrder.includes("-text") && !searching ? <FontAwesomeIcon rotation={180} icon={faLongArrowAltDown} color="black"/>
+                      :<FontAwesomeIcon rotation={90} icon={faExchangeAlt} color="grey"/>}
+                    </Button>
+                    {stateOrder.includes("text") && !searching ? <Button color="link" className="btn-sort__clear" onClick={() => onBtnClickOrderingName("Ctext")}><FontAwesomeIcon icon={faTimes} color="black" /></Button>
+                    :stateOrder.includes("-text") && !searching ? <Button color="link" className="btn-sort__clear" onClick={() => onBtnClickOrderingName("C-text")}><FontAwesomeIcon icon={faTimes} color="black" /></Button>
                     :""}
                   </div>
                 </div>
@@ -93,12 +104,12 @@ export class OrderingHeaderTable extends Component {
                 <div className="table-investor__ordering">                  
                   <span>Dev </span>
                   <div className="table-investor__ordering--control">
-                    <Button color="link" onClick={() => this.onBtnClickOrderingName("owner")}>
-                    {order.includes("owner") ? <FontAwesomeIcon icon={faLongArrowAltDown} color="black"/>
-                    :order.includes("-owner") ? <FontAwesomeIcon rotation={180} icon={faLongArrowAltDown} color="black"/>
+                    <Button color="link" onClick={() => onBtnClickOrderingName("owner")}>
+                    {stateOrder.includes("owner") && !searching ? <FontAwesomeIcon icon={faLongArrowAltDown} color="black"/>
+                    :stateOrder.includes("-owner") && !searching ? <FontAwesomeIcon rotation={180} icon={faLongArrowAltDown} color="black"/>
                     :<FontAwesomeIcon rotation={90} icon={faExchangeAlt} color="grey"/>}</Button>
-                    {order.includes("owner") ? <Button color="link" className="btn-sort__clear" onClick={() => this.onBtnClickOrderingName("Cowner")}><FontAwesomeIcon icon={faTimes} color="black" /></Button>
-                    :order.includes("-owner") ? <Button color="link" className="btn-sort__clear" onClick={() => this.onBtnClickOrderingName("C-owner")}><FontAwesomeIcon icon={faTimes} color="black" /></Button>
+                    {stateOrder.includes("owner") && !searching ? <Button color="link" className="btn-sort__clear" onClick={() => onBtnClickOrderingName("Cowner")}><FontAwesomeIcon icon={faTimes} color="black" /></Button>
+                    :stateOrder.includes("-owner") && !searching ? <Button color="link" className="btn-sort__clear" onClick={() => onBtnClickOrderingName("C-owner")}><FontAwesomeIcon icon={faTimes} color="black" /></Button>
                     :""}
                   </div>
                 </div>
@@ -108,12 +119,12 @@ export class OrderingHeaderTable extends Component {
                 <div className="table-investor__ordering">                  
                   <span>Status </span>
                   <div className="table-investor__ordering--control">
-                    <Button color="link" onClick={() => this.onBtnClickOrderingName("status")}>
-                    {order.includes("status") ? <FontAwesomeIcon icon={faLongArrowAltDown} color="black"/>
-                    :order.includes("-status") ? <FontAwesomeIcon rotation={180} icon={faLongArrowAltDown} color="black"/>
+                    <Button color="link" onClick={() => onBtnClickOrderingName("status")}>
+                    {stateOrder.includes("status") && !searching ? <FontAwesomeIcon icon={faLongArrowAltDown} color="black"/>
+                    :stateOrder.includes("-status") && !searching ? <FontAwesomeIcon rotation={180} icon={faLongArrowAltDown} color="black"/>
                     :<FontAwesomeIcon rotation={90} icon={faExchangeAlt} color="grey"/>}</Button>
-                    {order.includes("status") ? <Button color="link" className="btn-sort__clear" onClick={() => this.onBtnClickOrderingName("Cstatus")}><FontAwesomeIcon icon={faTimes} color="black" /></Button>
-                    :order.includes("-status") ? <Button color="link" className="btn-sort__clear" onClick={() => this.onBtnClickOrderingName("C-status")}><FontAwesomeIcon icon={faTimes} color="black" /></Button>
+                    {stateOrder.includes("status") && !searching ? <Button color="link" className="btn-sort__clear" onClick={() => onBtnClickOrderingName("Cstatus")}><FontAwesomeIcon icon={faTimes} color="black" /></Button>
+                    :stateOrder.includes("-status") && !searching ? <Button color="link" className="btn-sort__clear" onClick={() => onBtnClickOrderingName("C-status")}><FontAwesomeIcon icon={faTimes} color="black" /></Button>
                     :""}
                   </div>
                 </div>
@@ -122,12 +133,12 @@ export class OrderingHeaderTable extends Component {
                 <div className="table-investor__ordering ">                  
                   <span className="table-investor__ordering--payment">Payment </span>
                   <div className="table-investor__ordering--control">
-                    <Button color="link" onClick={() => this.onBtnClickOrderingName("is_payed")}>
-                    {order.includes("is_payed") ? <FontAwesomeIcon icon={faLongArrowAltDown} color="black"/>
-                    :order.includes("-is_payed") ? <FontAwesomeIcon rotation={180} icon={faLongArrowAltDown} color="black"/>
+                    <Button color="link" onClick={() => onBtnClickOrderingName("is_payed")}>
+                    {stateOrder.includes("is_payed") && !searching ? <FontAwesomeIcon icon={faLongArrowAltDown} color="black"/>
+                    :stateOrder.includes("-is_payed") && !searching ? <FontAwesomeIcon rotation={180} icon={faLongArrowAltDown} color="black"/>
                     :<FontAwesomeIcon rotation={90} icon={faExchangeAlt} color="grey"/>}</Button>
-                    {order.includes("is_payed") ? <Button color="link" className="btn-sort__clear" onClick={() => this.onBtnClickOrderingName("Cis_payed")}><FontAwesomeIcon icon={faTimes} color="black" /></Button>
-                    :order.includes("-is_payed") ? <Button color="link" className="btn-sort__clear" onClick={() => this.onBtnClickOrderingName("C-is_payed")}><FontAwesomeIcon icon={faTimes} color="black" /></Button>
+                    {stateOrder.includes("is_payed") && !searching ? <Button color="link" className="btn-sort__clear" onClick={() => onBtnClickOrderingName("Cis_payed")}><FontAwesomeIcon icon={faTimes} color="black" /></Button>
+                    :stateOrder.includes("-is_payed") && !searching ? <Button color="link" className="btn-sort__clear" onClick={() => onBtnClickOrderingName("C-is_payed")}><FontAwesomeIcon icon={faTimes} color="black" /></Button>
                     :""}
                   </div>
                 </div>
@@ -136,6 +147,4 @@ export class OrderingHeaderTable extends Component {
             </tr>
           </thead>
     )
-    
-  }
 }

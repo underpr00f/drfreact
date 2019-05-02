@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { Button } from 'reactstrap';
 import { Link } from 'react-router-dom'
 
@@ -7,10 +7,10 @@ import { faMale, faUsers, faEdit,
   faCheckCircle, faHandHoldingUsd, faTrash } from '@fortawesome/free-solid-svg-icons'
 import './styles.scss'
 
-export class OrderingBodyTable extends Component {
+export const OrderingBodyTable = ({ 
+      onSelectForEdit, onToggleModalDelete,
+      post, index   }) => {
 
-  render() { 
-    const { post, index } = this.props
 
     return (
         <tbody key={index}>
@@ -32,8 +32,8 @@ export class OrderingBodyTable extends Component {
                     <td>{note.status}</td>
                     <td>{note.is_payed ? <FontAwesomeIcon icon={faCheckCircle} color="black"/> : <FontAwesomeIcon icon={faHandHoldingUsd} color="black"/>}</td>
                     <td>
-                      <Button className="rounded-0" color="info" title="edit" onClick={() => this.props.onSelectForEdit(index, id)}><FontAwesomeIcon icon={faEdit} /></Button>
-                      <Button className="rounded-0" color="secondary" onClick={() => this.props.onToggleModalDelete(index, id)} title="delete"><FontAwesomeIcon icon={faTrash} /></Button>
+                      <Button className="rounded-0" color="info" title="edit" onClick={() => onSelectForEdit(index, id)}><FontAwesomeIcon icon={faEdit} /></Button>
+                      <Button className="rounded-0" color="secondary" onClick={() => onToggleModalDelete(index, id)} title="delete"><FontAwesomeIcon icon={faTrash} /></Button>
                     </td>
                 </tr>                                        
               )
@@ -41,5 +41,4 @@ export class OrderingBodyTable extends Component {
           ) : null}
         </tbody>
       )    
-  }
 }

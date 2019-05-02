@@ -1,57 +1,51 @@
-import React, { Component } from 'react'
+import React from 'react'
 
 import * as Inputs from '../../Atoms/AddInputs/AddInputs'
 import { CheckboxIsCorp } from '../../Atoms/Checkboxes/CheckboxIsCorp'
 
-export class InputFormNoteAdd extends Component {
-  render() {
-    const { text, phone, email,  
+export const InputFormNoteAdd = ({ onInputChange, handleCheckboxIsCorpBtnClick,
+      text, phone, email,  
       linkedin_profile, website, 
       correspondence, is_corporate,
-
-      errors, 
-    } = this.props;
-
+      errors,  }) => {
     return (
       <div>
         <Inputs.InputName 
-          onInputChange={this.props.onInputChange} 
+          onInputChange={onInputChange} 
           text={text} 
           errors={errors} 
         />
         <Inputs.InputPhone 
-          onInputChange={this.props.onInputChange} 
+          onInputChange={onInputChange} 
           phone={phone} 
           errors={errors} 
         />
         <Inputs.InputEmail 
-          onInputChange={this.props.onInputChange} 
+          onInputChange={onInputChange} 
           email={email} 
           errors={errors} 
         />      
         <Inputs.InputLinkedin 
-          onInputChange={this.props.onInputChange} 
+          onInputChange={onInputChange} 
           linkedin_profile={linkedin_profile} 
           errors={errors} 
         />
         <Inputs.InputWebsite 
-          onInputChange={this.props.onInputChange} 
+          onInputChange={onInputChange} 
           website={website} 
           errors={errors} 
         />      
         <Inputs.InputCorrespondence 
-          onInputChange={this.props.onInputChange} 
+          onInputChange={onInputChange} 
           correspondence={correspondence} 
           errors={errors} 
         />      
         
         <CheckboxIsCorp 
-          handleCheckboxIsCorpBtnClick={this.props.handleCheckboxIsCorpBtnClick} 
+          handleCheckboxIsCorpBtnClick={handleCheckboxIsCorpBtnClick} 
           is_corporate={is_corporate} 
         />
 
       </div>
     )
-    
-  }
 }

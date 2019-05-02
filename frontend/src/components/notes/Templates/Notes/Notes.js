@@ -318,7 +318,9 @@ class Notes extends Component {
 
   renderNotes () {
     const { notes } = this.props
-    const { errors, modal, searchtext, modaldelete, index, id, text, fetching } = this.state;
+    const { errors, modal, searchtext, 
+      modaldelete, index, id, 
+      text, fetching, searching } = this.state;
     const { next } = this.props.notes[this.props.notes.length - 1];
 
     return (
@@ -370,7 +372,8 @@ class Notes extends Component {
         </div>
         <Table className="table text-center table-investors" striped>
           <OrderingHeaderTable
-            onOrderNotes={this.onOrderNotes} 
+            onOrderNotes={this.onOrderNotes}
+            searchingProp={searching} 
           />
           {notes !== undefined ? notes.map((post, index)=>{
             return (

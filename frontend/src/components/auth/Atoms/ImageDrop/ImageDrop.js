@@ -15,12 +15,6 @@ class ImageDrop extends Component {
     classNameLabel: PropTypes.string,
     input: PropTypes.object,
     className: PropTypes.string,
-    // children: PropTypes.node,
-	//    children: PropTypes.oneOfType([
-	//      PropTypes.node,
-	//   PropTypes.object,
-	//   PropTypes.func,
-	// ]),
     cbFunction: PropTypes.func,
   };
 

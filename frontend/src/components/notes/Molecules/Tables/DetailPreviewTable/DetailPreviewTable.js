@@ -1,18 +1,17 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { Table } from 'reactstrap';
 
 import { ReturnButton, EditButton } from '../../../../general/Atoms/Buttons/Buttons'
 import moment from "moment";
 import './styles.scss'
 
-export class DetailPreviewTable extends Component {
-  render() {
-    const { text, phone, email,  
+export const DetailPreviewTable = ({ 
+      onEdit, handleCheckboxIsCorpBtnClick,
+      text, phone, email,  
       linkedin_profile, website, 
       correspondence, is_corporate,
       status, is_payed,
-      last_call, documents, 
-    } = this.props;
+      last_call, documents,   }) => {
 
     return (
             <div className="mt-2 table-detail"> 
@@ -25,7 +24,7 @@ export class DetailPreviewTable extends Component {
                       <td>
                         <ReturnButton />
                         <EditButton
-                          onEdit={this.props.onEdit} 
+                          onEdit={onEdit} 
                         />
                       </td>
                     </tr>
@@ -77,6 +76,4 @@ export class DetailPreviewTable extends Component {
                 </Table>
             </div>
     )
-    
-  }
 }

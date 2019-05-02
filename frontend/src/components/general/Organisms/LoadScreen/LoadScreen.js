@@ -12,8 +12,8 @@ export const LoadScreen = () => (
   </div>
 )
 
-export const LoadObject = (props) => (
-  <div className={`${props.objectclass}`}>
+export const LoadObject = ({objectclass}) => (
+  <div className={`${objectclass}`}>
     <div className="load-3">
     <div className="line"></div>
     <div className="line"></div>
