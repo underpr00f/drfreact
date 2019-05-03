@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-// import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import {
   Collapse,
@@ -13,12 +12,10 @@ import { NavigationLink, NavigationUserLink, BrandButton } from './general/Atoms
 import { getUserProfile } from "../actions/authActions";
 
 class Header extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            collapsed: true
-        };
+    state = {
+        collapsed: true
     }
+
     toggleNavbar = () => {
         this.setState({
             collapsed: !this.state.collapsed

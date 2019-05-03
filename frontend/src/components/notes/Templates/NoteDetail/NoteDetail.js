@@ -16,32 +16,27 @@ import { handleValidation } from '../../../../utils/helpers'
 import './styles.scss'
 
 class NoteDetail extends Component {
-
-    constructor(props){
-        super(props);
-  
-        this.state = {
-          text: "",
-          phone: "",
-          status: "",
-          email:"",
-          linkedin_profile: "",
-          website: "",
-          correspondence: "",
-          is_corporate: false,
-          is_payed: false,
-          id: null,
-          loading: true,
-          errors: {},
-          hasError: false,
-          dropdownOpen: false,
-          detail: {},
-          add_call: false,
-          last_call: "", 
-          documents: null,
-          attached: false, 
-          modal: false,     
-        }
+    state = {
+      text: "",
+      phone: "",
+      status: "",
+      email:"",
+      linkedin_profile: "",
+      website: "",
+      correspondence: "",
+      is_corporate: false,
+      is_payed: false,
+      id: null,
+      loading: true,
+      errors: {},
+      hasError: false,
+      dropdownOpen: false,
+      detail: {},
+      add_call: false,
+      last_call: "", 
+      documents: null,
+      attached: false, 
+      modal: false,     
     }
 
     componentDidMount(){

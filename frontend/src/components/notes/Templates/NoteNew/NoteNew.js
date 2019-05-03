@@ -10,22 +10,19 @@ import { ReturnButton, SaveButton, ClearButton } from '../../../general/Atoms/Bu
 import { handleValidation } from '../../../../utils/helpers'
 
 class NoteNew extends Component {
-    constructor(props){
-        super(props)       
-        this.state = {
-          text: "",
-          phone: "",
-          email: "",
-          status: "Candidate",
-          linkedin_profile: "",
-          website: "",
-          correspondence: "",
-          is_corporate: false,
-          id: null,
-          doneLoading: false,
-          errors: {},        
-          redirectToNewPage: false          
-        }
+    state = {
+      text: "",
+      phone: "",
+      email: "",
+      status: "Candidate",
+      linkedin_profile: "",
+      website: "",
+      correspondence: "",
+      is_corporate: false,
+      id: null,
+      doneLoading: false,
+      errors: {},        
+      redirectToNewPage: false          
     }
 
     componentWillReceiveProps(nextProps) {

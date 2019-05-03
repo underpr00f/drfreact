@@ -7,12 +7,13 @@ import { faMale,
 import './styles.scss'
 
 export const OrderingHeaderTable = ({ 
-    onOrderNotes, searchingProp
+    onOrderNotes, searchingProp, mountedProp
   }) => {
 
   const [stateOrder, setStateOrder] = useState([]);
   const [isOrderingName, setIsOrderingName] = useState(false);
   const [searching, setSearching] = useState(false);
+  const [mounted, setMounted] = useState(mountedProp);
 
   const onBtnClickOrderingName = (ordername) => {
     // Create a new array based on current state:
@@ -67,6 +68,7 @@ export const OrderingHeaderTable = ({
     setStateOrder(order);
     setIsOrderingName(is_ordering_name);
     setSearching(false)
+    setMounted(false)
   }
 
   //search prop cancel ordering
@@ -78,16 +80,25 @@ export const OrderingHeaderTable = ({
     }
   }, [searchingProp]);
   
+  //fix bug with doubling ordering after props.orderNotes("") 
+  // in componentDidMount in Notes.js
+  useEffect(() => {
+    if (mountedProp) {
+      setMounted(mountedProp)
+    }
+  }, [mountedProp]); 
+
   //ordering move to parent, with clear parent`s search state
   useEffect(() => {
-    if (!searching && stateOrder.length !== 0) {
+    if (!searching && !mounted) {
       onOrderNotes({order: stateOrder, 
         is_ordering_name: isOrderingName, 
         searchtext: "",
         searching: false,
+        mounted: false,
       })
     } 
-  }, [stateOrder, isOrderingName, searching]);
+  }, [stateOrder, isOrderingName, searching, mounted]);
   return (
         <thead>
           <tr>

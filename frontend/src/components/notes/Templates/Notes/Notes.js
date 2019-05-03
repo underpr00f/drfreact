@@ -20,41 +20,39 @@ import { handleValidation } from '../../../../utils/helpers'
 import './styles.scss'
 
 class Notes extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      text: "",
-      phone: "",
-      status: 'Candidate',
-      email: "",
-      linkedin_profile: "",
-      website: "",
-      correspondence: "",
-      is_corporate: false,
-      is_payed: false,
-      searchtext: "",
-      updateNoteId: null,
-      updateNoteIndex: null,
-      dropdownOpen: false,
-      is_ordering_name: false,
-      modal: false,
-      modaldelete: false,
-      is_staff: false,
-      loading: true,
-      fetching: true,
-      nextafterdelete: "",
-      deleted: false,
-      order: [],
-      errors: {},
-      notes: [
-          {
-            count: null,
-            next: null,
-            previous: null,
-            noteitems: []
-          },
-        ],
-      }
+  state = {
+    text: "",
+    phone: "",
+    status: 'Candidate',
+    email: "",
+    linkedin_profile: "",
+    website: "",
+    correspondence: "",
+    is_corporate: false,
+    is_payed: false,
+    searchtext: "",
+    updateNoteId: null,
+    updateNoteIndex: null,
+    dropdownOpen: false,
+    is_ordering_name: false,
+    modal: false,
+    modaldelete: false,
+    mounted: false,
+    is_staff: false,
+    loading: true,
+    fetching: true,
+    nextafterdelete: "",
+    deleted: false,
+    order: [],
+    errors: {},
+    notes: [
+        {
+          count: null,
+          next: null,
+          previous: null,
+          noteitems: []
+        },
+      ],
   }
 
   // // END FETCH DATA AFTER PROPS
@@ -64,7 +62,11 @@ class Notes extends Component {
       // array exists and is not empty
       this.props.fetchNotes()
     } else {
-      this.props.orderNotes("")
+      // fix bug with doubling requests 
+      // (add flag "mounted" in child OrderingHeaderTable.js)
+      this.setState({
+        mounted: true
+      }, () => {this.props.orderNotes("")});
     }
 
   }
@@ -133,10 +135,6 @@ class Notes extends Component {
         this.setState({nextafterdelete: nextForDelete,
           deleted: false})
       }
-      // if (this.props.lead) {
-      //   const leads = paymentsUtil(this.props.lead.leads)
-      //   this.setState({leads: leads}); 
-      // }
 
     }
   }   
@@ -223,14 +221,12 @@ class Notes extends Component {
 
   onOrderNotes = (dataFromCallback) => {
     // Array to string with ','
-    
     if (dataFromCallback && dataFromCallback.order.length) {
       let mapped = dataFromCallback.order.map((item)=>(item)).join(",");
       this.setState({...dataFromCallback});      
       this.props.orderNotes(mapped)              
     } else {
-      this.setState({order: []});
-      this.props.orderNotes("")   
+      this.props.orderNotes("");
     }    
   }
   submitNote = (e) => {
@@ -319,7 +315,7 @@ class Notes extends Component {
   renderNotes () {
     const { notes } = this.props
     const { errors, modal, searchtext, 
-      modaldelete, index, id, 
+      modaldelete, index, id, mounted, 
       text, fetching, searching } = this.state;
     const { next } = this.props.notes[this.props.notes.length - 1];
 
@@ -373,7 +369,8 @@ class Notes extends Component {
         <Table className="table text-center table-investors" striped>
           <OrderingHeaderTable
             onOrderNotes={this.onOrderNotes}
-            searchingProp={searching} 
+            searchingProp={searching}
+            mountedProp={mounted} 
           />
           {notes !== undefined ? notes.map((post, index)=>{
             return (
