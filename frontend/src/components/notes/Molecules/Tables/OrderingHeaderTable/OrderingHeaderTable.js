@@ -9,11 +9,10 @@ import './styles.scss'
 export const OrderingHeaderTable = ({ 
     onOrderNotes, searchingProp
   }) => {
+
   const [stateOrder, setStateOrder] = useState([]);
   const [isOrderingName, setIsOrderingName] = useState(false);
-  const [searching, setSearching] = useState(searchingProp);
-  
-
+  const [searching, setSearching] = useState(false);
 
   const onBtnClickOrderingName = (ordername) => {
     // Create a new array based on current state:
@@ -69,82 +68,91 @@ export const OrderingHeaderTable = ({
     setIsOrderingName(is_ordering_name);
     setSearching(false)
   }
+
+  //search prop cancel ordering
   useEffect(() => {
-    setSearching(searchingProp)
-    setStateOrder([]);
-    setIsOrderingName(false);  
+    if (searchingProp) {
+      setSearching(searchingProp)
+      setStateOrder([]);
+      setIsOrderingName(false); 
+    }
   }, [searchingProp]);
   
+  //ordering move to parent, with clear parent`s search state
   useEffect(() => {
-    if (!searching) {
-      onOrderNotes({order: stateOrder, is_ordering_name: isOrderingName, searchtext: ""})
-    }
+    if (!searching && stateOrder.length !== 0) {
+      onOrderNotes({order: stateOrder, 
+        is_ordering_name: isOrderingName, 
+        searchtext: "",
+        searching: false,
+      })
+    } 
   }, [stateOrder, isOrderingName, searching]);
-    return (
-          <thead>
-            <tr>
-              <th className="table-num__title">#</th>
-              <th className="table-investor__title"><FontAwesomeIcon icon={faMale} color="black"/> / <FontAwesomeIcon icon={faUsers} color="black"/></th>
-              <th>
-                <div className="table-investor__ordering">
-                  <span>Name </span>
-                  <div className="table-investor__ordering--control">
-                    <Button color="link" onClick={() => onBtnClickOrderingName("text")}>
-                      {stateOrder.includes("text") && !searching ? <FontAwesomeIcon icon={faLongArrowAltDown} color="black"/>
-                      :stateOrder.includes("-text") && !searching ? <FontAwesomeIcon rotation={180} icon={faLongArrowAltDown} color="black"/>
-                      :<FontAwesomeIcon rotation={90} icon={faExchangeAlt} color="grey"/>}
-                    </Button>
-                    {stateOrder.includes("text") && !searching ? <Button color="link" className="btn-sort__clear" onClick={() => onBtnClickOrderingName("Ctext")}><FontAwesomeIcon icon={faTimes} color="black" /></Button>
-                    :stateOrder.includes("-text") && !searching ? <Button color="link" className="btn-sort__clear" onClick={() => onBtnClickOrderingName("C-text")}><FontAwesomeIcon icon={faTimes} color="black" /></Button>
-                    :""}
-                  </div>
+  return (
+        <thead>
+          <tr>
+            <th className="table-num__title">#</th>
+            <th className="table-investor__title"><FontAwesomeIcon icon={faMale} color="black"/> / <FontAwesomeIcon icon={faUsers} color="black"/></th>
+            <th>
+              <div className="table-investor__ordering">
+                <span>Name </span>
+                <div className="table-investor__ordering--control">
+                  <Button color="link" onClick={() => onBtnClickOrderingName("text")}>
+                    {stateOrder.includes("text") && !searching ? <FontAwesomeIcon icon={faLongArrowAltDown} color="black"/>
+                    :stateOrder.includes("-text") && !searching ? <FontAwesomeIcon rotation={180} icon={faLongArrowAltDown} color="black"/>
+                    :<FontAwesomeIcon rotation={90} icon={faExchangeAlt} color="grey"/>}
+                  </Button>
+                  {stateOrder.includes("text") && !searching ? <Button color="link" className="btn-sort__clear" onClick={() => onBtnClickOrderingName("Ctext")}><FontAwesomeIcon icon={faTimes} color="black" /></Button>
+                  :stateOrder.includes("-text") && !searching ? <Button color="link" className="btn-sort__clear" onClick={() => onBtnClickOrderingName("C-text")}><FontAwesomeIcon icon={faTimes} color="black" /></Button>
+                  :""}
                 </div>
-              </th>
-              <th>
-                <div className="table-investor__ordering">                  
-                  <span>Dev </span>
-                  <div className="table-investor__ordering--control">
-                    <Button color="link" onClick={() => onBtnClickOrderingName("owner")}>
-                    {stateOrder.includes("owner") && !searching ? <FontAwesomeIcon icon={faLongArrowAltDown} color="black"/>
-                    :stateOrder.includes("-owner") && !searching ? <FontAwesomeIcon rotation={180} icon={faLongArrowAltDown} color="black"/>
-                    :<FontAwesomeIcon rotation={90} icon={faExchangeAlt} color="grey"/>}</Button>
-                    {stateOrder.includes("owner") && !searching ? <Button color="link" className="btn-sort__clear" onClick={() => onBtnClickOrderingName("Cowner")}><FontAwesomeIcon icon={faTimes} color="black" /></Button>
-                    :stateOrder.includes("-owner") && !searching ? <Button color="link" className="btn-sort__clear" onClick={() => onBtnClickOrderingName("C-owner")}><FontAwesomeIcon icon={faTimes} color="black" /></Button>
-                    :""}
-                  </div>
+              </div>
+            </th>
+            <th>
+              <div className="table-investor__ordering">                  
+                <span>Dev </span>
+                <div className="table-investor__ordering--control">
+                  <Button color="link" onClick={() => onBtnClickOrderingName("owner")}>
+                  {stateOrder.includes("owner") && !searching ? <FontAwesomeIcon icon={faLongArrowAltDown} color="black"/>
+                  :stateOrder.includes("-owner") && !searching ? <FontAwesomeIcon rotation={180} icon={faLongArrowAltDown} color="black"/>
+                  :<FontAwesomeIcon rotation={90} icon={faExchangeAlt} color="grey"/>}</Button>
+                  {stateOrder.includes("owner") && !searching ? <Button color="link" className="btn-sort__clear" onClick={() => onBtnClickOrderingName("Cowner")}><FontAwesomeIcon icon={faTimes} color="black" /></Button>
+                  :stateOrder.includes("-owner") && !searching ? <Button color="link" className="btn-sort__clear" onClick={() => onBtnClickOrderingName("C-owner")}><FontAwesomeIcon icon={faTimes} color="black" /></Button>
+                  :""}
                 </div>
-              </th>
-              <th className="table-phone__title">Phone</th>
-              <th>
-                <div className="table-investor__ordering">                  
-                  <span>Status </span>
-                  <div className="table-investor__ordering--control">
-                    <Button color="link" onClick={() => onBtnClickOrderingName("status")}>
-                    {stateOrder.includes("status") && !searching ? <FontAwesomeIcon icon={faLongArrowAltDown} color="black"/>
-                    :stateOrder.includes("-status") && !searching ? <FontAwesomeIcon rotation={180} icon={faLongArrowAltDown} color="black"/>
-                    :<FontAwesomeIcon rotation={90} icon={faExchangeAlt} color="grey"/>}</Button>
-                    {stateOrder.includes("status") && !searching ? <Button color="link" className="btn-sort__clear" onClick={() => onBtnClickOrderingName("Cstatus")}><FontAwesomeIcon icon={faTimes} color="black" /></Button>
-                    :stateOrder.includes("-status") && !searching ? <Button color="link" className="btn-sort__clear" onClick={() => onBtnClickOrderingName("C-status")}><FontAwesomeIcon icon={faTimes} color="black" /></Button>
-                    :""}
-                  </div>
+              </div>
+            </th>
+            <th className="table-phone__title">Phone</th>
+            <th>
+              <div className="table-investor__ordering">                  
+                <span>Status </span>
+                <div className="table-investor__ordering--control">
+                  <Button color="link" onClick={() => onBtnClickOrderingName("status")}>
+                  {stateOrder.includes("status") && !searching ? <FontAwesomeIcon icon={faLongArrowAltDown} color="black"/>
+                  :stateOrder.includes("-status") && !searching ? <FontAwesomeIcon rotation={180} icon={faLongArrowAltDown} color="black"/>
+                  :<FontAwesomeIcon rotation={90} icon={faExchangeAlt} color="grey"/>}</Button>
+                  {stateOrder.includes("status") && !searching ? <Button color="link" className="btn-sort__clear" onClick={() => onBtnClickOrderingName("Cstatus")}><FontAwesomeIcon icon={faTimes} color="black" /></Button>
+                  :stateOrder.includes("-status") && !searching ? <Button color="link" className="btn-sort__clear" onClick={() => onBtnClickOrderingName("C-status")}><FontAwesomeIcon icon={faTimes} color="black" /></Button>
+                  :""}
                 </div>
-              </th>
-              <th>
-                <div className="table-investor__ordering ">                  
-                  <span className="table-investor__ordering--payment">Payment </span>
-                  <div className="table-investor__ordering--control">
-                    <Button color="link" onClick={() => onBtnClickOrderingName("is_payed")}>
-                    {stateOrder.includes("is_payed") && !searching ? <FontAwesomeIcon icon={faLongArrowAltDown} color="black"/>
-                    :stateOrder.includes("-is_payed") && !searching ? <FontAwesomeIcon rotation={180} icon={faLongArrowAltDown} color="black"/>
-                    :<FontAwesomeIcon rotation={90} icon={faExchangeAlt} color="grey"/>}</Button>
-                    {stateOrder.includes("is_payed") && !searching ? <Button color="link" className="btn-sort__clear" onClick={() => onBtnClickOrderingName("Cis_payed")}><FontAwesomeIcon icon={faTimes} color="black" /></Button>
-                    :stateOrder.includes("-is_payed") && !searching ? <Button color="link" className="btn-sort__clear" onClick={() => onBtnClickOrderingName("C-is_payed")}><FontAwesomeIcon icon={faTimes} color="black" /></Button>
-                    :""}
-                  </div>
+              </div>
+            </th>
+            <th>
+              <div className="table-investor__ordering ">                  
+                <span className="table-investor__ordering--payment">Payment </span>
+                <div className="table-investor__ordering--control">
+                  <Button color="link" onClick={() => onBtnClickOrderingName("is_payed")}>
+                  {stateOrder.includes("is_payed") && !searching ? <FontAwesomeIcon icon={faLongArrowAltDown} color="black"/>
+                  :stateOrder.includes("-is_payed") && !searching ? <FontAwesomeIcon rotation={180} icon={faLongArrowAltDown} color="black"/>
+                  :<FontAwesomeIcon rotation={90} icon={faExchangeAlt} color="grey"/>}</Button>
+                  {stateOrder.includes("is_payed") && !searching ? <Button color="link" className="btn-sort__clear" onClick={() => onBtnClickOrderingName("Cis_payed")}><FontAwesomeIcon icon={faTimes} color="black" /></Button>
+                  :stateOrder.includes("-is_payed") && !searching ? <Button color="link" className="btn-sort__clear" onClick={() => onBtnClickOrderingName("C-is_payed")}><FontAwesomeIcon icon={faTimes} color="black" /></Button>
+                  :""}
                 </div>
-              </th>
-              <th>Manage</th>
-            </tr>
-          </thead>
-    )
+              </div>
+            </th>
+            <th>Manage</th>
+          </tr>
+        </thead>
+  )
 }
