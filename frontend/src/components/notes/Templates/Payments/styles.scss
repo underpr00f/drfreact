@@ -1,0 +1,8 @@
+@media (max-width: 576px) {
+  .table .table-payments {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 55px;
+  }
+}

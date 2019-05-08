@@ -1,0 +1,53 @@
+.table-investor__ordering {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 75px;
+  }
+  &--control {
+    display: flex;
+
+    button {
+      padding: 10px;
+    }
+  }
+}
+
+@media only screen and (max-width: 992px) {
+  .table-investor__ordering--payment {
+    max-width: 55px!important;
+  }
+  .table-investor__title {
+    padding: 0!important;
+    min-width: 50px;
+  }  
+}
+@media only screen and (max-width: 767px) {
+  .table-investor__title {
+    display: none!important;
+  }
+}
+@media (max-width: 576px) {
+  .table-investor__ordering {
+    display: flex;
+    flex-direction: column;
+    
+    &--control {
+      display: flex;
+      width: 100%;
+      margin: 0;
+
+      button {
+        width: 100%;
+        padding: 0;
+      }
+    }
+  }
+  .table-phone__title {
+    display: none!important;
+  }
+}
