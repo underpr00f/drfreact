@@ -7,7 +7,7 @@ import { renderField, renderTextAreaField,
     renderError} from "../../utils/renderUtils";
 import { updateUserProfile } from "../../actions/authActions";
 import ImageDrop from './Atoms/ImageDrop/ImageDrop'
-import { maxLength15, minLength5, required, letters, isurl } from '../../utils/formValidators'
+import { maxLength15, letters, isurl } from '../../utils/formValidators'
 
 class Login extends Component {
 
@@ -16,8 +16,13 @@ class Login extends Component {
     };
 
     render() {
-        const { handleSubmit, error, invalid, pristine, submitting } = this.props;
-
+        const { handleSubmit, error, invalid, pristine, submitting, initialValues } = this.props;
+        
+        let userprofile = ""
+        if (initialValues) {
+            userprofile = initialValues.username
+        }
+        
         return (
             <div className="row justify-content-center">
 
@@ -27,12 +32,12 @@ class Login extends Component {
                 >
                     <h4 className="text-md-center">Edit Profile</h4>
                     <hr/>
-
-                    <fieldset className="form-group">
-                        <Field name="username" label="Username" component={renderField}
-                               type="text" validate={[maxLength15, minLength5, required]}
-                        />
-                    </fieldset>
+                    <div className="text-center">
+                        <span>Username: </span>
+                        <span>
+                            {userprofile}
+                        </span>
+                    </div>
 
                     <fieldset className="form-group">
                         <Field name="first_name" label="First Name" component={renderField}
